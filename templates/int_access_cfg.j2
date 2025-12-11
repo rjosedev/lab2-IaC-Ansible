@@ -1,0 +1,22 @@
+{# Interface Access Configuration Template #}
+!
+{% for interface in interfaces -%}
+{% if interface.mode == "access" -%}
+interface {{ interface.name }}
+  description {{ interface.description }}
+  switchport mode {{ interface.mode }}
+  switchport access vlan {{ interface.access_vlan }}
+{% if interface.access_vlan == 5 %}
+  spanning-tree bpduguard disable
+  no shutdown
+{%- elif interface.access_vlan == 99 %}
+  spanning-tree bpduguard enable
+  shutdown
+{%- else %}
+  spanning-tree portfast
+  no shutdown
+{%- endif %}
+
+!
+{% endif -%}
+{% endfor -%}

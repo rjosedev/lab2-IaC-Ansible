@@ -1,0 +1,35 @@
+hostname SW-MGMT-OOB
+no ip domain lookup
+ip domain-name mydomain.local
+crypto key generate rsa label sshkeys
+4096
+ip ssh version 2
+ip ssh rsa keypair-name sshkeys
+ip ssh time-out 30
+ip ssh source-interface GigabitEthernet0/0	# SW-MGMT-OOB
+ip ssh source-interface GigabitEthernet1/3	# los demás
+
+username utnfrc privilege 15 secret 5 Mypass123!
+enable secret Mypass123!
+
+ip default-gateway 172.16.5.1
+
+line vty 0 15
+ exec-timeout 20 0
+ login local
+ transport input ssh
+
+interface GigabitEthernet0/0	# SW-MGMT-OOB
+interface GigabitEthernet1/3	# los demás
+ switchport access vlan 5
+ switchport mode access
+ spanning-tree portfast edge
+
+interface Vlan5
+ ip address 172.16.5.50 255.255.255.0
+ no shutdown
+
+line aux 0
+ exec-timeout 0 1
+ no exec
+ transport output none

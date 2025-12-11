@@ -1,0 +1,17 @@
+{#- Routers Configuration Template -#}
+!
+{% for router in routers -%}
+{% if router.name == "eigrp" -%}
+  router eigrp {{ router.as_number }}
+  no auto-summary
+  no synchronization
+  eigrp log-neighbor-changes
+  router id {{ router.router_id }}
+{% for network in router.networks %}
+  network {{ network }}
+{% endfor %}
+{%- else %}
+{#- Add other routing protocols here as needed -#}
+!
+{% endif -%}
+{%- endfor %}

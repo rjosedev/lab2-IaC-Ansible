@@ -1,0 +1,13 @@
+{#- Interface SVI Configuration Template #}
+!
+{% for interface in interfaces -%}
+{%- if interface.mode == "mgmt" -%}
+  interface vlan {{ interface.vlan }}
+  description {{ interface.description }}
+  ip address {{ interface.ip_address }} {{ interface.subnet_mask }}
+  no shutdown
+  exit
+ip default-gateway 172.16.5.1
+!
+{% endif -%}
+{% endfor -%}
