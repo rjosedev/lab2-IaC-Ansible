@@ -3,7 +3,7 @@
 {% for interface in interfaces -%}
 {%- if interface.mode == "mgmt" -%}
   interface vlan {{ interface.vlan }}
-  description {{ interface.description }}
+  description ### SVI interface for VLAN05_Mgmt/OOB ###
   ip address {{ interface.ip_address }} {{ interface.subnet_mask }}
   no shutdown
   exit

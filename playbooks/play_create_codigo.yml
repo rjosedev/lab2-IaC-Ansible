@@ -1,7 +1,7 @@
 # Playbook para generar codigo utilizando templates Jinja2
 ---
-- name: Generar codigo desde templates Jinja2 para interfaces de acceso
-  hosts: "{{ modelo.hosts_groups.sw_core }}, {{ modelo.hosts_groups.sw_bld }}, {{ modelo.hosts_groups.sw_dc }}, {{ modelo.hosts_groups.sw_it }}"
+- name: Generar codigo desde templates Jinja2 para interfaces ACCESS
+  hosts: "{{ modelo.hosts_groups.sw_all }}"
   gather_facts: false
 
   vars_files:
@@ -12,18 +12,18 @@
       ansible.builtin.set_fact:
         interfaces: "{{ modelo.infra_spec.devices[inventory_hostname].interfaces }}"
 
-    - name: Renderizar template Jinja2 para configurarcion de interfaces de acceso
+    - name: Renderizar template Jinja2 para configurarcion de interfaces ACCESS
       ansible.builtin.template:
         src: "{{ playbook_dir }}/../templates/int_access_cfg.j2"
         dest: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_int_access.cfg"
       register: int_access_result
 
-    - name: Mostrar resultado de la generacion de configuracion de interfaces de acceso
+    - name: Mostrar resultado de la generacion de configuracion de interfaces de ACCESS
       ansible.builtin.debug:
         var: int_access_result
 
-- name: Generar codigo desde templates Jinja2 para interfaces troncales
-  hosts: "{{ modelo.hosts_groups.sw_core }}, {{ modelo.hosts_groups.sw_bld }}, {{ modelo.hosts_groups.sw_dc }}, {{ modelo.hosts_groups.sw_it }}"
+- name: Generar codigo desde templates Jinja2 para interfaces TRUNK
+  hosts: "{{ modelo.hosts_groups.sw_all }}"
   gather_facts: false
 
   vars_files:
@@ -34,18 +34,40 @@
       ansible.builtin.set_fact:
         interfaces: "{{ modelo.infra_spec.devices[inventory_hostname].interfaces }}"
 
-    - name: Renderizar template Jinja2 para configurarcion de interfaces troncales
+    - name: Renderizar template Jinja2 para configurarcion de interfaces TRUNK
       ansible.builtin.template:
         src: "{{ playbook_dir }}/../templates/int_trunk_cfg.j2"
         dest: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_int_trunk.cfg"
       register: int_trunk_result
 
-    - name: Mostrar resultado de la generacion de configuracion de interfaces troncales
+    - name: Mostrar resultado de la generacion de configuracion de interfaces TRUNK
       ansible.builtin.debug:
         var: int_trunk_result
 
+- name: Generar codigo desde templates Jinja2 para interfaces MGMT
+  hosts: "{{ modelo.hosts_groups.sw_all }}"
+  gather_facts: false
+
+  vars_files:
+    - ../modelo_datos/modelo.yml
+
+  tasks:
+    - name: Defincion de variables locales
+      ansible.builtin.set_fact:
+        interfaces: "{{ modelo.infra_spec.devices[inventory_hostname].interfaces }}"
+
+    - name: Renderizar template Jinja2 para configurarcion de interfaces MGMT
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/../templates/int_mgmt_cfg.j2"
+        dest: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_int_mgmt.cfg"
+      register: int_mgmt_result
+
+    - name: Mostrar resultado de la generacion de configuracion de interfaces MGMT
+      ansible.builtin.debug:
+        var: int_mgmt_result
+
 - name: Generar codigo desde templates Jinja2 para configuracion de VLANs
-  hosts: "{{ modelo.hosts_groups.sw_core }}, {{ modelo.hosts_groups.sw_bld }}, {{ modelo.hosts_groups.sw_dc }}, {{ modelo.hosts_groups.sw_it }}"
+  hosts: "{{ modelo.hosts_groups.sw_all }}"
   gather_facts: false
 
   vars_files:
@@ -84,7 +106,7 @@
         dest: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_int_svi.cfg"
       register: svi_vrrp_result
   
-- name: Generar código desde templates Jinja2 para configuracion de Routing
+- name: Generar código desde templates Jinja2 para configuracion de ROUTERS
   hosts: "{{ modelo.hosts_groups.sw_core }}, {{ modelo.hosts_groups.sw_it }}"
   gather_facts: false
 
@@ -96,15 +118,15 @@
       ansible.builtin.set_fact:
         routers: "{{ modelo.infra_spec.devices[inventory_hostname].routers }}"
 
-    - name: Renderizar template Jinja2 para configurarcion de Routing
+    - name: Renderizar template Jinja2 para configurarcion de ROUTERS
       ansible.builtin.template:
         src: "{{ playbook_dir }}/../templates/routers_cfg.j2"
-        dest: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_routers_cfg.cfg"
+        dest: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_routers.cfg"
       register: routers_result
 
 
-- name: Generar código desde templates Jinja2 para configuracion de Services
-  hosts: "{{ modelo.hosts_groups.sw_core }}, {{ modelo.hosts_groups.sw_bld }}, {{ modelo.hosts_groups.sw_dc }}, {{ modelo.hosts_groups.sw_it }}"
+- name: Generar código desde templates Jinja2 para configuracion de SERVICES
+  hosts: "{{ modelo.hosts_groups.sw_all }}"
   gather_facts: false
 
   vars_files:
@@ -115,8 +137,8 @@
       ansible.builtin.set_fact:
         services: "{{ modelo.infra_spec.devices[inventory_hostname].services }}"
 
-    - name: Renderizar template Jinja2 para configurarcion de Services
+    - name: Renderizar template Jinja2 para configurarcion de SERVICES
       ansible.builtin.template:
         src: "{{ playbook_dir }}/../templates/services_cfg.j2"
-        dest: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_services_cfg.cfg"
+        dest: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_services.cfg"
       register: services_result

@@ -1,33 +1,14 @@
 # Playbook para aplicar las configuraciones generadas a los dispositivos de red
 ---
-- name: Aplicar configuraciones de interfaces de trunk a dispositivos de red
-  hosts: "{{ modelo.hosts_groups.sw_core }}, {{ modelo.hosts_groups.sw_bld }}, {{ modelo.hosts_groups.sw_dc }}, {{ modelo.hosts_groups.sw_it }}"
+- name: Aplicar configuraciones de interfaces ACCESS a dispositivos de red
+  hosts: "{{ modelo.hosts_groups.sw_all }}"
   gather_facts: false
 
   vars_files:
     - ../modelo_datos/modelo.yml
 
   tasks:
-    - name: Aplicar configuración de interfaces de trunk
-      cisco.ios.ios_config:
-        src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_int_trunk.cfg"
-      register: apply_trunk_result
-      notify: Guardar configuracion
-
-  handlers:
-    - name: Guardar configuracion
-      cisco.ios.ios_config:
-        save_when: modified
-
-- name: Aplicar configuraciones de interfaces de acceso a dispositivos de red
-  hosts: "{{ modelo.hosts_groups.sw_core }}, {{ modelo.hosts_groups.sw_bld }}, {{ modelo.hosts_groups.sw_dc }}, {{ modelo.hosts_groups.sw_it }}"
-  gather_facts: false
-
-  vars_files:
-    - ../modelo_datos/modelo.yml
-
-  tasks:
-    - name: Aplicar configuración de interfaces de acceso
+    - name: Aplicar configuración de interfaces ACCESS
       cisco.ios.ios_config:
         src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_int_access.cfg"
       register: apply_access_result
@@ -38,8 +19,46 @@
       cisco.ios.ios_config:
         save_when: modified
 
+- name: Aplicar configuraciones de interfaces TRUNK a dispositivos de red
+  hosts: "{{ modelo.hosts_groups.sw_all }}"
+  gather_facts: false
+
+  vars_files:
+    - ../modelo_datos/modelo.yml
+
+  tasks:
+    - name: Aplicar configuración de interfaces TRUNK
+      cisco.ios.ios_config:
+        src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_int_trunk.cfg"
+      register: apply_trunk_result
+      notify: Guardar configuracion
+
+  handlers:
+    - name: Guardar configuracion
+      cisco.ios.ios_config:
+        save_when: modified
+
+- name: Aplicar configuraciones de interfaces MGMT a dispositivos de red
+  hosts: "{{ modelo.hosts_groups.sw_all }}"
+  gather_facts: false
+
+  vars_files:
+    - ../modelo_datos/modelo.yml
+
+  tasks:
+    - name: Aplicar configuración de interfaces MGMT
+      cisco.ios.ios_config:
+        src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_int_mgmt.cfg"
+      register: apply_mgmt_result
+      notify: Guardar configuracion
+
+  handlers:
+    - name: Guardar configuracion
+      cisco.ios.ios_config:
+        save_when: modified
+
 - name: Aplicar configuraciones de VLANs a dispositivos de red
-  hosts: "{{ modelo.hosts_groups.sw_core }}, {{ modelo.hosts_groups.sw_bld }}, {{ modelo.hosts_groups.sw_dc }}, {{ modelo.hosts_groups.sw_it }}"
+  hosts: "{{ modelo.hosts_groups.sw_all }}"
   gather_facts: false
 
   vars_files:
@@ -58,7 +77,7 @@
         save_when: modified
 
 - name: Aplicar configuraciones de SVI y VRRP a dispositivos de red
-  hosts: "{{ modelo.hosts_groups.sw_core }}, {{ modelo.hosts_groups.sw_bld }}, {{ modelo.hosts_groups.sw_dc }}, {{ modelo.hosts_groups.sw_it }}"
+  hosts: "{{ modelo.hosts_groups.sw_core }}, {{ modelo.hosts_groups.sw_it }}"
   gather_facts: false
 
   vars_files:
@@ -69,6 +88,44 @@
       cisco.ios.ios_config:
         src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_int_svi.cfg"
       register: apply_svi_vrrp_result
+      notify: Guardar configuracion
+
+  handlers:
+    - name: Guardar configuracion
+      cisco.ios.ios_config:
+        save_when: modified
+
+- name: Aplicar configuraciones de ROUTERS a dispositivos de red
+  hosts: "{{ modelo.hosts_groups.sw_core }}, {{ modelo.hosts_groups.sw_it }}"
+  gather_facts: false
+
+  vars_files:
+    - ../modelo_datos/modelo.yml
+
+  tasks:
+    - name: Aplicar configuración de ROUTERS
+      cisco.ios.ios_config:
+        src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_routers.cfg"
+      register: apply_routers_result
+      notify: Guardar configuracion
+
+  handlers:
+    - name: Guardar configuracion
+      cisco.ios.ios_config:
+        save_when: modified
+
+- name: Aplicar configuraciones de SERVICES a dispositivos de red
+  hosts: "{{ modelo.hosts_groups.sw_all }}"
+  gather_facts: false
+
+  vars_files:
+    - ../modelo_datos/modelo.yml
+
+  tasks:
+    - name: Aplicar configuración de SERVICES
+      cisco.ios.ios_config:
+        src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_services.cfg"
+      register: apply_services_result
       notify: Guardar configuracion
 
   handlers:

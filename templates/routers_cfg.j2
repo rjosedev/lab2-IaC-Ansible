@@ -4,9 +4,8 @@
 {% if router.name == "eigrp" -%}
   router eigrp {{ router.as_number }}
   no auto-summary
-  no synchronization
   eigrp log-neighbor-changes
-  router id {{ router.router_id }}
+  eigrp router-id {{ router.router_id }}
 {% for network in router.networks %}
   network {{ network }}
 {% endfor %}

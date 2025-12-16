@@ -21,7 +21,7 @@
 {% if service.name == "snmp" %}
   snmp-server community {{ service.snmp_community }} RO
   snmp-server host {{ service.server1 }} version 2c {{ service.snmp_community }}
-  snmp-server source-interface {{ service.source_int }}
+  snmp-server source-interface traps {{ service.source_int }}
 !
 {%- endif %}
 {% endfor -%}
