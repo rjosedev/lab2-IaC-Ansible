@@ -7,13 +7,11 @@ interface {{ interface.name }}
   switchport {{ interface.mode }} encapsulation dot1q
   switchport trunk allowed vlan {{ interface.allowed_vlan }}
   switchport trunk native vlan {{ interface.native }}
+  switchport mode trunk
 {% if interface.dynamic %}
   switchport mode dynamic {{ interface.dynamic }}
   spanning-tree bpduguard disable
 {% endif -%}
-{% if interface.mode == "trunk" %}
-  switchport mode trunk
-{% endif %}
 {% if interface.channel_group %}
   channel-group {{ interface.channel_group }} mode {{ interface.channel_mode }}
 {% endif %}

@@ -6,9 +6,14 @@
   no auto-summary
   eigrp log-neighbor-changes
   eigrp router-id {{ router.router_id }}
+  passive-interface vlan 5
 {% for network in router.networks %}
   network {{ network }}
 {% endfor %}
+{% for intf in router.no_passive_interfaces %}
+  no passive-interface {{ intf }}
+{% endfor %}
+!
 {%- else %}
 {#- Add other routing protocols here as needed -#}
 !

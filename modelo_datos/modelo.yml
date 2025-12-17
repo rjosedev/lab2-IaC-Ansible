@@ -40,6 +40,8 @@ vars:
   vlans: &sw_vlans
     - id: 1
       name: "VLAN01_Default/Native"
+    - id: 3
+      name: "VLAN03_Routing/Mgmt"
     - id: 5
       name: "VLAN05_Mgmt/OOB"
     - id: 10
@@ -64,7 +66,7 @@ vars:
     mode: access
     description: "### NONE at VLAN99_Unused/Suspended - ACCESS ###"
   int_trunk: &int_trunk
-    allowed_vlan: "1,10,20,30,40,50,60,70,80"
+    allowed_vlan: ""
     mode: trunk
     native: "1"
     dynamic: null
@@ -83,7 +85,6 @@ vars:
     snd_ip: null
     lst_ip: *lst_ip
     subnet_mask: *sn_24
-    vrrp_vip: *lst_ip
     vrrp_group: null
     vrrp_priority: null
     mode: svi
@@ -126,6 +127,11 @@ modelo:
             as_number: 10
             router_id: "1.1.1.1"
             networks: *networks
+            no_passive_interfaces: &no_passive_interfaces
+              - "GigabitEthernet1/1"
+              - "GigabitEthernet1/2"
+              - "GigabitEthernet2/1"
+              - "GigabitEthernet2/2"
         # Services configuration
         services: *services
         # VLANs database inventory
@@ -145,30 +151,35 @@ modelo:
           - name: "GigabitEthernet0/1"
             description: "### Link to SW-BLD-A - TRUNK ###"
             <<: *int_trunk
-            dynamic: "auto"
+            dynamic: "desirable"
+            allowed_vlan: 1,10,20,30,40,50,60
           - name: "GigabitEthernet0/2"
             description: "### Link to SW-BLD-B - TRUNK ###"
             <<: *int_trunk
-            dynamic: "auto"
+            dynamic: "desirable"
+            allowed_vlan: 1,10,20,30,40,50,60
           - name: "GigabitEthernet0/3"
             description: "### Link to SW-DC - TRUNK ###"
             <<: *int_trunk
-            dynamic: "auto"
+            dynamic: "desirable"
+            allowed_vlan: 1,10,20,30,40,50,60
           - name: "GigabitEthernet1/0"
             <<: *int_access
             access_vlan: 99
           - name: "GigabitEthernet1/1"
             description: "### Link 1 to SW-CORE-2 - LACP - TRUNK ###"
             <<: *int_trunk
-            dynamic: "auto"
+            dynamic: "desirable"
             channel_group: 1
             channel_mode: "active"
+            allowed_vlan: 1,3,10,20,30,40,50,60
           - name: "GigabitEthernet1/2"
             description: "### Link 2 to SW-CORE-2 - LACP - TRUNK ###"
             <<: *int_trunk
-            dynamic: "auto"
+            dynamic: "desirable"
             channel_group: 1
             channel_mode: "active"
+            allowed_vlan: 1,3,10,20,30,40,50,60
           - name: "GigabitEthernet1/3"
             description: "### Link to SW-MGMT-OOB - Uplinks to NetCloud 1 - ACCESS ###"
             <<: *int_access
@@ -180,10 +191,12 @@ modelo:
             description: "### Link to SW-IT-1 - TRUNK ###"
             <<: *int_trunk
             dynamic: "desirable"
+            allowed_vlan: 1,3
           - name: "GigabitEthernet2/2"
             description: "### Link to SW-IT-2 - TRUNK ###"
             <<: *int_trunk
             dynamic: "desirable"
+            allowed_vlan: 1,3
           - name: "GigabitEthernet2/3"
             <<: *int_access
             access_vlan: 99
@@ -192,8 +205,13 @@ modelo:
             description: "### Port-Channel 1 (GE1/1 - GE1/2) to SW-CORE-2 - LACP - TRUNK ###"
             <<: *int_trunk
             port_channel: 1
-            dynamic: "auto"
+            dynamic: "desirable"
+            allowed_vlan: 1,3,10,20,30,40,50,60
           # SVI interface for MGMT
+          - name: "vlan 3"
+            vlan: 3
+            ip_address: "172.16.3.31"
+            <<: *int_mgmt
           - name: "vlan 5"
             vlan: 5
             ip_address: "172.16.5.51"
@@ -206,7 +224,6 @@ modelo:
             description: "### SVI interface for VLAN10_Engineering ###"            
             vrrp_group: 10
             vrrp_priority: 1
-            vrrp_vip: *lst_ip
             <<: *int_svi
           - name: "vlan 20"
             vlan: 20
@@ -215,17 +232,15 @@ modelo:
             description: "### SVI interface for VLAN20_Accounting ###"
             vrrp_group: 20
             vrrp_priority: 2
-            vrrp_vip: *lst_ip
             <<: *int_svi
           - name: "vlan 30"
             vlan: 30
             ip_address: *sn_vl30
             fst_ip: *fst_ip
-            description: "### SVI interface for VLAN30_Production ###"
+            description: "### SVI interface for VLAN30_Production ###"            
+            <<: *int_svi
             vrrp_group: 30
             vrrp_priority: 1
-            vrrp_vip: *lst_ip
-            <<: *int_svi
           - name: "vlan 40"
             vlan: 40
             ip_address: *sn_vl40
@@ -233,7 +248,6 @@ modelo:
             description: "### SVI interface for VLAN40_DevOps ###"
             vrrp_group: 40
             vrrp_priority: 2
-            vrrp_vip: *lst_ip
             <<: *int_svi
           - name: "vlan 50"
             vlan: 50
@@ -242,7 +256,6 @@ modelo:
             description: "### SVI interface for VLAN50_Data ###"
             vrrp_group: 50
             vrrp_priority: 1
-            vrrp_vip: *lst_ip
             <<: *int_svi
           - name: "vlan 60"
             vlan: 60
@@ -251,7 +264,6 @@ modelo:
             description: "### SVI interface for VLAN60_Services ###"
             vrrp_group: 60
             vrrp_priority: 2
-            vrrp_vip: *lst_ip
             <<: *int_svi
       ### EOF SW-CORE-1 ###
 
@@ -266,6 +278,7 @@ modelo:
             as_number: 10
             router_id: "1.1.1.2"
             networks: *networks
+            no_passive_interfaces: *no_passive_interfaces
         services: *services
         vlans: *sw_vlans
         pvst:
@@ -280,29 +293,34 @@ modelo:
             description: "### Link to SW-BLD-A - TRUNK ###"
             <<: *int_trunk
             dynamic: "desirable"
+            allowed_vlan: 1,10,20,30,40,50,60
           - name: "GigabitEthernet0/2"
             description: "### Link to SW-BLD-B - TRUNK ###"
             <<: *int_trunk
             dynamic: "desirable"
+            allowed_vlan: 1,10,20,30,40,50,60
           - name: "GigabitEthernet0/3"
             description: "### Link to SW-DC - TRUNK ###"
             <<: *int_trunk
             dynamic: "desirable"
+            allowed_vlan: 1,10,20,30,40,50,60
           - name: "GigabitEthernet1/0"
             <<: *int_access
             access_vlan: 99
           - name: "GigabitEthernet1/1"
             description: "### Link 1 to SW-CORE-1 - LACP - TRUNK ###"
             <<: *int_trunk
-            dynamic: "auto"
+            dynamic: "desirable"
             channel_group: 1
             channel_mode: "active"
+            allowed_vlan: 1,3,10,20,30,40,50,60
           - name: "GigabitEthernet1/2"
             description: "### Link 2 to SW-CORE-1 - LACP - TRUNK ###"
             <<: *int_trunk
-            dynamic: "auto"
+            dynamic: "desirable"
             channel_group: 1
             channel_mode: "active"
+            allowed_vlan: 1,3,10,20,30,40,50,60
           - name: "GigabitEthernet1/3"
             description: "### Link to SW-MGMT-OOB - Uplinks to NetCloud 1 - ACCESS ###"
             <<: *int_access
@@ -314,10 +332,12 @@ modelo:
             description: "### Link to SW-IT-1 - TRUNK ###"
             <<: *int_trunk
             dynamic: "desirable"
+            allowed_vlan: 1,3
           - name: "GigabitEthernet2/2"
             description: "### Link to SW-IT-2 - TRUNK ###"
             <<: *int_trunk
-            dynamic: "desirable"          
+            dynamic: "desirable"
+            allowed_vlan: 1,3          
           - name: "GigabitEthernet2/3"
             <<: *int_access
             access_vlan: 99
@@ -326,6 +346,11 @@ modelo:
             <<: *int_trunk
             port_channel: 1
             dynamic: "desirable"
+            allowed_vlan: 1,3,10,20,30,40,50,60
+          - name: "vlan 3"
+            vlan: 3
+            ip_address: "172.16.3.32"
+            <<: *int_mgmt
           - name: "vlan 5"
             vlan: 5
             ip_address: "172.16.5.52"
@@ -337,7 +362,6 @@ modelo:
             description: "### SVI interface for VLAN10_Engineering ###"
             vrrp_group: 10
             vrrp_priority: 2
-            vrrp_vip: *lst_ip
             <<: *int_svi
           - name: "vlan 20"
             vlan: 20
@@ -346,7 +370,6 @@ modelo:
             description: "### SVI interface for VLAN20_Accounting ###"
             vrrp_group: 20
             vrrp_priority: 1
-            vrrp_vip: *lst_ip
             <<: *int_svi
           - name: "vlan 30"
             vlan: 30
@@ -355,7 +378,6 @@ modelo:
             description: "### SVI interface for VLAN30_Production ###"
             vrrp_group: 30
             vrrp_priority: 2
-            vrrp_vip: *lst_ip
             <<: *int_svi
           - name: "vlan 40"
             vlan: 40
@@ -364,7 +386,6 @@ modelo:
             description: "### SVI interface for VLAN40_DevOps ###"
             vrrp_group: 40
             vrrp_priority: 1
-            vrrp_vip: *lst_ip
             <<: *int_svi
           - name: "vlan 50"
             vlan: 50
@@ -373,7 +394,6 @@ modelo:
             description: "### SVI interface for VLAN50_Data ###"
             vrrp_group: 50
             vrrp_priority: 2
-            vrrp_vip: *lst_ip
             <<: *int_svi
           - name: "vlan 60"
             vlan: 60
@@ -382,7 +402,6 @@ modelo:
             description: "### SVI interface for VLAN60_Services ###"
             vrrp_group: 60
             vrrp_priority: 1
-            vrrp_vip: *lst_ip
             <<: *int_svi
       ### EOF SW-CORE-2 ###
 
@@ -404,10 +423,12 @@ modelo:
             description: "### Link to SW-CORE-1 - TRUNK ###"
             <<: *int_trunk
             dynamic: "desirable"
+            allowed_vlan: 1,10,20,30,40,50,60
           - name: "GigabitEthernet0/2"
             description: "### Link to SW-CORE-2 - TRUNK ###"
             <<: *int_trunk
             dynamic: "desirable"
+            allowed_vlan: 1,10,20,30,40,50,60
           - name: "GigabitEthernet0/3"
             <<: *int_access
             access_vlan: 99
@@ -425,7 +446,7 @@ modelo:
           - name: "GigabitEthernet1/3"
             description: "### Link to SW-MGMT-OOB - Uplinks to NetCloud 1 - ACCESS ###"
             <<: *int_access
-            access_vlan: 5
+            access_vlan: 5          
           - name: "vlan 5"
             vlan: 5
             ip_address: "172.16.5.53"
@@ -450,10 +471,12 @@ modelo:
             description: "### Link to SW-CORE-1 - TRUNK ###"
             <<: *int_trunk
             dynamic: "desirable"
+            allowed_vlan: 1,10,20,30,40,50,60
           - name: "GigabitEthernet0/2"
             description: "### Link to SW-CORE-2 - TRUNK ###"
             <<: *int_trunk
             dynamic: "desirable"
+            allowed_vlan: 1,10,20,30,40,50,60
           - name: "GigabitEthernet0/3"
             <<: *int_access
             access_vlan: 99
@@ -497,10 +520,12 @@ modelo:
             description: "### Link to SW-CORE-1 - TRUNK ###"
             <<: *int_trunk
             dynamic: "desirable"
+            allowed_vlan: 1,10,20,30,40,50,60
           - name: "GigabitEthernet0/2"
             description: "### Link to SW-CORE-2 - TRUNK ###"
             <<: *int_trunk
             dynamic: "desirable"
+            allowed_vlan: 1,10,20,30,40,50,60
           - name: "GigabitEthernet0/3"
             <<: *int_access
             access_vlan: 99
@@ -536,10 +561,13 @@ modelo:
             as_number: 10
             router_id: "1.1.1.3"
             networks: *networks
+            no_passive_interfaces: *no_passive_interfaces
         services: *services
         vlans: *sw_vlans
         pvst:
           - mode: "rapid-pvst"
+            rt_pri: "70"
+            rt_sec: "80"
         interfaces:
           - name: "GigabitEthernet0/0"
             <<: *int_access
@@ -561,15 +589,17 @@ modelo:
           - name: "GigabitEthernet1/1"
             description: "### Link 1 to SW-IT-1 - LACP - TRUNK ###"
             <<: *int_trunk
-            dynamic: "auto"
+            dynamic: "desirable"
             channel_group: 1
             channel_mode: "active"
+            allowed_vlan: 1,3,70,80
           - name: "GigabitEthernet1/2"
             description: "### Link 2 to SW-IT-1 - LACP - TRUNK ###"
             <<: *int_trunk
-            dynamic: "auto"
+            dynamic: "desirable"
             channel_group: 1
             channel_mode: "active"
+            allowed_vlan: 1,3,70,80
           - name: "GigabitEthernet1/3"
             description: "### Link to SW-MGMT-OOB - Uplinks to NetCloud 1 - ACCESS ###"
             <<: *int_access
@@ -581,10 +611,12 @@ modelo:
             description: "### Link to SW-CORE-1 - TRUNK ###"
             <<: *int_trunk
             dynamic: "desirable"
+            allowed_vlan: 1,3
           - name: "GigabitEthernet2/2"
             description: "### Link to SW-CORE-2 - TRUNK ###"
             <<: *int_trunk
             dynamic: "desirable"
+            allowed_vlan: 1,3
           - name: "GigabitEthernet2/3"
             <<: *int_access
             access_vlan: 99
@@ -592,7 +624,12 @@ modelo:
             description: "### Port-Channel 1 (GE1/1 - GE1/2) to SW-IT-2 - LACP - TRUNK ###"
             <<: *int_trunk
             port_channel: 1
-            dynamic: "auto"
+            dynamic: "desirable"
+            allowed_vlan: 1,3,70,80
+          - name: "vlan 3"
+            vlan: 3
+            ip_address: "172.16.3.36"
+            <<: *int_mgmt
           - name: "vlan 5"
             vlan: 5
             ip_address: "172.16.5.56"
@@ -604,7 +641,6 @@ modelo:
             description: "### SVI interface for VLAN70_IT1 ###"
             vrrp_group: 70
             vrrp_priority: 1
-            vrrp_vip: *lst_ip
             <<: *int_svi
           - name: "vlan 80"
             vlan: 80
@@ -613,7 +649,6 @@ modelo:
             description: "### SVI interface for VLAN80_IT2 ###"
             vrrp_group: 80
             vrrp_priority: 2
-            vrrp_vip: *lst_ip
             <<: *int_svi
       ### EOF SW-IT-1 ###
 
@@ -628,10 +663,13 @@ modelo:
             as_number: 10
             router_id: "1.1.1.4"
             networks: *networks
+            no_passive_interfaces: *no_passive_interfaces
         services: *services
         vlans: *sw_vlans
         pvst:
           - mode: "rapid-pvst"
+            rt_pri: "80"
+            rt_sec: "70"
         interfaces:
           - name: "GigabitEthernet0/0"
             <<: *int_access
@@ -653,15 +691,17 @@ modelo:
           - name: "GigabitEthernet1/1"
             description: "### Link 1 to SW-IT-1 - LACP - TRUNK ###"
             <<: *int_trunk
-            dynamic: "auto"
+            dynamic: "desirable"
             channel_group: 1
             channel_mode: "active"
+            allowed_vlan: 1,3,70,80
           - name: "GigabitEthernet1/2"
             description: "### Link 2 to SW-IT-1 - LACP - TRUNK ###"
             <<: *int_trunk
-            dynamic: "auto"
+            dynamic: "desirable"
             channel_group: 1
             channel_mode: "active"
+            allowed_vlan: 1,3,70,80
           - name: "GigabitEthernet1/3"
             description: "### Link to SW-MGMT-OOB - Uplinks to NetCloud 1 - ACCESS ###"
             <<: *int_access
@@ -673,18 +713,25 @@ modelo:
             description: "### Link to SW-CORE-1 - TRUNK ###"
             <<: *int_trunk
             dynamic: "desirable"
+            allowed_vlan: 1,3
           - name: "GigabitEthernet2/2"
             description: "### Link to SW-CORE-2 - TRUNK ###"
             <<: *int_trunk
             dynamic: "desirable"
+            allowed_vlan: 1,3
           - name: "GigabitEthernet2/3"
             <<: *int_access
             access_vlan: 99
           - name: "Port-Channel1"
-            description: "### Port-Channel 1 (GE1/1 - GE1/2) to SW-IT-2 - LACP - TRUNK ###"
+            description: "### Port-Channel 1 (GE1/1 - GE1/2) to SW-IT-1 - LACP - TRUNK ###"
             <<: *int_trunk
             port_channel: 1
             dynamic: "desirable"
+            allowed_vlan: 1,3,70,80
+          - name: "vlan 3"
+            vlan: 3
+            ip_address: "172.16.3.37"
+            <<: *int_mgmt
           - name: "vlan 5"
             vlan: 5
             ip_address: "172.16.5.57"
@@ -696,7 +743,6 @@ modelo:
             description: "### SVI interface for VLAN70_IT1 ###"
             vrrp_group: 70
             vrrp_priority: 2
-            vrrp_vip: *lst_ip
             <<: *int_svi
           - name: "vlan 80"
             vlan: 80
@@ -705,6 +751,5 @@ modelo:
             description: "### SVI interface for VLAN80_IT2 ###"
             vrrp_group: 80
             vrrp_priority: 1
-            vrrp_vip: *lst_ip
             <<: *int_svi
       ### EOF SW-IT-2 ###
