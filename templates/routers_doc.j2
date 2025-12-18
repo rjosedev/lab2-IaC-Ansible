@@ -1,7 +1,16 @@
 {# Routers Configuration Template #}
+
+# Device - {{inventory_hostname}}
+
+## Configuraciones de Routers
+
+### hostname: {{inventory_hostname}}
+
+```
+{# Routers Configuration Template #}
 !
 {% for router in routers -%}
-{% if router.name == "eigrp" -%}
+{% if router.name == eigrp -%}
   router eigrp {{ router.as_number }}
   no auto-summary
   eigrp log-neighbor-changes
@@ -19,3 +28,4 @@
 !
 {% endif -%}
 {%- endfor %}
+```

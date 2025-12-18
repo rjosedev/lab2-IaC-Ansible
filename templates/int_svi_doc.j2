@@ -1,0 +1,27 @@
+{# Interface SVI Configuration Template #}
+
+# Device - {{inventory_hostname}}
+
+## Configuraciones de interfaces SVI
+
+### hostname: {{inventory_hostname}}
+
+```
+{# Interface SVI Configuration Template #}
+!
+{% for interface in interfaces -%}
+{%- if interface.mode == "svi" -%}
+  interface vlan {{ interface.vlan }}
+  description {{ interface.description }}
+  no shutdown
+{% if interface.fst_ip %}
+  ip address {{ interface.ip_address }}{{ interface.fst_ip }} {{ interface.subnet_mask }}
+{% elif interface.snd_ip %}
+  ip address {{ interface.ip_address }}{{ interface.snd_ip }} {{ interface.subnet_mask }}
+{% endif %}
+  vrrp {{ interface.vrrp_group }} ip {{ interface.ip_address }}{{ interface.lst_ip }}
+  vrrp {{ interface.vrrp_group }} priority {{ interface.vrrp_priority }}
+!
+{% endif -%}
+{% endfor -%}
+```

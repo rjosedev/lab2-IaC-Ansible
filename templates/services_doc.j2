@@ -1,0 +1,37 @@
+{# Services Configuration Template #}
+
+# Device - {{inventory_hostname}}
+
+## Configuraciones de Services
+
+### hostname: {{inventory_hostname}}
+
+```
+{# Services Configuration Template #}
+!
+{% for service in services -%}
+{%- if service.name == "dns" %}
+  ip name-server {{ service.server1 }}
+  ip name-server {{ service.server2 }}
+!
+{% endif %}
+{% if service.name == "ntp" %}
+  ntp server {{ service.server1 }}
+  ntp server {{ service.server2 }}
+  ntp source {{ service.source_int }}
+!
+{% endif %}
+{% if service.name == "syslog" %}
+  logging host {{ service.server1 }}
+  logging host {{ service.server2 }}
+  logging source-interface {{ service.source_int }}
+!
+{% endif %}
+{% if service.name == "snmp" %}
+  snmp-server community {{ service.snmp_community }} RO
+  snmp-server host {{ service.server1 }} version 2c {{ service.snmp_community }}
+  snmp-server source-interface traps {{ service.source_int }}
+!
+{%- endif %}
+{% endfor -%}
+```

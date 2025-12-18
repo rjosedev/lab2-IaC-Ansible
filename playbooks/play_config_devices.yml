@@ -8,7 +8,7 @@
     - ../modelo_datos/modelo.yml
 
   tasks:
-    - name: Aplicar configuración de interfaces ACCESS
+    - name: Aplicar configuracion de interfaces ACCESS
       cisco.ios.ios_config:
         src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_int_access.cfg"
       register: apply_access_result
@@ -27,7 +27,7 @@
     - ../modelo_datos/modelo.yml
 
   tasks:
-    - name: Aplicar configuración de interfaces TRUNK
+    - name: Aplicar configuracion de interfaces TRUNK
       cisco.ios.ios_config:
         src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_int_trunk.cfg"
       register: apply_trunk_result
@@ -46,7 +46,7 @@
     - ../modelo_datos/modelo.yml
 
   tasks:
-    - name: Aplicar configuración de interfaces MGMT
+    - name: Aplicar configuracion de interfaces MGMT
       cisco.ios.ios_config:
         src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_int_mgmt.cfg"
       register: apply_mgmt_result
@@ -65,7 +65,7 @@
     - ../modelo_datos/modelo.yml
 
   tasks:
-    - name: Aplicar configuración de VLANs
+    - name: Aplicar configuracion de VLANs
       cisco.ios.ios_config:
         src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_vlans.cfg"
       register: apply_vlans_result
@@ -84,7 +84,7 @@
     - ../modelo_datos/modelo.yml
 
   tasks:
-    - name: Aplicar configuración de SVI y VRRP
+    - name: Aplicar configuracion de SVI y VRRP
       cisco.ios.ios_config:
         src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_int_svi.cfg"
       register: apply_svi_vrrp_result
@@ -103,7 +103,7 @@
     - ../modelo_datos/modelo.yml
 
   tasks:
-    - name: Aplicar configuración de ROUTERS
+    - name: Aplicar configuracion de ROUTERS
       cisco.ios.ios_config:
         src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_routers.cfg"
       register: apply_routers_result
@@ -122,7 +122,7 @@
     - ../modelo_datos/modelo.yml
 
   tasks:
-    - name: Aplicar configuración de SERVICES
+    - name: Aplicar configuracion de SERVICES
       cisco.ios.ios_config:
         src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_services.cfg"
       register: apply_services_result

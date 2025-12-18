@@ -1,3 +1,12 @@
+{# Interface Mgmt Configuration Template #}
+
+# Device - {{inventory_hostname}}
+
+## Configuraciones de interfaces Mgmt
+
+### hostname: {{inventory_hostname}}
+
+```
 {# Interface SVI Configuration Template #}
 !
 {% for interface in interfaces -%}
@@ -17,3 +26,4 @@ ip default-gateway 172.16.5.1
 !
 {% endif -%}
 {% endfor -%}
+```

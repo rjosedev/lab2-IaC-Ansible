@@ -1,0 +1,26 @@
+{# VLANs Configuration Template #}
+
+# Device - {{inventory_hostname}}
+
+## Configuraciones de VLANs
+
+### hostname: {{inventory_hostname}}
+
+```
+{# VLANs Configuration Template #}
+!
+{% for vlan in vlans -%}
+{%- if vlan.id == 99 %}
+vlan {{ vlan.id }}
+  name {{ vlan.name }}
+  state suspend
+  shutdown
+!
+{%- else %}
+vlan {{ vlan.id }}
+  name {{ vlan.name }}
+  no shutdown
+!
+{% endif -%}
+{% endfor -%}
+```

@@ -1,0 +1,1931 @@
+{
+  "vars": {
+    "sn_24": "255.255.255.0",
+    "source_int": "Vlan5",
+    "sn_vl10": "172.16.10",
+    "sn_vl20": "172.16.20",
+    "sn_vl30": "172.16.30",
+    "sn_vl40": "172.31.40",
+    "sn_vl50": "10.0.50",
+    "sn_vl60": "10.0.60",
+    "sn_vl70": "10.0.70",
+    "sn_vl80": "10.0.80",
+    "fst_ip": 0.25,
+    "snd_ip": 0.251,
+    "lst_ip": 0.254,
+    "networks": [
+      "172.16.10.0",
+      "172.16.20.0",
+      "172.16.30.0",
+      "172.31.40.0",
+      "10.0.50.0",
+      "10.0.60.0",
+      "10.0.70.0",
+      "10.0.80.0"
+    ],
+    "services": [
+      {
+        "name": "dns",
+        "server1": "10.0.70.11",
+        "server2": "10.0.80.22"
+      },
+      {
+        "name": "ntp",
+        "server1": "10.0.70.11",
+        "server2": "10.0.80.22",
+        "source_int": "Vlan5"
+      },
+      {
+        "name": "syslog",
+        "server1": "10.0.70.11",
+        "server2": "10.0.80.22",
+        "source_int": "Vlan5"
+      },
+      {
+        "name": "snmp",
+        "server1": "10.0.70.11",
+        "snmp_community": "{{ snmp_community }}",
+        "source_int": "Vlan5"
+      }
+    ],
+    "vlans": [
+      {
+        "id": 1,
+        "name": "VLAN01_Default/Native"
+      },
+      {
+        "id": 3,
+        "name": "VLAN03_Routing/Mgmt"
+      },
+      {
+        "id": 5,
+        "name": "VLAN05_Mgmt/OOB"
+      },
+      {
+        "id": 10,
+        "name": "VLAN10_Engineering"
+      },
+      {
+        "id": 20,
+        "name": "VLAN20_Accounting"
+      },
+      {
+        "id": 30,
+        "name": "VLAN30_Production"
+      },
+      {
+        "id": 40,
+        "name": "VLAN40_DevOps"
+      },
+      {
+        "id": 50,
+        "name": "VLAN50_Data"
+      },
+      {
+        "id": 60,
+        "name": "VLAN60_Services"
+      },
+      {
+        "id": 70,
+        "name": "VLAN70_IT1"
+      },
+      {
+        "id": 80,
+        "name": "VLAN80_IT2"
+      },
+      {
+        "id": 99,
+        "name": "VLAN99_Unused/Suspended"
+      }
+    ],
+    "int_access": {
+      "mode": "access",
+      "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###"
+    },
+    "int_trunk": {
+      "allowed_vlan": null,
+      "mode": "trunk",
+      "native": 1,
+      "dynamic": null,
+      "channel_group": null,
+      "channel_mode": null
+    },
+    "int_svi": {
+      "sn_vl10": "172.16.10",
+      "sn_vl20": "172.16.20",
+      "sn_vl30": "172.16.30",
+      "sn_vl40": "172.31.40",
+      "sn_vl50": "10.0.50",
+      "sn_vl60": "10.0.60",
+      "sn_vl70": "10.0.70",
+      "sn_vl80": "10.0.80",
+      "fst_ip": null,
+      "snd_ip": null,
+      "lst_ip": 0.254,
+      "subnet_mask": "255.255.255.0",
+      "vrrp_group": null,
+      "vrrp_priority": null,
+      "mode": "svi",
+      "vlan": null,
+      "trunk_mode": null,
+      "allowed_vlan": null
+    },
+    "int_mgmt": {
+      "mode": "mgmt",
+      "subnet_mask": "255.255.255.0"
+    }
+  },
+  "modelo": {
+    "metadata": {
+      "version": 1,
+      "project": "Simulacro de Caso de Uso - Lab 2 - IaC > Ansible",
+      "description": "Modelo de datos para la gestión de infraestructura de red",
+      "author": "Equipo de Desarrollo",
+      "date": "2024-12-08",
+      "time_zone": "America/Argentina/Buenos_Aires"
+    },
+    "hosts_groups": {
+      "sw_all": "cisco_ios_sw_all",
+      "sw_core": "cisco_ios_sw_core",
+      "sw_bld": "cisco_ios_sw_bld",
+      "sw_dc": "cisco_ios_sw_dc",
+      "sw_it": "cisco_ios_sw_it"
+    },
+    "infra_spec": {
+      "devices": {
+        "SW-CORE-1": {
+          "management": {
+            "ip": "172.16.5.51",
+            "interface": "GigabitEthernet1/3"
+          },
+          "ip_routing": true,
+          "routers": [
+            {
+              "name": "eigrp",
+              "as_number": 10,
+              "router_id": "1.1.1.1",
+              "networks": [
+                "172.16.10.0",
+                "172.16.20.0",
+                "172.16.30.0",
+                "172.31.40.0",
+                "10.0.50.0",
+                "10.0.60.0",
+                "10.0.70.0",
+                "10.0.80.0"
+              ],
+              "no_passive_interfaces": [
+                "GigabitEthernet1/1",
+                "GigabitEthernet1/2",
+                "GigabitEthernet2/1",
+                "GigabitEthernet2/2"
+              ]
+            }
+          ],
+          "services": [
+            {
+              "name": "dns",
+              "server1": "10.0.70.11",
+              "server2": "10.0.80.22"
+            },
+            {
+              "name": "ntp",
+              "server1": "10.0.70.11",
+              "server2": "10.0.80.22",
+              "source_int": "Vlan5"
+            },
+            {
+              "name": "syslog",
+              "server1": "10.0.70.11",
+              "server2": "10.0.80.22",
+              "source_int": "Vlan5"
+            },
+            {
+              "name": "snmp",
+              "server1": "10.0.70.11",
+              "snmp_community": "{{ snmp_community }}",
+              "source_int": "Vlan5"
+            }
+          ],
+          "vlans": [
+            {
+              "id": 1,
+              "name": "VLAN01_Default/Native"
+            },
+            {
+              "id": 3,
+              "name": "VLAN03_Routing/Mgmt"
+            },
+            {
+              "id": 5,
+              "name": "VLAN05_Mgmt/OOB"
+            },
+            {
+              "id": 10,
+              "name": "VLAN10_Engineering"
+            },
+            {
+              "id": 20,
+              "name": "VLAN20_Accounting"
+            },
+            {
+              "id": 30,
+              "name": "VLAN30_Production"
+            },
+            {
+              "id": 40,
+              "name": "VLAN40_DevOps"
+            },
+            {
+              "id": 50,
+              "name": "VLAN50_Data"
+            },
+            {
+              "id": 60,
+              "name": "VLAN60_Services"
+            },
+            {
+              "id": 70,
+              "name": "VLAN70_IT1"
+            },
+            {
+              "id": 80,
+              "name": "VLAN80_IT2"
+            },
+            {
+              "id": 99,
+              "name": "VLAN99_Unused/Suspended"
+            }
+          ],
+          "pvst": [
+            {
+              "mode": "rapid-pvst",
+              "rt_pri": "10,30,50",
+              "rt_sec": "20,40,60"
+            }
+          ],
+          "interfaces": [
+            {
+              "name": "GigabitEthernet0/0",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet0/1",
+              "description": "### Link to SW-BLD-A - TRUNK ###",
+              "allowed_vlan": "1,10,20,30,40,50,60",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet0/2",
+              "description": "### Link to SW-BLD-B - TRUNK ###",
+              "allowed_vlan": "1,10,20,30,40,50,60",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet0/3",
+              "description": "### Link to SW-DC - TRUNK ###",
+              "allowed_vlan": "1,10,20,30,40,50,60",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet1/0",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet1/1",
+              "description": "### Link 1 to SW-CORE-2 - LACP - TRUNK ###",
+              "allowed_vlan": "1,3,10,20,30,40,50,60",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": 1,
+              "channel_mode": "active"
+            },
+            {
+              "name": "GigabitEthernet1/2",
+              "description": "### Link 2 to SW-CORE-2 - LACP - TRUNK ###",
+              "allowed_vlan": "1,3,10,20,30,40,50,60",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": 1,
+              "channel_mode": "active"
+            },
+            {
+              "name": "GigabitEthernet1/3",
+              "description": "### Link to SW-MGMT-OOB - Uplinks to NetCloud 1 - ACCESS ###",
+              "mode": "access",
+              "access_vlan": 5
+            },
+            {
+              "name": "GigabitEthernet2/0",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet2/1",
+              "description": "### Link to SW-IT-1 - TRUNK ###",
+              "allowed_vlan": "1,3",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet2/2",
+              "description": "### Link to SW-IT-2 - TRUNK ###",
+              "allowed_vlan": "1,3",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet2/3",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "Port-Channel1",
+              "description": "### Port-Channel 1 (GE1/1 - GE1/2) to SW-CORE-2 - LACP - TRUNK ###",
+              "allowed_vlan": "1,3,10,20,30,40,50,60",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null,
+              "port_channel": 1
+            },
+            {
+              "name": "vlan 3",
+              "vlan": 3,
+              "ip_address": "172.16.3.31",
+              "mode": "mgmt",
+              "subnet_mask": "255.255.255.0"
+            },
+            {
+              "name": "vlan 5",
+              "vlan": 5,
+              "ip_address": "172.16.5.51",
+              "mode": "mgmt",
+              "subnet_mask": "255.255.255.0"
+            },
+            {
+              "name": "vlan 10",
+              "vlan": 10,
+              "ip_address": "172.16.10",
+              "fst_ip": 0.25,
+              "description": "### SVI interface for VLAN10_Engineering ###",
+              "vrrp_group": 10,
+              "vrrp_priority": 1,
+              "sn_vl10": "172.16.10",
+              "sn_vl20": "172.16.20",
+              "sn_vl30": "172.16.30",
+              "sn_vl40": "172.31.40",
+              "sn_vl50": "10.0.50",
+              "sn_vl60": "10.0.60",
+              "sn_vl70": "10.0.70",
+              "sn_vl80": "10.0.80",
+              "snd_ip": null,
+              "lst_ip": 0.254,
+              "subnet_mask": "255.255.255.0",
+              "mode": "svi",
+              "trunk_mode": null,
+              "allowed_vlan": null
+            },
+            {
+              "name": "vlan 20",
+              "vlan": 20,
+              "ip_address": "172.16.20",
+              "fst_ip": 0.25,
+              "description": "### SVI interface for VLAN20_Accounting ###",
+              "vrrp_group": 20,
+              "vrrp_priority": 2,
+              "sn_vl10": "172.16.10",
+              "sn_vl20": "172.16.20",
+              "sn_vl30": "172.16.30",
+              "sn_vl40": "172.31.40",
+              "sn_vl50": "10.0.50",
+              "sn_vl60": "10.0.60",
+              "sn_vl70": "10.0.70",
+              "sn_vl80": "10.0.80",
+              "snd_ip": null,
+              "lst_ip": 0.254,
+              "subnet_mask": "255.255.255.0",
+              "mode": "svi",
+              "trunk_mode": null,
+              "allowed_vlan": null
+            },
+            {
+              "name": "vlan 30",
+              "vlan": 30,
+              "ip_address": "172.16.30",
+              "fst_ip": 0.25,
+              "description": "### SVI interface for VLAN30_Production ###",
+              "sn_vl10": "172.16.10",
+              "sn_vl20": "172.16.20",
+              "sn_vl30": "172.16.30",
+              "sn_vl40": "172.31.40",
+              "sn_vl50": "10.0.50",
+              "sn_vl60": "10.0.60",
+              "sn_vl70": "10.0.70",
+              "sn_vl80": "10.0.80",
+              "snd_ip": null,
+              "lst_ip": 0.254,
+              "subnet_mask": "255.255.255.0",
+              "vrrp_group": 30,
+              "vrrp_priority": 1,
+              "mode": "svi",
+              "trunk_mode": null,
+              "allowed_vlan": null
+            },
+            {
+              "name": "vlan 40",
+              "vlan": 40,
+              "ip_address": "172.31.40",
+              "fst_ip": 0.25,
+              "description": "### SVI interface for VLAN40_DevOps ###",
+              "vrrp_group": 40,
+              "vrrp_priority": 2,
+              "sn_vl10": "172.16.10",
+              "sn_vl20": "172.16.20",
+              "sn_vl30": "172.16.30",
+              "sn_vl40": "172.31.40",
+              "sn_vl50": "10.0.50",
+              "sn_vl60": "10.0.60",
+              "sn_vl70": "10.0.70",
+              "sn_vl80": "10.0.80",
+              "snd_ip": null,
+              "lst_ip": 0.254,
+              "subnet_mask": "255.255.255.0",
+              "mode": "svi",
+              "trunk_mode": null,
+              "allowed_vlan": null
+            },
+            {
+              "name": "vlan 50",
+              "vlan": 50,
+              "ip_address": "10.0.50",
+              "fst_ip": 0.25,
+              "description": "### SVI interface for VLAN50_Data ###",
+              "vrrp_group": 50,
+              "vrrp_priority": 1,
+              "sn_vl10": "172.16.10",
+              "sn_vl20": "172.16.20",
+              "sn_vl30": "172.16.30",
+              "sn_vl40": "172.31.40",
+              "sn_vl50": "10.0.50",
+              "sn_vl60": "10.0.60",
+              "sn_vl70": "10.0.70",
+              "sn_vl80": "10.0.80",
+              "snd_ip": null,
+              "lst_ip": 0.254,
+              "subnet_mask": "255.255.255.0",
+              "mode": "svi",
+              "trunk_mode": null,
+              "allowed_vlan": null
+            },
+            {
+              "name": "vlan 60",
+              "vlan": 60,
+              "ip_address": "10.0.60",
+              "fst_ip": 0.25,
+              "description": "### SVI interface for VLAN60_Services ###",
+              "vrrp_group": 60,
+              "vrrp_priority": 2,
+              "sn_vl10": "172.16.10",
+              "sn_vl20": "172.16.20",
+              "sn_vl30": "172.16.30",
+              "sn_vl40": "172.31.40",
+              "sn_vl50": "10.0.50",
+              "sn_vl60": "10.0.60",
+              "sn_vl70": "10.0.70",
+              "sn_vl80": "10.0.80",
+              "snd_ip": null,
+              "lst_ip": 0.254,
+              "subnet_mask": "255.255.255.0",
+              "mode": "svi",
+              "trunk_mode": null,
+              "allowed_vlan": null
+            }
+          ]
+        },
+        "SW-CORE-2": {
+          "management": {
+            "ip": "172.16.5.52",
+            "interface": "GigabitEthernet1/3"
+          },
+          "ip_routing": true,
+          "routers": [
+            {
+              "name": "eigrp",
+              "as_number": 10,
+              "router_id": "1.1.1.2",
+              "networks": [
+                "172.16.10.0",
+                "172.16.20.0",
+                "172.16.30.0",
+                "172.31.40.0",
+                "10.0.50.0",
+                "10.0.60.0",
+                "10.0.70.0",
+                "10.0.80.0"
+              ],
+              "no_passive_interfaces": [
+                "GigabitEthernet1/1",
+                "GigabitEthernet1/2",
+                "GigabitEthernet2/1",
+                "GigabitEthernet2/2"
+              ]
+            }
+          ],
+          "services": [
+            {
+              "name": "dns",
+              "server1": "10.0.70.11",
+              "server2": "10.0.80.22"
+            },
+            {
+              "name": "ntp",
+              "server1": "10.0.70.11",
+              "server2": "10.0.80.22",
+              "source_int": "Vlan5"
+            },
+            {
+              "name": "syslog",
+              "server1": "10.0.70.11",
+              "server2": "10.0.80.22",
+              "source_int": "Vlan5"
+            },
+            {
+              "name": "snmp",
+              "server1": "10.0.70.11",
+              "snmp_community": "{{ snmp_community }}",
+              "source_int": "Vlan5"
+            }
+          ],
+          "vlans": [
+            {
+              "id": 1,
+              "name": "VLAN01_Default/Native"
+            },
+            {
+              "id": 3,
+              "name": "VLAN03_Routing/Mgmt"
+            },
+            {
+              "id": 5,
+              "name": "VLAN05_Mgmt/OOB"
+            },
+            {
+              "id": 10,
+              "name": "VLAN10_Engineering"
+            },
+            {
+              "id": 20,
+              "name": "VLAN20_Accounting"
+            },
+            {
+              "id": 30,
+              "name": "VLAN30_Production"
+            },
+            {
+              "id": 40,
+              "name": "VLAN40_DevOps"
+            },
+            {
+              "id": 50,
+              "name": "VLAN50_Data"
+            },
+            {
+              "id": 60,
+              "name": "VLAN60_Services"
+            },
+            {
+              "id": 70,
+              "name": "VLAN70_IT1"
+            },
+            {
+              "id": 80,
+              "name": "VLAN80_IT2"
+            },
+            {
+              "id": 99,
+              "name": "VLAN99_Unused/Suspended"
+            }
+          ],
+          "pvst": [
+            {
+              "mode": "rapid-pvst",
+              "rt_pri": "20,40,60",
+              "rt_sec": "10,30,50"
+            }
+          ],
+          "interfaces": [
+            {
+              "name": "GigabitEthernet0/0",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet0/1",
+              "description": "### Link to SW-BLD-A - TRUNK ###",
+              "allowed_vlan": "1,10,20,30,40,50,60",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet0/2",
+              "description": "### Link to SW-BLD-B - TRUNK ###",
+              "allowed_vlan": "1,10,20,30,40,50,60",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet0/3",
+              "description": "### Link to SW-DC - TRUNK ###",
+              "allowed_vlan": "1,10,20,30,40,50,60",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet1/0",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet1/1",
+              "description": "### Link 1 to SW-CORE-1 - LACP - TRUNK ###",
+              "allowed_vlan": "1,3,10,20,30,40,50,60",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": 1,
+              "channel_mode": "active"
+            },
+            {
+              "name": "GigabitEthernet1/2",
+              "description": "### Link 2 to SW-CORE-1 - LACP - TRUNK ###",
+              "allowed_vlan": "1,3,10,20,30,40,50,60",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": 1,
+              "channel_mode": "active"
+            },
+            {
+              "name": "GigabitEthernet1/3",
+              "description": "### Link to SW-MGMT-OOB - Uplinks to NetCloud 1 - ACCESS ###",
+              "mode": "access",
+              "access_vlan": 5
+            },
+            {
+              "name": "GigabitEthernet2/0",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet2/1",
+              "description": "### Link to SW-IT-1 - TRUNK ###",
+              "allowed_vlan": "1,3",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet2/2",
+              "description": "### Link to SW-IT-2 - TRUNK ###",
+              "allowed_vlan": "1,3",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet2/3",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "Port-Channel1",
+              "description": "### Port-Channel 1 (GE1/1 - GE1/2) to SW-CORE-1 - LACP - TRUNK ###",
+              "allowed_vlan": "1,3,10,20,30,40,50,60",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null,
+              "port_channel": 1
+            },
+            {
+              "name": "vlan 3",
+              "vlan": 3,
+              "ip_address": "172.16.3.32",
+              "mode": "mgmt",
+              "subnet_mask": "255.255.255.0"
+            },
+            {
+              "name": "vlan 5",
+              "vlan": 5,
+              "ip_address": "172.16.5.52",
+              "mode": "mgmt",
+              "subnet_mask": "255.255.255.0"
+            },
+            {
+              "name": "vlan 10",
+              "vlan": 10,
+              "ip_address": "172.16.10",
+              "snd_ip": 0.251,
+              "description": "### SVI interface for VLAN10_Engineering ###",
+              "vrrp_group": 10,
+              "vrrp_priority": 2,
+              "sn_vl10": "172.16.10",
+              "sn_vl20": "172.16.20",
+              "sn_vl30": "172.16.30",
+              "sn_vl40": "172.31.40",
+              "sn_vl50": "10.0.50",
+              "sn_vl60": "10.0.60",
+              "sn_vl70": "10.0.70",
+              "sn_vl80": "10.0.80",
+              "fst_ip": null,
+              "lst_ip": 0.254,
+              "subnet_mask": "255.255.255.0",
+              "mode": "svi",
+              "trunk_mode": null,
+              "allowed_vlan": null
+            },
+            {
+              "name": "vlan 20",
+              "vlan": 20,
+              "ip_address": "172.16.20",
+              "snd_ip": 0.251,
+              "description": "### SVI interface for VLAN20_Accounting ###",
+              "vrrp_group": 20,
+              "vrrp_priority": 1,
+              "sn_vl10": "172.16.10",
+              "sn_vl20": "172.16.20",
+              "sn_vl30": "172.16.30",
+              "sn_vl40": "172.31.40",
+              "sn_vl50": "10.0.50",
+              "sn_vl60": "10.0.60",
+              "sn_vl70": "10.0.70",
+              "sn_vl80": "10.0.80",
+              "fst_ip": null,
+              "lst_ip": 0.254,
+              "subnet_mask": "255.255.255.0",
+              "mode": "svi",
+              "trunk_mode": null,
+              "allowed_vlan": null
+            },
+            {
+              "name": "vlan 30",
+              "vlan": 30,
+              "ip_address": "172.16.30",
+              "snd_ip": 0.251,
+              "description": "### SVI interface for VLAN30_Production ###",
+              "vrrp_group": 30,
+              "vrrp_priority": 2,
+              "sn_vl10": "172.16.10",
+              "sn_vl20": "172.16.20",
+              "sn_vl30": "172.16.30",
+              "sn_vl40": "172.31.40",
+              "sn_vl50": "10.0.50",
+              "sn_vl60": "10.0.60",
+              "sn_vl70": "10.0.70",
+              "sn_vl80": "10.0.80",
+              "fst_ip": null,
+              "lst_ip": 0.254,
+              "subnet_mask": "255.255.255.0",
+              "mode": "svi",
+              "trunk_mode": null,
+              "allowed_vlan": null
+            },
+            {
+              "name": "vlan 40",
+              "vlan": 40,
+              "ip_address": "172.31.40",
+              "snd_ip": 0.251,
+              "description": "### SVI interface for VLAN40_DevOps ###",
+              "vrrp_group": 40,
+              "vrrp_priority": 1,
+              "sn_vl10": "172.16.10",
+              "sn_vl20": "172.16.20",
+              "sn_vl30": "172.16.30",
+              "sn_vl40": "172.31.40",
+              "sn_vl50": "10.0.50",
+              "sn_vl60": "10.0.60",
+              "sn_vl70": "10.0.70",
+              "sn_vl80": "10.0.80",
+              "fst_ip": null,
+              "lst_ip": 0.254,
+              "subnet_mask": "255.255.255.0",
+              "mode": "svi",
+              "trunk_mode": null,
+              "allowed_vlan": null
+            },
+            {
+              "name": "vlan 50",
+              "vlan": 50,
+              "ip_address": "10.0.50",
+              "snd_ip": 0.251,
+              "description": "### SVI interface for VLAN50_Data ###",
+              "vrrp_group": 50,
+              "vrrp_priority": 2,
+              "sn_vl10": "172.16.10",
+              "sn_vl20": "172.16.20",
+              "sn_vl30": "172.16.30",
+              "sn_vl40": "172.31.40",
+              "sn_vl50": "10.0.50",
+              "sn_vl60": "10.0.60",
+              "sn_vl70": "10.0.70",
+              "sn_vl80": "10.0.80",
+              "fst_ip": null,
+              "lst_ip": 0.254,
+              "subnet_mask": "255.255.255.0",
+              "mode": "svi",
+              "trunk_mode": null,
+              "allowed_vlan": null
+            },
+            {
+              "name": "vlan 60",
+              "vlan": 60,
+              "ip_address": "10.0.60",
+              "snd_ip": 0.251,
+              "description": "### SVI interface for VLAN60_Services ###",
+              "vrrp_group": 60,
+              "vrrp_priority": 1,
+              "sn_vl10": "172.16.10",
+              "sn_vl20": "172.16.20",
+              "sn_vl30": "172.16.30",
+              "sn_vl40": "172.31.40",
+              "sn_vl50": "10.0.50",
+              "sn_vl60": "10.0.60",
+              "sn_vl70": "10.0.70",
+              "sn_vl80": "10.0.80",
+              "fst_ip": null,
+              "lst_ip": 0.254,
+              "subnet_mask": "255.255.255.0",
+              "mode": "svi",
+              "trunk_mode": null,
+              "allowed_vlan": null
+            }
+          ]
+        },
+        "SW-BLD-A": {
+          "management": {
+            "ip": "172.16.5.53",
+            "interface": "GigabitEthernet1/3"
+          },
+          "ip_routing": false,
+          "services": [
+            {
+              "name": "dns",
+              "server1": "10.0.70.11",
+              "server2": "10.0.80.22"
+            },
+            {
+              "name": "ntp",
+              "server1": "10.0.70.11",
+              "server2": "10.0.80.22",
+              "source_int": "Vlan5"
+            },
+            {
+              "name": "syslog",
+              "server1": "10.0.70.11",
+              "server2": "10.0.80.22",
+              "source_int": "Vlan5"
+            },
+            {
+              "name": "snmp",
+              "server1": "10.0.70.11",
+              "snmp_community": "{{ snmp_community }}",
+              "source_int": "Vlan5"
+            }
+          ],
+          "vlans": [
+            {
+              "id": 1,
+              "name": "VLAN01_Default/Native"
+            },
+            {
+              "id": 3,
+              "name": "VLAN03_Routing/Mgmt"
+            },
+            {
+              "id": 5,
+              "name": "VLAN05_Mgmt/OOB"
+            },
+            {
+              "id": 10,
+              "name": "VLAN10_Engineering"
+            },
+            {
+              "id": 20,
+              "name": "VLAN20_Accounting"
+            },
+            {
+              "id": 30,
+              "name": "VLAN30_Production"
+            },
+            {
+              "id": 40,
+              "name": "VLAN40_DevOps"
+            },
+            {
+              "id": 50,
+              "name": "VLAN50_Data"
+            },
+            {
+              "id": 60,
+              "name": "VLAN60_Services"
+            },
+            {
+              "id": 70,
+              "name": "VLAN70_IT1"
+            },
+            {
+              "id": 80,
+              "name": "VLAN80_IT2"
+            },
+            {
+              "id": 99,
+              "name": "VLAN99_Unused/Suspended"
+            }
+          ],
+          "pvst": [
+            {
+              "mode": "rapid-pvst"
+            }
+          ],
+          "interfaces": [
+            {
+              "name": "GigabitEthernet0/0",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet0/1",
+              "description": "### Link to SW-CORE-1 - TRUNK ###",
+              "allowed_vlan": "1,10,20,30,40,50,60",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet0/2",
+              "description": "### Link to SW-CORE-2 - TRUNK ###",
+              "allowed_vlan": "1,10,20,30,40,50,60",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet0/3",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet1/0",
+              "description": "### Link to PC on VLAN10_Engineering - ACCESS ###",
+              "mode": "access",
+              "access_vlan": 10
+            },
+            {
+              "name": "GigabitEthernet1/1",
+              "description": "### Link to PC on VLAN20_Accounting - ACCESS ###",
+              "mode": "access",
+              "access_vlan": 20
+            },
+            {
+              "name": "GigabitEthernet1/2",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet1/3",
+              "description": "### Link to SW-MGMT-OOB - Uplinks to NetCloud 1 - ACCESS ###",
+              "mode": "access",
+              "access_vlan": 5
+            },
+            {
+              "name": "vlan 5",
+              "vlan": 5,
+              "ip_address": "172.16.5.53",
+              "mode": "mgmt",
+              "subnet_mask": "255.255.255.0"
+            }
+          ]
+        },
+        "SW-BLD-B": {
+          "management": {
+            "ip": "172.16.5.54",
+            "interface": "GigabitEthernet1/3"
+          },
+          "ip_routing": false,
+          "services": [
+            {
+              "name": "dns",
+              "server1": "10.0.70.11",
+              "server2": "10.0.80.22"
+            },
+            {
+              "name": "ntp",
+              "server1": "10.0.70.11",
+              "server2": "10.0.80.22",
+              "source_int": "Vlan5"
+            },
+            {
+              "name": "syslog",
+              "server1": "10.0.70.11",
+              "server2": "10.0.80.22",
+              "source_int": "Vlan5"
+            },
+            {
+              "name": "snmp",
+              "server1": "10.0.70.11",
+              "snmp_community": "{{ snmp_community }}",
+              "source_int": "Vlan5"
+            }
+          ],
+          "vlans": [
+            {
+              "id": 1,
+              "name": "VLAN01_Default/Native"
+            },
+            {
+              "id": 3,
+              "name": "VLAN03_Routing/Mgmt"
+            },
+            {
+              "id": 5,
+              "name": "VLAN05_Mgmt/OOB"
+            },
+            {
+              "id": 10,
+              "name": "VLAN10_Engineering"
+            },
+            {
+              "id": 20,
+              "name": "VLAN20_Accounting"
+            },
+            {
+              "id": 30,
+              "name": "VLAN30_Production"
+            },
+            {
+              "id": 40,
+              "name": "VLAN40_DevOps"
+            },
+            {
+              "id": 50,
+              "name": "VLAN50_Data"
+            },
+            {
+              "id": 60,
+              "name": "VLAN60_Services"
+            },
+            {
+              "id": 70,
+              "name": "VLAN70_IT1"
+            },
+            {
+              "id": 80,
+              "name": "VLAN80_IT2"
+            },
+            {
+              "id": 99,
+              "name": "VLAN99_Unused/Suspended"
+            }
+          ],
+          "pvst": [
+            {
+              "mode": "rapid-pvst"
+            }
+          ],
+          "interfaces": [
+            {
+              "name": "GigabitEthernet0/0",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet0/1",
+              "description": "### Link to SW-CORE-1 - TRUNK ###",
+              "allowed_vlan": "1,10,20,30,40,50,60",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet0/2",
+              "description": "### Link to SW-CORE-2 - TRUNK ###",
+              "allowed_vlan": "1,10,20,30,40,50,60",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet0/3",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet1/0",
+              "description": "### Link to PC on VLAN30_Production - ACCESS ###",
+              "mode": "access",
+              "access_vlan": 30
+            },
+            {
+              "name": "GigabitEthernet1/1",
+              "description": "### Link to PC on VLAN40_DevOps - ACCESS ###",
+              "mode": "access",
+              "access_vlan": 40
+            },
+            {
+              "name": "GigabitEthernet1/2",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet1/3",
+              "description": "### Link to SW-MGMT-OOB - Uplinks to NetCloud 1 - ACCESS ###",
+              "mode": "access",
+              "access_vlan": 5
+            },
+            {
+              "name": "vlan 5",
+              "vlan": 5,
+              "ip_address": "172.16.5.54",
+              "mode": "mgmt",
+              "subnet_mask": "255.255.255.0"
+            }
+          ]
+        },
+        "SW-DC": {
+          "management": {
+            "ip": "172.16.5.55",
+            "interface": "GigabitEthernet1/3"
+          },
+          "ip_routing": false,
+          "services": [
+            {
+              "name": "dns",
+              "server1": "10.0.70.11",
+              "server2": "10.0.80.22"
+            },
+            {
+              "name": "ntp",
+              "server1": "10.0.70.11",
+              "server2": "10.0.80.22",
+              "source_int": "Vlan5"
+            },
+            {
+              "name": "syslog",
+              "server1": "10.0.70.11",
+              "server2": "10.0.80.22",
+              "source_int": "Vlan5"
+            },
+            {
+              "name": "snmp",
+              "server1": "10.0.70.11",
+              "snmp_community": "{{ snmp_community }}",
+              "source_int": "Vlan5"
+            }
+          ],
+          "vlans": [
+            {
+              "id": 1,
+              "name": "VLAN01_Default/Native"
+            },
+            {
+              "id": 3,
+              "name": "VLAN03_Routing/Mgmt"
+            },
+            {
+              "id": 5,
+              "name": "VLAN05_Mgmt/OOB"
+            },
+            {
+              "id": 10,
+              "name": "VLAN10_Engineering"
+            },
+            {
+              "id": 20,
+              "name": "VLAN20_Accounting"
+            },
+            {
+              "id": 30,
+              "name": "VLAN30_Production"
+            },
+            {
+              "id": 40,
+              "name": "VLAN40_DevOps"
+            },
+            {
+              "id": 50,
+              "name": "VLAN50_Data"
+            },
+            {
+              "id": 60,
+              "name": "VLAN60_Services"
+            },
+            {
+              "id": 70,
+              "name": "VLAN70_IT1"
+            },
+            {
+              "id": 80,
+              "name": "VLAN80_IT2"
+            },
+            {
+              "id": 99,
+              "name": "VLAN99_Unused/Suspended"
+            }
+          ],
+          "pvst": [
+            {
+              "mode": "rapid-pvst"
+            }
+          ],
+          "interfaces": [
+            {
+              "name": "GigabitEthernet0/0",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet0/1",
+              "description": "### Link to SW-CORE-1 - TRUNK ###",
+              "allowed_vlan": "1,10,20,30,40,50,60",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet0/2",
+              "description": "### Link to SW-CORE-2 - TRUNK ###",
+              "allowed_vlan": "1,10,20,30,40,50,60",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet0/3",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet1/0",
+              "description": "### Link to Server1 on VLAN50_Data - ACCESS ###",
+              "mode": "access",
+              "access_vlan": 50
+            },
+            {
+              "name": "GigabitEthernet1/1",
+              "description": "### Link to Server2 on VLAN60_Services - ACCESS ###",
+              "mode": "access",
+              "access_vlan": 60
+            },
+            {
+              "name": "GigabitEthernet1/2",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet1/3",
+              "description": "### Link to SW-MGMT-OOB - Uplinks to NetCloud 1 - ACCESS ###",
+              "mode": "access",
+              "access_vlan": 5
+            },
+            {
+              "name": "vlan 5",
+              "vlan": 5,
+              "ip_address": "172.16.5.55",
+              "mode": "mgmt",
+              "subnet_mask": "255.255.255.0"
+            }
+          ]
+        },
+        "SW-IT-1": {
+          "management": {
+            "ip": "172.16.5.56",
+            "interface": "GigabitEthernet1/3"
+          },
+          "ip_routing": true,
+          "routers": [
+            {
+              "name": "eigrp",
+              "as_number": 10,
+              "router_id": "1.1.1.3",
+              "networks": [
+                "172.16.10.0",
+                "172.16.20.0",
+                "172.16.30.0",
+                "172.31.40.0",
+                "10.0.50.0",
+                "10.0.60.0",
+                "10.0.70.0",
+                "10.0.80.0"
+              ],
+              "no_passive_interfaces": [
+                "GigabitEthernet1/1",
+                "GigabitEthernet1/2",
+                "GigabitEthernet2/1",
+                "GigabitEthernet2/2"
+              ]
+            }
+          ],
+          "services": [
+            {
+              "name": "dns",
+              "server1": "10.0.70.11",
+              "server2": "10.0.80.22"
+            },
+            {
+              "name": "ntp",
+              "server1": "10.0.70.11",
+              "server2": "10.0.80.22",
+              "source_int": "Vlan5"
+            },
+            {
+              "name": "syslog",
+              "server1": "10.0.70.11",
+              "server2": "10.0.80.22",
+              "source_int": "Vlan5"
+            },
+            {
+              "name": "snmp",
+              "server1": "10.0.70.11",
+              "snmp_community": "{{ snmp_community }}",
+              "source_int": "Vlan5"
+            }
+          ],
+          "vlans": [
+            {
+              "id": 1,
+              "name": "VLAN01_Default/Native"
+            },
+            {
+              "id": 3,
+              "name": "VLAN03_Routing/Mgmt"
+            },
+            {
+              "id": 5,
+              "name": "VLAN05_Mgmt/OOB"
+            },
+            {
+              "id": 10,
+              "name": "VLAN10_Engineering"
+            },
+            {
+              "id": 20,
+              "name": "VLAN20_Accounting"
+            },
+            {
+              "id": 30,
+              "name": "VLAN30_Production"
+            },
+            {
+              "id": 40,
+              "name": "VLAN40_DevOps"
+            },
+            {
+              "id": 50,
+              "name": "VLAN50_Data"
+            },
+            {
+              "id": 60,
+              "name": "VLAN60_Services"
+            },
+            {
+              "id": 70,
+              "name": "VLAN70_IT1"
+            },
+            {
+              "id": 80,
+              "name": "VLAN80_IT2"
+            },
+            {
+              "id": 99,
+              "name": "VLAN99_Unused/Suspended"
+            }
+          ],
+          "pvst": [
+            {
+              "mode": "rapid-pvst",
+              "rt_pri": 70,
+              "rt_sec": 80
+            }
+          ],
+          "interfaces": [
+            {
+              "name": "GigabitEthernet0/0",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet0/1",
+              "description": "### Link 1 to (e1/ens4) UBUNTU-1 - TRUNK ###",
+              "allowed_vlan": "1,70,80",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": null,
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet0/2",
+              "description": "### Link 2 to (e2/ens5) UBUNTU-1 - TRUNK ###",
+              "allowed_vlan": "1,70,80",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": null,
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet0/3",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet1/0",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet1/1",
+              "description": "### Link 1 to SW-IT-1 - LACP - TRUNK ###",
+              "allowed_vlan": "1,3,70,80",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": 1,
+              "channel_mode": "active"
+            },
+            {
+              "name": "GigabitEthernet1/2",
+              "description": "### Link 2 to SW-IT-1 - LACP - TRUNK ###",
+              "allowed_vlan": "1,3,70,80",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": 1,
+              "channel_mode": "active"
+            },
+            {
+              "name": "GigabitEthernet1/3",
+              "description": "### Link to SW-MGMT-OOB - Uplinks to NetCloud 1 - ACCESS ###",
+              "mode": "access",
+              "access_vlan": 5
+            },
+            {
+              "name": "GigabitEthernet2/0",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet2/1",
+              "description": "### Link to SW-CORE-1 - TRUNK ###",
+              "allowed_vlan": "1,3",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet2/2",
+              "description": "### Link to SW-CORE-2 - TRUNK ###",
+              "allowed_vlan": "1,3",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet2/3",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "Port-Channel1",
+              "description": "### Port-Channel 1 (GE1/1 - GE1/2) to SW-IT-2 - LACP - TRUNK ###",
+              "allowed_vlan": "1,3,70,80",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null,
+              "port_channel": 1
+            },
+            {
+              "name": "vlan 3",
+              "vlan": 3,
+              "ip_address": "172.16.3.36",
+              "mode": "mgmt",
+              "subnet_mask": "255.255.255.0"
+            },
+            {
+              "name": "vlan 5",
+              "vlan": 5,
+              "ip_address": "172.16.5.56",
+              "mode": "mgmt",
+              "subnet_mask": "255.255.255.0"
+            },
+            {
+              "name": "vlan 70",
+              "vlan": 70,
+              "ip_address": "10.0.70",
+              "fst_ip": 0.25,
+              "description": "### SVI interface for VLAN70_IT1 ###",
+              "vrrp_group": 70,
+              "vrrp_priority": 1,
+              "sn_vl10": "172.16.10",
+              "sn_vl20": "172.16.20",
+              "sn_vl30": "172.16.30",
+              "sn_vl40": "172.31.40",
+              "sn_vl50": "10.0.50",
+              "sn_vl60": "10.0.60",
+              "sn_vl70": "10.0.70",
+              "sn_vl80": "10.0.80",
+              "snd_ip": null,
+              "lst_ip": 0.254,
+              "subnet_mask": "255.255.255.0",
+              "mode": "svi",
+              "trunk_mode": null,
+              "allowed_vlan": null
+            },
+            {
+              "name": "vlan 80",
+              "vlan": 80,
+              "ip_address": "10.0.80",
+              "fst_ip": 0.25,
+              "description": "### SVI interface for VLAN80_IT2 ###",
+              "vrrp_group": 80,
+              "vrrp_priority": 2,
+              "sn_vl10": "172.16.10",
+              "sn_vl20": "172.16.20",
+              "sn_vl30": "172.16.30",
+              "sn_vl40": "172.31.40",
+              "sn_vl50": "10.0.50",
+              "sn_vl60": "10.0.60",
+              "sn_vl70": "10.0.70",
+              "sn_vl80": "10.0.80",
+              "snd_ip": null,
+              "lst_ip": 0.254,
+              "subnet_mask": "255.255.255.0",
+              "mode": "svi",
+              "trunk_mode": null,
+              "allowed_vlan": null
+            }
+          ]
+        },
+        "SW-IT-2": {
+          "management": {
+            "ip": "172.16.5.57",
+            "interface": "GigabitEthernet1/3"
+          },
+          "ip_routing": true,
+          "routers": [
+            {
+              "name": "eigrp",
+              "as_number": 10,
+              "router_id": "1.1.1.4",
+              "networks": [
+                "172.16.10.0",
+                "172.16.20.0",
+                "172.16.30.0",
+                "172.31.40.0",
+                "10.0.50.0",
+                "10.0.60.0",
+                "10.0.70.0",
+                "10.0.80.0"
+              ],
+              "no_passive_interfaces": [
+                "GigabitEthernet1/1",
+                "GigabitEthernet1/2",
+                "GigabitEthernet2/1",
+                "GigabitEthernet2/2"
+              ]
+            }
+          ],
+          "services": [
+            {
+              "name": "dns",
+              "server1": "10.0.70.11",
+              "server2": "10.0.80.22"
+            },
+            {
+              "name": "ntp",
+              "server1": "10.0.70.11",
+              "server2": "10.0.80.22",
+              "source_int": "Vlan5"
+            },
+            {
+              "name": "syslog",
+              "server1": "10.0.70.11",
+              "server2": "10.0.80.22",
+              "source_int": "Vlan5"
+            },
+            {
+              "name": "snmp",
+              "server1": "10.0.70.11",
+              "snmp_community": "{{ snmp_community }}",
+              "source_int": "Vlan5"
+            }
+          ],
+          "vlans": [
+            {
+              "id": 1,
+              "name": "VLAN01_Default/Native"
+            },
+            {
+              "id": 3,
+              "name": "VLAN03_Routing/Mgmt"
+            },
+            {
+              "id": 5,
+              "name": "VLAN05_Mgmt/OOB"
+            },
+            {
+              "id": 10,
+              "name": "VLAN10_Engineering"
+            },
+            {
+              "id": 20,
+              "name": "VLAN20_Accounting"
+            },
+            {
+              "id": 30,
+              "name": "VLAN30_Production"
+            },
+            {
+              "id": 40,
+              "name": "VLAN40_DevOps"
+            },
+            {
+              "id": 50,
+              "name": "VLAN50_Data"
+            },
+            {
+              "id": 60,
+              "name": "VLAN60_Services"
+            },
+            {
+              "id": 70,
+              "name": "VLAN70_IT1"
+            },
+            {
+              "id": 80,
+              "name": "VLAN80_IT2"
+            },
+            {
+              "id": 99,
+              "name": "VLAN99_Unused/Suspended"
+            }
+          ],
+          "pvst": [
+            {
+              "mode": "rapid-pvst",
+              "rt_pri": 80,
+              "rt_sec": 70
+            }
+          ],
+          "interfaces": [
+            {
+              "name": "GigabitEthernet0/0",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet0/1",
+              "description": "### Link 1 to (e3/ens6) UBUNTU-1 - TRUNK ###",
+              "allowed_vlan": "1,70,80",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": null,
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet0/2",
+              "description": "### Link 2 to (e4/ens7) UBUNTU-1 - TRUNK ###",
+              "allowed_vlan": "1,70,80",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": null,
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet0/3",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet1/0",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet1/1",
+              "description": "### Link 1 to SW-IT-1 - LACP - TRUNK ###",
+              "allowed_vlan": "1,3,70,80",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": 1,
+              "channel_mode": "active"
+            },
+            {
+              "name": "GigabitEthernet1/2",
+              "description": "### Link 2 to SW-IT-1 - LACP - TRUNK ###",
+              "allowed_vlan": "1,3,70,80",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": 1,
+              "channel_mode": "active"
+            },
+            {
+              "name": "GigabitEthernet1/3",
+              "description": "### Link to SW-MGMT-OOB - Uplinks to NetCloud 1 - ACCESS ###",
+              "mode": "access",
+              "access_vlan": 5
+            },
+            {
+              "name": "GigabitEthernet2/0",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "GigabitEthernet2/1",
+              "description": "### Link to SW-CORE-1 - TRUNK ###",
+              "allowed_vlan": "1,3",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet2/2",
+              "description": "### Link to SW-CORE-2 - TRUNK ###",
+              "allowed_vlan": "1,3",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null
+            },
+            {
+              "name": "GigabitEthernet2/3",
+              "mode": "access",
+              "description": "### NONE at VLAN99_Unused/Suspended - ACCESS ###",
+              "access_vlan": 99
+            },
+            {
+              "name": "Port-Channel1",
+              "description": "### Port-Channel 1 (GE1/1 - GE1/2) to SW-IT-1 - LACP - TRUNK ###",
+              "allowed_vlan": "1,3,70,80",
+              "mode": "trunk",
+              "native": 1,
+              "dynamic": "desirable",
+              "channel_group": null,
+              "channel_mode": null,
+              "port_channel": 1
+            },
+            {
+              "name": "vlan 3",
+              "vlan": 3,
+              "ip_address": "172.16.3.37",
+              "mode": "mgmt",
+              "subnet_mask": "255.255.255.0"
+            },
+            {
+              "name": "vlan 5",
+              "vlan": 5,
+              "ip_address": "172.16.5.57",
+              "mode": "mgmt",
+              "subnet_mask": "255.255.255.0"
+            },
+            {
+              "name": "vlan 70",
+              "vlan": 70,
+              "ip_address": "10.0.70",
+              "snd_ip": 0.251,
+              "description": "### SVI interface for VLAN70_IT1 ###",
+              "vrrp_group": 70,
+              "vrrp_priority": 2,
+              "sn_vl10": "172.16.10",
+              "sn_vl20": "172.16.20",
+              "sn_vl30": "172.16.30",
+              "sn_vl40": "172.31.40",
+              "sn_vl50": "10.0.50",
+              "sn_vl60": "10.0.60",
+              "sn_vl70": "10.0.70",
+              "sn_vl80": "10.0.80",
+              "fst_ip": null,
+              "lst_ip": 0.254,
+              "subnet_mask": "255.255.255.0",
+              "mode": "svi",
+              "trunk_mode": null,
+              "allowed_vlan": null
+            },
+            {
+              "name": "vlan 80",
+              "vlan": 80,
+              "ip_address": "10.0.80",
+              "snd_ip": 0.251,
+              "description": "### SVI interface for VLAN80_IT2 ###",
+              "vrrp_group": 80,
+              "vrrp_priority": 1,
+              "sn_vl10": "172.16.10",
+              "sn_vl20": "172.16.20",
+              "sn_vl30": "172.16.30",
+              "sn_vl40": "172.31.40",
+              "sn_vl50": "10.0.50",
+              "sn_vl60": "10.0.60",
+              "sn_vl70": "10.0.70",
+              "sn_vl80": "10.0.80",
+              "fst_ip": null,
+              "lst_ip": 0.254,
+              "subnet_mask": "255.255.255.0",
+              "mode": "svi",
+              "trunk_mode": null,
+              "allowed_vlan": null
+            }
+          ]
+        }
+      }
+    }
+  }
+}

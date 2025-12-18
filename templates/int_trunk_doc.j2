@@ -1,0 +1,32 @@
+{# Interface Trunk Configuration Template #}
+
+# Device - {{inventory_hostname}}
+
+## Configuraciones de interfaces Trunk
+
+### hostname: {{inventory_hostname}}
+
+```
+{# Interface Trunk Configuration Template #}
+!
+{% for interface in interfaces -%}
+{% if interface.mode == "trunk" -%}
+interface {{ interface.name }}
+  description {{ interface.description }}
+  switchport {{ interface.mode }} encapsulation dot1q
+  switchport trunk allowed vlan {{ interface.allowed_vlan }}
+  switchport trunk native vlan {{ interface.native }}
+  switchport mode trunk
+{% if interface.dynamic %}
+  switchport mode dynamic {{ interface.dynamic }}
+  spanning-tree bpduguard disable
+{% endif -%}
+{% if interface.channel_group %}
+  channel-group {{ interface.channel_group }} mode {{ interface.channel_mode }}
+{% endif %}
+  no ip address
+  no shutdown
+!
+{% endif -%}
+{% endfor -%}
+```

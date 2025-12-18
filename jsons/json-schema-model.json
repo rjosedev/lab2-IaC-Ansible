@@ -1,0 +1,1005 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$ref": "#/definitions/JSONSchema",
+    "definitions": {
+        "JSONSchema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "vars": {
+                    "$ref": "#/definitions/Vars"
+                },
+                "modelo": {
+                    "$ref": "#/definitions/Modelo"
+                }
+            },
+            "required": [
+                "modelo",
+                "vars"
+            ],
+            "title": "JSONSchema"
+        },
+        "Modelo": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "metadata": {
+                    "$ref": "#/definitions/Metadata"
+                },
+                "hosts_groups": {
+                    "$ref": "#/definitions/HostsGroups"
+                },
+                "infra_spec": {
+                    "$ref": "#/definitions/InfraSpec"
+                }
+            },
+            "required": [
+                "hosts_groups",
+                "infra_spec",
+                "metadata"
+            ],
+            "title": "Modelo"
+        },
+        "HostsGroups": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "sw_all": {
+                    "type": "string"
+                },
+                "sw_core": {
+                    "type": "string"
+                },
+                "sw_bld": {
+                    "type": "string"
+                },
+                "sw_dc": {
+                    "type": "string"
+                },
+                "sw_it": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "sw_all",
+                "sw_bld",
+                "sw_core",
+                "sw_dc",
+                "sw_it"
+            ],
+            "title": "HostsGroups"
+        },
+        "InfraSpec": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "devices": {
+                    "$ref": "#/definitions/Devices"
+                }
+            },
+            "required": [
+                "devices"
+            ],
+            "title": "InfraSpec"
+        },
+        "Devices": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "SW-CORE-1": {
+                    "$ref": "#/definitions/SwCore"
+                },
+                "SW-CORE-2": {
+                    "$ref": "#/definitions/SwCore"
+                },
+                "SW-BLD-A": {
+                    "$ref": "#/definitions/Sw"
+                },
+                "SW-BLD-B": {
+                    "$ref": "#/definitions/Sw"
+                },
+                "SW-DC": {
+                    "$ref": "#/definitions/Sw"
+                },
+                "SW-IT-1": {
+                    "$ref": "#/definitions/SwIt"
+                },
+                "SW-IT-2": {
+                    "$ref": "#/definitions/SwIt"
+                }
+            },
+            "required": [
+                "SW-BLD-A",
+                "SW-BLD-B",
+                "SW-CORE-1",
+                "SW-CORE-2",
+                "SW-DC",
+                "SW-IT-1",
+                "SW-IT-2"
+            ],
+            "title": "Devices"
+        },
+        "Sw": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "management": {
+                    "$ref": "#/definitions/Management"
+                },
+                "ip_routing": {
+                    "type": "boolean"
+                },
+                "services": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Service"
+                    }
+                },
+                "vlans": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/VLAN"
+                    }
+                },
+                "pvst": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/SWBLDAPvst"
+                    }
+                },
+                "interfaces": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/SWBLDAInterface"
+                    }
+                }
+            },
+            "required": [
+                "interfaces",
+                "ip_routing",
+                "management",
+                "pvst",
+                "services",
+                "vlans"
+            ],
+            "title": "Sw"
+        },
+        "SWBLDAInterface": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "mode": {
+                    "$ref": "#/definitions/Mode"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "access_vlan": {
+                    "type": "integer"
+                },
+                "allowed_vlan": {
+                    "$ref": "#/definitions/AllowedVLAN"
+                },
+                "native": {
+                    "type": "integer"
+                },
+                "dynamic": {
+                    "$ref": "#/definitions/Dynamic"
+                },
+                "channel_group": {
+                    "type": "null"
+                },
+                "channel_mode": {
+                    "type": "null"
+                },
+                "vlan": {
+                    "type": "integer"
+                },
+                "ip_address": {
+                    "type": "string"
+                },
+                "subnet_mask": {
+                    "$ref": "#/definitions/Sn24"
+                }
+            },
+            "required": [
+                "mode",
+                "name"
+            ],
+            "title": "SWBLDAInterface"
+        },
+        "Management": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "ip": {
+                    "type": "string"
+                },
+                "interface": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "interface",
+                "ip"
+            ],
+            "title": "Management"
+        },
+        "SWBLDAPvst": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "mode": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "mode"
+            ],
+            "title": "SWBLDAPvst"
+        },
+        "Service": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "$ref": "#/definitions/Name"
+                },
+                "server1": {
+                    "$ref": "#/definitions/Server1"
+                },
+                "server2": {
+                    "$ref": "#/definitions/Server2"
+                },
+                "source_int": {
+                    "$ref": "#/definitions/SourceInt"
+                },
+                "snmp_community": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "server1"
+            ],
+            "title": "Service"
+        },
+        "VLAN": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "name"
+            ],
+            "title": "VLAN"
+        },
+        "SwCore": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "management": {
+                    "$ref": "#/definitions/Management"
+                },
+                "ip_routing": {
+                    "type": "boolean"
+                },
+                "routers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Router"
+                    }
+                },
+                "services": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Service"
+                    }
+                },
+                "vlans": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/VLAN"
+                    }
+                },
+                "pvst": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/SWCORE1_Pvst"
+                    }
+                },
+                "interfaces": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/SWCORE1_Interface"
+                    }
+                }
+            },
+            "required": [
+                "interfaces",
+                "ip_routing",
+                "management",
+                "pvst",
+                "routers",
+                "services",
+                "vlans"
+            ],
+            "title": "SwCore"
+        },
+        "SWCORE1_Interface": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "mode": {
+                    "$ref": "#/definitions/Mode"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "access_vlan": {
+                    "type": "integer"
+                },
+                "allowed_vlan": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/AllowedVLAN"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "native": {
+                    "type": "integer"
+                },
+                "dynamic": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Dynamic"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "channel_group": {
+                    "anyOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "channel_mode": {
+                    "anyOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ]
+                },
+                "port_channel": {
+                    "type": "integer"
+                },
+                "vlan": {
+                    "type": "integer"
+                },
+                "ip_address": {
+                    "type": "string"
+                },
+                "subnet_mask": {
+                    "$ref": "#/definitions/Sn24"
+                },
+                "fst_ip": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "vrrp_group": {
+                    "type": "integer"
+                },
+                "vrrp_priority": {
+                    "type": "integer"
+                },
+                "sn_vl10": {
+                    "$ref": "#/definitions/SnVl10"
+                },
+                "sn_vl20": {
+                    "$ref": "#/definitions/SnVl20"
+                },
+                "sn_vl30": {
+                    "$ref": "#/definitions/SnVl30"
+                },
+                "sn_vl40": {
+                    "$ref": "#/definitions/SnVl40"
+                },
+                "sn_vl50": {
+                    "$ref": "#/definitions/SnVl50"
+                },
+                "sn_vl60": {
+                    "$ref": "#/definitions/SnVl60"
+                },
+                "sn_vl70": {
+                    "$ref": "#/definitions/SnVl70"
+                },
+                "sn_vl80": {
+                    "$ref": "#/definitions/SnVl80"
+                },
+                "snd_ip": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "lst_ip": {
+                    "type": "number"
+                },
+                "trunk_mode": {
+                    "type": "null"
+                }
+            },
+            "required": [
+                "mode",
+                "name"
+            ],
+            "title": "SWCORE1_Interface"
+        },
+        "SWCORE1_Pvst": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "mode": {
+                    "type": "string"
+                },
+                "rt_pri": {
+                    "type": "string"
+                },
+                "rt_sec": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "mode",
+                "rt_pri",
+                "rt_sec"
+            ],
+            "title": "SWCORE1_Pvst"
+        },
+        "Router": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "as_number": {
+                    "type": "integer"
+                },
+                "router_id": {
+                    "type": "string"
+                },
+                "networks": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "no_passive_interfaces": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [
+                "as_number",
+                "name",
+                "networks",
+                "no_passive_interfaces",
+                "router_id"
+            ],
+            "title": "Router"
+        },
+        "SwIt": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "management": {
+                    "$ref": "#/definitions/Management"
+                },
+                "ip_routing": {
+                    "type": "boolean"
+                },
+                "routers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Router"
+                    }
+                },
+                "services": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Service"
+                    }
+                },
+                "vlans": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/VLAN"
+                    }
+                },
+                "pvst": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/SWIT1_Pvst"
+                    }
+                },
+                "interfaces": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/SWCORE1_Interface"
+                    }
+                }
+            },
+            "required": [
+                "interfaces",
+                "ip_routing",
+                "management",
+                "pvst",
+                "routers",
+                "services",
+                "vlans"
+            ],
+            "title": "SwIt"
+        },
+        "SWIT1_Pvst": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "mode": {
+                    "type": "string"
+                },
+                "rt_pri": {
+                    "type": "integer"
+                },
+                "rt_sec": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "mode",
+                "rt_pri",
+                "rt_sec"
+            ],
+            "title": "SWIT1_Pvst"
+        },
+        "Metadata": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "version": {
+                    "type": "integer"
+                },
+                "project": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "author": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "time_zone": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "author",
+                "date",
+                "description",
+                "project",
+                "time_zone",
+                "version"
+            ],
+            "title": "Metadata"
+        },
+        "Vars": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "sn_24": {
+                    "$ref": "#/definitions/Sn24"
+                },
+                "source_int": {
+                    "$ref": "#/definitions/SourceInt"
+                },
+                "sn_vl10": {
+                    "$ref": "#/definitions/SnVl10"
+                },
+                "sn_vl20": {
+                    "$ref": "#/definitions/SnVl20"
+                },
+                "sn_vl30": {
+                    "$ref": "#/definitions/SnVl30"
+                },
+                "sn_vl40": {
+                    "$ref": "#/definitions/SnVl40"
+                },
+                "sn_vl50": {
+                    "$ref": "#/definitions/SnVl50"
+                },
+                "sn_vl60": {
+                    "$ref": "#/definitions/SnVl60"
+                },
+                "sn_vl70": {
+                    "$ref": "#/definitions/SnVl70"
+                },
+                "sn_vl80": {
+                    "$ref": "#/definitions/SnVl80"
+                },
+                "fst_ip": {
+                    "type": "number"
+                },
+                "snd_ip": {
+                    "type": "number"
+                },
+                "lst_ip": {
+                    "type": "number"
+                },
+                "networks": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "services": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Service"
+                    }
+                },
+                "vlans": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/VLAN"
+                    }
+                },
+                "int_access": {
+                    "$ref": "#/definitions/IntAccess"
+                },
+                "int_trunk": {
+                    "$ref": "#/definitions/IntTrunk"
+                },
+                "int_svi": {
+                    "$ref": "#/definitions/IntSvi"
+                },
+                "int_mgmt": {
+                    "$ref": "#/definitions/IntMgmt"
+                }
+            },
+            "required": [
+                "fst_ip",
+                "int_access",
+                "int_mgmt",
+                "int_svi",
+                "int_trunk",
+                "lst_ip",
+                "networks",
+                "services",
+                "sn_24",
+                "sn_vl10",
+                "sn_vl20",
+                "sn_vl30",
+                "sn_vl40",
+                "sn_vl50",
+                "sn_vl60",
+                "sn_vl70",
+                "sn_vl80",
+                "snd_ip",
+                "source_int",
+                "vlans"
+            ],
+            "title": "Vars"
+        },
+        "IntAccess": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "mode": {
+                    "$ref": "#/definitions/Mode"
+                },
+                "description": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "description",
+                "mode"
+            ],
+            "title": "IntAccess"
+        },
+        "IntMgmt": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "mode": {
+                    "$ref": "#/definitions/Mode"
+                },
+                "subnet_mask": {
+                    "$ref": "#/definitions/Sn24"
+                }
+            },
+            "required": [
+                "mode",
+                "subnet_mask"
+            ],
+            "title": "IntMgmt"
+        },
+        "IntSvi": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "sn_vl10": {
+                    "$ref": "#/definitions/SnVl10"
+                },
+                "sn_vl20": {
+                    "$ref": "#/definitions/SnVl20"
+                },
+                "sn_vl30": {
+                    "$ref": "#/definitions/SnVl30"
+                },
+                "sn_vl40": {
+                    "$ref": "#/definitions/SnVl40"
+                },
+                "sn_vl50": {
+                    "$ref": "#/definitions/SnVl50"
+                },
+                "sn_vl60": {
+                    "$ref": "#/definitions/SnVl60"
+                },
+                "sn_vl70": {
+                    "$ref": "#/definitions/SnVl70"
+                },
+                "sn_vl80": {
+                    "$ref": "#/definitions/SnVl80"
+                },
+                "fst_ip": {
+                    "type": "null"
+                },
+                "snd_ip": {
+                    "type": "null"
+                },
+                "lst_ip": {
+                    "type": "number"
+                },
+                "subnet_mask": {
+                    "$ref": "#/definitions/Sn24"
+                },
+                "vrrp_group": {
+                    "type": "null"
+                },
+                "vrrp_priority": {
+                    "type": "null"
+                },
+                "mode": {
+                    "$ref": "#/definitions/Mode"
+                },
+                "vlan": {
+                    "type": "null"
+                },
+                "trunk_mode": {
+                    "type": "null"
+                },
+                "allowed_vlan": {
+                    "type": "null"
+                }
+            },
+            "required": [
+                "allowed_vlan",
+                "fst_ip",
+                "lst_ip",
+                "mode",
+                "sn_vl10",
+                "sn_vl20",
+                "sn_vl30",
+                "sn_vl40",
+                "sn_vl50",
+                "sn_vl60",
+                "sn_vl70",
+                "sn_vl80",
+                "snd_ip",
+                "subnet_mask",
+                "trunk_mode",
+                "vlan",
+                "vrrp_group",
+                "vrrp_priority"
+            ],
+            "title": "IntSvi"
+        },
+        "IntTrunk": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "allowed_vlan": {
+                    "type": "null"
+                },
+                "mode": {
+                    "$ref": "#/definitions/Mode"
+                },
+                "native": {
+                    "type": "integer"
+                },
+                "dynamic": {
+                    "type": "null"
+                },
+                "channel_group": {
+                    "type": "null"
+                },
+                "channel_mode": {
+                    "type": "null"
+                }
+            },
+            "required": [
+                "allowed_vlan",
+                "channel_group",
+                "channel_mode",
+                "dynamic",
+                "mode",
+                "native"
+            ],
+            "title": "IntTrunk"
+        },
+        "Mode": {
+            "type": "string",
+            "enum": [
+                "access",
+                "trunk",
+                "mgmt",
+                "svi"
+            ],
+            "title": "Mode"
+        },
+        "Sn24": {
+            "type": "string",
+            "enum": [
+                "255.255.255.0"
+            ],
+            "title": "Sn24"
+        },
+        "Name": {
+            "type": "string",
+            "enum": [
+                "dns",
+                "ntp",
+                "syslog",
+                "snmp"
+            ],
+            "title": "Name"
+        },
+        "Server1": {
+            "type": "string",
+            "enum": [
+                "10.0.70.11"
+            ],
+            "title": "Server1"
+        },
+        "Server2": {
+            "type": "string",
+            "enum": [
+                "10.0.80.22"
+            ],
+            "title": "Server2"
+        },
+        "SourceInt": {
+            "type": "string",
+            "enum": [
+                "Vlan5"
+            ],
+            "title": "SourceInt"
+        },
+        "AllowedVLAN": {
+            "type": "string",
+            "enum": [
+                "1,10,20,30,40,50,60",
+                "1,3,10,20,30,40,50,60",
+                "1,3",
+                "1,70,80",
+                "1,3,70,80"
+            ],
+            "title": "AllowedVLAN"
+        },
+        "Dynamic": {
+            "type": "string",
+            "enum": [
+                "desirable"
+            ],
+            "title": "Dynamic"
+        },
+        "SnVl10": {
+            "type": "string",
+            "enum": [
+                "172.16.10"
+            ],
+            "title": "SnVl10"
+        },
+        "SnVl20": {
+            "type": "string",
+            "enum": [
+                "172.16.20"
+            ],
+            "title": "SnVl20"
+        },
+        "SnVl30": {
+            "type": "string",
+            "enum": [
+                "172.16.30"
+            ],
+            "title": "SnVl30"
+        },
+        "SnVl40": {
+            "type": "string",
+            "enum": [
+                "172.31.40"
+            ],
+            "title": "SnVl40"
+        },
+        "SnVl50": {
+            "type": "string",
+            "enum": [
+                "10.0.50"
+            ],
+            "title": "SnVl50"
+        },
+        "SnVl60": {
+            "type": "string",
+            "enum": [
+                "10.0.60"
+            ],
+            "title": "SnVl60"
+        },
+        "SnVl70": {
+            "type": "string",
+            "enum": [
+                "10.0.70"
+            ],
+            "title": "SnVl70"
+        },
+        "SnVl80": {
+            "type": "string",
+            "enum": [
+                "10.0.80"
+            ],
+            "title": "SnVl80"
+        }
+    }
+}

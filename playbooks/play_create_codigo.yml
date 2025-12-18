@@ -106,7 +106,7 @@
         dest: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_int_svi.cfg"
       register: svi_vrrp_result
   
-- name: Generar código desde templates Jinja2 para configuracion de ROUTERS
+- name: Generar codigo desde templates Jinja2 para configuracion de ROUTERS
   hosts: "{{ modelo.hosts_groups.sw_core }}, {{ modelo.hosts_groups.sw_it }}"
   gather_facts: false
 
