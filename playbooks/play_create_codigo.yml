@@ -14,9 +14,13 @@
 
     - name: Renderizar template Jinja2 para configurarcion de interfaces ACCESS
       ansible.builtin.template:
-        src: "{{ playbook_dir }}/../templates/int_access_cfg.j2"
-        dest: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_int_access.cfg"
+        src: "{{ playbook_dir }}/../templates/int_access_{{ item.type }}.j2"
+        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_int_access.{{ item.ext }}"
+        mode: "0644"
       register: int_access_result
+      loop:
+        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
 
     - name: Mostrar resultado de la generacion de configuracion de interfaces de ACCESS
       ansible.builtin.debug:
@@ -36,9 +40,13 @@
 
     - name: Renderizar template Jinja2 para configurarcion de interfaces TRUNK
       ansible.builtin.template:
-        src: "{{ playbook_dir }}/../templates/int_trunk_cfg.j2"
-        dest: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_int_trunk.cfg"
+        src: "{{ playbook_dir }}/../templates/int_trunk_{{ item.type }}.j2"
+        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_int_trunk.{{ item.ext }}"
+        mode: "0644"
       register: int_trunk_result
+      loop:
+        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
 
     - name: Mostrar resultado de la generacion de configuracion de interfaces TRUNK
       ansible.builtin.debug:
@@ -58,9 +66,13 @@
 
     - name: Renderizar template Jinja2 para configurarcion de interfaces MGMT
       ansible.builtin.template:
-        src: "{{ playbook_dir }}/../templates/int_mgmt_cfg.j2"
-        dest: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_int_mgmt.cfg"
+        src: "{{ playbook_dir }}/../templates/int_mgmt_{{ item.type }}.j2"
+        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_int_mgmt.{{ item.ext }}"
+        mode: "0644"
       register: int_mgmt_result
+      loop:
+        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
 
     - name: Mostrar resultado de la generacion de configuracion de interfaces MGMT
       ansible.builtin.debug:
@@ -80,9 +92,13 @@
 
     - name: Renderizar template Jinja2 para configurarcion de VLANs
       ansible.builtin.template:
-        src: "{{ playbook_dir }}/../templates/vlans_cfg.j2"
-        dest: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_vlans.cfg"
+        src: "{{ playbook_dir }}/../templates/vlans_{{ item.type }}.j2"
+        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_vlans.{{ item.ext }}"
+        mode: "0644"
       register: vlans_result
+      loop:
+        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
 
     - name: Mostrar resultado de la generacion de configuracion de VLANs
       ansible.builtin.debug:
@@ -102,9 +118,17 @@
 
     - name: Renderizar template Jinja2 para configurarcion de SVI y VRRP
       ansible.builtin.template:
-        src: "{{ playbook_dir }}/../templates/int_svi_cfg.j2"
-        dest: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_int_svi.cfg"
+        src: "{{ playbook_dir }}/../templates/int_svi_{{ item.type }}.j2"
+        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_int_svi.{{ item.ext }}"
+        mode: "0644"
       register: svi_vrrp_result
+      loop:
+        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+      
+    - name: Mostrar resultado de la generacion de configuracion de SVI y VRRP
+      ansible.builtin.debug:
+        var: svi_vrrp_result
   
 - name: Generar codigo desde templates Jinja2 para configuracion de ROUTERS
   hosts: "{{ modelo.hosts_groups.sw_core }}, {{ modelo.hosts_groups.sw_it }}"
@@ -120,12 +144,19 @@
 
     - name: Renderizar template Jinja2 para configurarcion de ROUTERS
       ansible.builtin.template:
-        src: "{{ playbook_dir }}/../templates/routers_cfg.j2"
-        dest: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_routers.cfg"
+        src: "{{ playbook_dir }}/../templates/routers_{{ item.type }}.j2"
+        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_routers.{{ item.ext }}"
+        mode: "0644"
       register: routers_result
+      loop:
+        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+  
+    - name: Mostrar resultado de la generacion de configuracion de ROUTERS
+      ansible.builtin.debug:
+        var: routers_result
 
-
-- name: Generar código desde templates Jinja2 para configuracion de SERVICES
+- name: Generar codigo desde templates Jinja2 para configuracion de SERVICES
   hosts: "{{ modelo.hosts_groups.sw_all }}"
   gather_facts: false
 
@@ -139,6 +170,14 @@
 
     - name: Renderizar template Jinja2 para configurarcion de SERVICES
       ansible.builtin.template:
-        src: "{{ playbook_dir }}/../templates/services_cfg.j2"
-        dest: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}_services.cfg"
+        src: "{{ playbook_dir }}/../templates/services_{{ item.type }}.j2"
+        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_services.{{ item.ext }}"
+        mode: "0644"
       register: services_result
+      loop:
+        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+    
+    - name: Mostrar resultado de la generacion de configuracion de SERVICES
+      ansible.builtin.debug:
+        var: services_result

@@ -12,17 +12,20 @@
 
     - name: Set variable servicio
       ansible.builtin.set_fact:
-        servicio: "{{ modelo.metadatos.proyecto }}"
+        servicio: "{{ modelo.metadata.project }}"
 
     - name: Renderizar template Jinja2 generar titulo del reporte
       ansible.builtin.template:
         src: "{{ playbook_dir }}/../templates/titulo_reporte_{{ item.type }}.j2"
-        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}Titulo_reporte.{{ item.ext }}"
+        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}titulo_reporte.{{ item.ext }}"
         mode: "0644"
       register: titulo_reporte_result
       loop:
         - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.0"}
-
+  
+    - name: Mostrar resultado de la generacion del titulo del reporte
+      ansible.builtin.debug:
+        var: titulo_reporte_result
 
 - name: Crea documentacion del proyecto
   hosts: localhost
@@ -41,7 +44,7 @@
     - name: Ensambla modulos tipo md de documentacion y crea reporte final
       ansible.builtin.assemble:
         src: "{{ playbook_dir }}/../doc/modulos/"
-        dest: "{{ playbook_dir }}/../doc/Reporte {{ modelo.metadatos.proyecto }} {{ date }}_{{ time }}.md"
+        dest: "{{ playbook_dir }}/../doc/reporte {{ modelo.metadata.project }} {{ date }}_{{ time }}.md"
         regexp: "^1"
         mode: "0644"
       register: doc_ensamble_result

@@ -10,7 +10,7 @@
 {# Routers Configuration Template #}
 !
 {% for router in routers -%}
-{% if router.name == eigrp -%}
+{% if router.name == "eigrp" -%}
   router eigrp {{ router.as_number }}
   no auto-summary
   eigrp log-neighbor-changes

@@ -9,7 +9,7 @@
 - name: Get date in local time zone
   ansible.builtin.command: date "+%Y-%m-%d %H:%M:%S"
   environment:
-    TZ: "{{ modelo.metadatos.time_zone }}"
+    TZ: "{{ modelo.metadata.time_zone }}"
   register: date_local
   changed_when: false
 
