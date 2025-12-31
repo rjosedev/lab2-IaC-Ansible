@@ -1,5 +1,57 @@
 # Playbook para generar codigo utilizando templates Jinja2
 ---
+- name: Generar codigo desde templates Jinja2 para configuracion de ROUTERS BB
+  hosts: "{{ modelo.hosts_groups.rt_all }}"
+  gather_facts: false
+
+  vars_files:
+    - ../modelo_datos/modelo.yml
+
+  tasks:
+    - name: Defincion de variables locales
+      ansible.builtin.set_fact:
+        routers_bb: "{{ modelo.infra_spec.devices[inventory_hostname].routers_bb }}"
+
+    - name: Renderizar template Jinja2 para configurarcion de ROUTERS BB
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/../templates/routers_bb_{{ item.type }}.j2"
+        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_routers_bb.{{ item.ext }}"
+        mode: "0644"
+      register: routers_bb_result
+      loop:
+        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+  
+    - name: Mostrar resultado de la generacion de configuracion de ROUTERS BB
+      ansible.builtin.debug:
+        var: routers_bb_result
+
+- name: Generar codigo desde templates Jinja2 para interfaces P-PE
+  hosts: "{{ modelo.hosts_groups.rt_all }}"
+  gather_facts: false
+
+  vars_files:
+    - ../modelo_datos/modelo.yml
+
+  tasks:
+    - name: Defincion de variables locales
+      ansible.builtin.set_fact:
+        interfaces: "{{ modelo.infra_spec.devices[inventory_hostname].interfaces }}"
+
+    - name: Renderizar template Jinja2 para configurarcion de interfaces P-PE
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/../templates/int_rt_{{ item.type }}.j2"
+        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_int_rt.{{ item.ext }}"
+        mode: "0644"
+      register: int_rt_result
+      loop:
+        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+
+    - name: Mostrar resultado de la generacion de configuracion de interfaces de P-PE
+      ansible.builtin.debug:
+        var: int_rt_result
+
 - name: Generar codigo desde templates Jinja2 para interfaces ACCESS
   hosts: "{{ modelo.hosts_groups.sw_all }}"
   gather_facts: false

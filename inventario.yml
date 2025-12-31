@@ -7,16 +7,19 @@ cisco_ios_sw_core:
       ansible_host: 172.16.5.51
     SW-CORE-2:
       ansible_host: 172.16.5.52
+
 cisco_ios_sw_bld:
   hosts:
     SW-BLD-A:
       ansible_host: 172.16.5.53
     SW-BLD-B:
       ansible_host: 172.16.5.54
+
 cisco_ios_sw_dc:
   hosts:
     SW-DC:
       ansible_host: 172.16.5.55
+
 cisco_ios_sw_it:
   hosts:
     SW-IT-1:
@@ -24,12 +27,46 @@ cisco_ios_sw_it:
     SW-IT-2:
       ansible_host: 172.16.5.57
 
+cisco_ios_rt_p:
+  hosts:
+    RT-P-2:
+      ansible_host: 172.16.5.32
+    RT-P-3:
+      ansible_host: 172.16.5.33
+    RT-P-4:
+      ansible_host: 172.16.5.34
+    RT-P-5:
+      ansible_host: 172.16.5.35
+    RT-P-6:
+      ansible_host: 172.16.5.36
+
+cisco_ios_rt_pe:
+  hosts:
+    RT_PE_1:
+      ansible_host: 172.16.5.11
+    RT_PE_2:
+      ansible_host: 172.16.5.12
+    RT-PE-1:
+      ansible_host: 172.16.5.13
+    RT-PE-2:
+      ansible_host: 172.16.5.14
+
+cisco_ios_rt_all:
+  children:
+    cisco_ios_rt_p:
+    cisco_ios_rt_pe:
+
 cisco_ios_sw_all:
   children:
     cisco_ios_sw_core:
     cisco_ios_sw_bld:
     cisco_ios_sw_dc:
     cisco_ios_sw_it:
+
+cisco_ios_all:
+  children:
+    cisco_ios_rt_all:
+    cisco_ios_sw_all:
 
 all:
   vars:

@@ -2,7 +2,7 @@ hostname SW-MGMT-OOB
 no ip domain lookup
 ip domain-name mydomain.local
 crypto key generate rsa label sshkeys
-4096
+1024
 ip ssh version 2
 ip ssh rsa keypair-name sshkeys
 ip ssh time-out 30
@@ -28,6 +28,35 @@ interface GigabitEthernet1/3	# los demás
 interface Vlan5
  ip address 172.16.5.50 255.255.255.0
  no shutdown
+
+line aux 0
+ exec-timeout 0 1
+ no exec
+ transport output none
+ 
+ 
+ 
+hostname RT-PE-1
+no ip domain lookup
+ip domain-name mydomain.local	# CSR ip domain name mydomain.local
+crypto key generate rsa label sshkeys
+1024
+ip ssh version 2
+ip ssh rsa keypair-name sshkeys
+ip ssh time-out 30
+ip ssh source-interface GigabitEthernet0/5	# hacia SW-MGMT-OOB
+ip ssh source-interface GigabitEthernet5	# CSR
+int GigabitEthernet 0/5				# CSR int GigabitEthernet 5
+ip address 172.16.5.41 255.255.255.0
+no shutdown
+
+username utnfrc privilege 15 secret 5 Mypass123!
+enable secret Mypass123!
+
+line vty 0 15
+ exec-timeout 20 0
+ login local
+ transport input ssh
 
 line aux 0
  exec-timeout 0 1

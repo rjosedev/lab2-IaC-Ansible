@@ -1,0 +1,31 @@
+{# Routers Backbone Configuration Template #}
+!
+{% if routers_bb.mpls %}
+mpls ldp {{ routers_bb.mpls.ldp_label }}
+mpls ldp router-id {{ routers_bb.mpls.ldp_interface }}
+!
+{% endif %}
+{% if routers_bb.isis -%}
+{% for i in routers_bb.isis %}
+router isis {{ i.name }}
+  net {{ i.net }}
+  is-type {{ i.is_type }}
+  mpls ldp sync
+!
+{% endfor %}
+{% endif %}
+{% if routers_bb.bgp -%}
+{% for b in routers_bb.bgp %}
+{{ b.bgp_lines }}
+!
+{% endfor %}
+{% endif %}
+{% if routers_bb.vrf -%}
+{% for v in routers_bb.vrf %}
+ip vrf {{ v.name }}
+  rd {{ v.rd }}
+  route-target import {{ v.rt_import }}
+  route-target export {{ v.rt_export }}
+!
+{% endfor %}
+{% endif %}

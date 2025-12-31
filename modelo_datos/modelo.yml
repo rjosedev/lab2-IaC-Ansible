@@ -1,40 +1,42 @@
 vars:
   sn_24: &sn_24 255.255.255.0
-  source_int: &source_int Vlan5
-  sn_vl10: &sn_vl10 172.16.10
-  sn_vl20: &sn_vl20 172.16.20
-  sn_vl30: &sn_vl30 172.16.30
-  sn_vl40: &sn_vl40 172.31.40
-  sn_vl50: &sn_vl50 10.0.50
-  sn_vl60: &sn_vl60 10.0.60
-  sn_vl70: &sn_vl70 10.0.70
-  sn_vl80: &sn_vl80 10.0.80
-  fst_ip: &fst_ip .250
-  snd_ip: &snd_ip .251
-  lst_ip: &lst_ip .254
+  sn_29: &sn_29 255.255.255.248
+  sn_30: &sn_30 255.255.255.252
+  sn_32: &sn_32 255.255.255.255
+  sn_vl11: &sn_vl11 "172.16.11"
+  sn_vl21: &sn_vl21 "172.16.21"
+  sn_vl31: &sn_vl31 "172.16.31"
+  sn_vl41: &sn_vl41 "172.31.41"
+  sn_vl51: &sn_vl51 "10.0.51"
+  sn_vl61: &sn_vl61 "10.0.61"
+  sn_vl71: &sn_vl71 "10.0.71"
+  sn_vl81: &sn_vl81 "10.0.81"
+  fst_ip: &fst_ip ".250"
+  snd_ip: &snd_ip ".251"
+  lst_ip: &lst_ip ".254"
   networks: &networks
-    - 172.16.10.0
-    - 172.16.20.0
-    - 172.16.30.0
-    - 172.31.40.0
-    - 10.0.50.0
-    - 10.0.60.0
-    - 10.0.70.0
-    - 10.0.80.0
+    - 172.16.11.0
+    - 172.16.21.0
+    - 172.16.31.0
+    - 172.31.41.0 
+    - 10.0.51.0
+    - 10.0.61.0
+    - 10.0.71.0
+    - 10.0.81.0
   services: &services
-    - name: dns
-      server1: 10.0.70.11
-      server2: 10.0.80.22
-    - name: ntp
-      server1: 10.0.70.11
-      server2: 10.0.80.22
+    dns:
+      server1: &server1 10.0.71.11
+      server2: &server2 10.0.81.22
+    ntp:
+      server1: *server1
+      server2: *server2
+      source_int: &source_int Vlan5
+    syslog:
+      server1: *server1
+      server2: *server2
       source_int: *source_int
-    - name: syslog
-      server1: 10.0.70.11
-      server2: 10.0.80.22
-      source_int: *source_int
-    - name: snmp
-      server1: 10.0.70.11
+    snmp:
+      server1: *server1
       snmp_community: "{{ snmp_community }}"
       source_int: *source_int
   vlans: &sw_vlans
@@ -44,22 +46,22 @@ vars:
       name: VLAN03_Routing/Mgmt
     - id: 5
       name: VLAN05_Mgmt/OOB
-    - id: 10
-      name: VLAN10_Engineering
-    - id: 20
-      name: VLAN20_Accounting
-    - id: 30
-      name: VLAN30_Production
-    - id: 40
-      name: VLAN40_DevOps
-    - id: 50
-      name: VLAN50_Data
-    - id: 60
-      name: VLAN60_Services
-    - id: 70
-      name: VLAN70_IT1
-    - id: 80
-      name: VLAN80_IT2
+    - id: 11
+      name: VLAN11_Engineering
+    - id: 21
+      name: VLAN21_Accounting
+    - id: 31
+      name: VLAN31_Production
+    - id: 41
+      name: VLAN41_DevOps
+    - id: 51
+      name: VLAN51_Data
+    - id: 61
+      name: VLAN61_Services
+    - id: 71
+      name: VLAN71_IT1
+    - id: 81
+      name: VLAN81_IT2
     - id: 99
       name: VLAN99_Unused/Suspended
   int_access: &int_access
@@ -73,16 +75,16 @@ vars:
     channel_group: null
     channel_mode: null
   int_svi: &int_svi
-    sn_vl10: *sn_vl10
-    sn_vl20: *sn_vl20
-    sn_vl30: *sn_vl30
-    sn_vl40: *sn_vl40
-    sn_vl50: *sn_vl50
-    sn_vl60: *sn_vl60
-    sn_vl70: *sn_vl70
-    sn_vl80: *sn_vl80
-    fst_ip: null
-    snd_ip: null
+    sn_vl11: *sn_vl11
+    sn_vl21: *sn_vl21
+    sn_vl31: *sn_vl31
+    sn_vl41: *sn_vl41
+    sn_vl51: *sn_vl51
+    sn_vl61: *sn_vl61
+    sn_vl71: *sn_vl71
+    sn_vl81: *sn_vl81
+    fst_ip: ""
+    snd_ip: ""
     lst_ip: *lst_ip
     subnet_mask: *sn_24
     vrrp_group: null
@@ -94,13 +96,24 @@ vars:
   int_mgmt: &int_mgmt
     mode: mgmt
     subnet_mask: *sn_24
+  int_internet: &int_internet
+    mode: internet
+    subnet_mask: *sn_24
+    description: "### Link to Internet Cloud 0 ###"
+  int_isis: &int_isis
+    mode: isis
+    isis_name: CORE
+    mpls_ip: null
+  int_vrf: &int_vrf
+    mode: vrf
+    vrf_name: null
 modelo:
   metadata:
     version: 1.0
     project: Simulacro de Caso de Uso - Lab 2 - IaC > Ansible
     description: Modelo de datos para la gestión de infraestructura de red
     author: Equipo de Desarrollo
-    date: 2024-12-08
+    date: 2124-12-08
     time_zone: America/Argentina/Buenos_Aires
   hosts_groups:
     sw_all: cisco_ios_sw_all
@@ -108,6 +121,9 @@ modelo:
     sw_bld: cisco_ios_sw_bld
     sw_dc: cisco_ios_sw_dc
     sw_it: cisco_ios_sw_it
+    rt_all: cisco_ios_rt_all
+    rt_p: cisco_ios_rt_p
+    rt_pe: cisco_ios_rt_pe
   # Infrastructure inventory
   infra_spec:
     # Devices inventory
@@ -121,7 +137,7 @@ modelo:
         # EIGRP Routing configuration
         routers:
           - name: eigrp
-            as_number: 10
+            as_number: 11
             router_id: 1.1.1.1
             networks: *networks
             no_passive_interfaces: &no_passive_interfaces
@@ -136,8 +152,8 @@ modelo:
         # Per VLAN Spanning Tree Protocol configurations
         pvst:
           - mode: rapid-pvst
-            rt_pri: 10,30,50
-            rt_sec: 20,40,60
+            rt_pri: 11,31,51
+            rt_sec: 21,41,61
         # Interfaces configurations
         interfaces:
           # ACCESS interfaces
@@ -149,17 +165,17 @@ modelo:
             description: "### Link to SW-BLD-A - TRUNK ###"
             <<: *int_trunk
             dynamic: desirable
-            allowed_vlan: 1,10,20,30,40,50,60
+            allowed_vlan: 1,11,21,31,41,51,61
           - name: GigabitEthernet0/2
             description: "### Link to SW-BLD-B - TRUNK ###"
             <<: *int_trunk
             dynamic: desirable
-            allowed_vlan: 1,10,20,30,40,50,60
+            allowed_vlan: 1,11,21,31,41,51,61
           - name: GigabitEthernet0/3
             description: "### Link to SW-DC - TRUNK ###"
             <<: *int_trunk
             dynamic: desirable
-            allowed_vlan: 1,10,20,30,40,50,60
+            allowed_vlan: 1,11,21,31,41,51,61
           - name: GigabitEthernet1/0
             <<: *int_access
             access_vlan: 99
@@ -169,16 +185,16 @@ modelo:
             dynamic: desirable
             channel_group: 1
             channel_mode: active
-            allowed_vlan: 1,3,10,20,30,40,50,60
+            allowed_vlan: 1,3,11,21,31,41,51,61
           - name: GigabitEthernet1/2
             description: "### Link 2 to SW-CORE-2 - LACP - TRUNK ###"
             <<: *int_trunk
             dynamic: desirable
             channel_group: 1
             channel_mode: active
-            allowed_vlan: 1,3,10,20,30,40,50,60
+            allowed_vlan: 1,3,11,21,31,41,51,61
           - name: GigabitEthernet1/3
-            description: "### Link to SW-MGMT-OOB - Uplinks to NetCloud 1 - ACCESS ###"
+            description: "### Link to SW-MGMT-OOB - Uplinks to Net Cloud 1 - ACCESS ###"
             <<: *int_access
             access_vlan: 5
           - name: GigabitEthernet2/0
@@ -194,16 +210,16 @@ modelo:
             <<: *int_trunk
             dynamic: desirable
             allowed_vlan: 1,3
-          - name: GigabitEthernet2/3
-            <<: *int_access
-            access_vlan: 99
+          #- name: GigabitEthernet2/3
+          #  <<: *int_access
+          #  access_vlan: 99
           # Port-Channel interfaces
           - name: Port-Channel1
             description: "### Port-Channel 1 (GE1/1 - GE1/2) to SW-CORE-2 - LACP - TRUNK ###"
             <<: *int_trunk
             port_channel: 1
             dynamic: desirable
-            allowed_vlan: 1,3,10,20,30,40,50,60
+            allowed_vlan: 1,3,11,21,31,41,51,61
           # SVI interface for MGMT
           - name: vlan 3
             vlan: 3
@@ -214,52 +230,52 @@ modelo:
             ip_address: 172.16.5.51
             <<: *int_mgmt
           # SVI interfaces for VLANs routing configured with VRRP
-          - name: vlan 10
-            vlan: 10
-            ip_address: *sn_vl10
+          - name: vlan 11
+            vlan: 11
+            ip_address: *sn_vl11
             fst_ip: *fst_ip
-            description: "### SVI interface for VLAN10_Engineering ###"
-            vrrp_group: 10
+            description: "### SVI interface for VLAN11_Engineering ###"
+            vrrp_group: 11
             vrrp_priority: 1
             <<: *int_svi
-          - name: vlan 20
-            vlan: 20
-            ip_address: *sn_vl20
+          - name: vlan 21
+            vlan: 21
+            ip_address: *sn_vl21
             fst_ip: *fst_ip
-            description: "### SVI interface for VLAN20_Accounting ###"
-            vrrp_group: 20
+            description: "### SVI interface for VLAN21_Accounting ###"
+            vrrp_group: 21
             vrrp_priority: 2
             <<: *int_svi
-          - name: vlan 30
-            vlan: 30
-            ip_address: *sn_vl30
+          - name: vlan 31
+            vlan: 31
+            ip_address: *sn_vl31
             fst_ip: *fst_ip
-            description: "### SVI interface for VLAN30_Production ###"
+            description: "### SVI interface for VLAN31_Production ###"
             <<: *int_svi
-            vrrp_group: 30
+            vrrp_group: 31
             vrrp_priority: 1
-          - name: vlan 40
-            vlan: 40
-            ip_address: *sn_vl40
+          - name: vlan 41
+            vlan: 41
+            ip_address: *sn_vl41
             fst_ip: *fst_ip
-            description: "### SVI interface for VLAN40_DevOps ###"
-            vrrp_group: 40
+            description: "### SVI interface for VLAN41_DevOps ###"
+            vrrp_group: 41
             vrrp_priority: 2
             <<: *int_svi
-          - name: vlan 50
-            vlan: 50
-            ip_address: *sn_vl50
+          - name: vlan 51
+            vlan: 51
+            ip_address: *sn_vl51
             fst_ip: *fst_ip
-            description: "### SVI interface for VLAN50_Data ###"
-            vrrp_group: 50
+            description: "### SVI interface for VLAN51_Data ###"
+            vrrp_group: 51
             vrrp_priority: 1
             <<: *int_svi
-          - name: vlan 60
-            vlan: 60
-            ip_address: *sn_vl60
+          - name: vlan 61
+            vlan: 61
+            ip_address: *sn_vl61
             fst_ip: *fst_ip
-            description: "### SVI interface for VLAN60_Services ###"
-            vrrp_group: 60
+            description: "### SVI interface for VLAN61_Services ###"
+            vrrp_group: 61
             vrrp_priority: 2
             <<: *int_svi
       #### EOF SW-CORE-1 ####
@@ -272,7 +288,7 @@ modelo:
         ip_routing: true
         routers:
           - name: eigrp
-            as_number: 10
+            as_number: 11
             router_id: 1.1.1.2
             networks: *networks
             no_passive_interfaces: *no_passive_interfaces
@@ -280,8 +296,8 @@ modelo:
         vlans: *sw_vlans
         pvst:
           - mode: rapid-pvst
-            rt_pri: 20,40,60
-            rt_sec: 10,30,50
+            rt_pri: 21,41,61
+            rt_sec: 11,31,51
         interfaces:
           - name: GigabitEthernet0/0
             <<: *int_access
@@ -290,17 +306,17 @@ modelo:
             description: "### Link to SW-BLD-A - TRUNK ###"
             <<: *int_trunk
             dynamic: desirable
-            allowed_vlan: 1,10,20,30,40,50,60
+            allowed_vlan: 1,11,21,31,41,51,61
           - name: GigabitEthernet0/2
             description: "### Link to SW-BLD-B - TRUNK ###"
             <<: *int_trunk
             dynamic: desirable
-            allowed_vlan: 1,10,20,30,40,50,60
+            allowed_vlan: 1,11,21,31,41,51,61
           - name: GigabitEthernet0/3
             description: "### Link to SW-DC - TRUNK ###"
             <<: *int_trunk
             dynamic: desirable
-            allowed_vlan: 1,10,20,30,40,50,60
+            allowed_vlan: 1,11,21,31,41,51,61
           - name: GigabitEthernet1/0
             <<: *int_access
             access_vlan: 99
@@ -310,16 +326,16 @@ modelo:
             dynamic: desirable
             channel_group: 1
             channel_mode: active
-            allowed_vlan: 1,3,10,20,30,40,50,60
+            allowed_vlan: 1,3,11,21,31,41,51,61
           - name: GigabitEthernet1/2
             description: "### Link 2 to SW-CORE-1 - LACP - TRUNK ###"
             <<: *int_trunk
             dynamic: desirable
             channel_group: 1
             channel_mode: active
-            allowed_vlan: 1,3,10,20,30,40,50,60
+            allowed_vlan: 1,3,11,21,31,41,51,61
           - name: GigabitEthernet1/3
-            description: "### Link to SW-MGMT-OOB - Uplinks to NetCloud 1 - ACCESS ###"
+            description: "### Link to SW-MGMT-OOB - Uplinks to Net Cloud 1 - ACCESS ###"
             <<: *int_access
             access_vlan: 5
           - name: GigabitEthernet2/0
@@ -335,15 +351,15 @@ modelo:
             <<: *int_trunk
             dynamic: desirable
             allowed_vlan: 1,3          
-          - name: GigabitEthernet2/3
-            <<: *int_access
-            access_vlan: 99
+          #- name: GigabitEthernet2/3
+          #  <<: *int_access
+          #  access_vlan: 99
           - name: Port-Channel1
             description: "### Port-Channel 1 (GE1/1 - GE1/2) to SW-CORE-1 - LACP - TRUNK ###"
             <<: *int_trunk
             port_channel: 1
             dynamic: desirable
-            allowed_vlan: 1,3,10,20,30,40,50,60
+            allowed_vlan: 1,3,11,21,31,41,51,61
           - name: vlan 3
             vlan: 3
             ip_address: 172.16.3.32
@@ -352,52 +368,52 @@ modelo:
             vlan: 5
             ip_address: 172.16.5.52
             <<: *int_mgmt
-          - name: vlan 10
-            vlan: 10
-            ip_address: *sn_vl10
+          - name: vlan 11
+            vlan: 11
+            ip_address: *sn_vl11
             snd_ip: *snd_ip
-            description: "### SVI interface for VLAN10_Engineering ###"
-            vrrp_group: 10
+            description: "### SVI interface for VLAN11_Engineering ###"
+            vrrp_group: 11
             vrrp_priority: 2
             <<: *int_svi
-          - name: vlan 20
-            vlan: 20
-            ip_address: *sn_vl20
+          - name: vlan 21
+            vlan: 21
+            ip_address: *sn_vl21
             snd_ip: *snd_ip
-            description: "### SVI interface for VLAN20_Accounting ###"
-            vrrp_group: 20
+            description: "### SVI interface for VLAN21_Accounting ###"
+            vrrp_group: 21
             vrrp_priority: 1
             <<: *int_svi
-          - name: vlan 30
-            vlan: 30
-            ip_address: *sn_vl30
+          - name: vlan 31
+            vlan: 31
+            ip_address: *sn_vl31
             snd_ip: *snd_ip
-            description: "### SVI interface for VLAN30_Production ###"
-            vrrp_group: 30
+            description: "### SVI interface for VLAN31_Production ###"
+            vrrp_group: 31
             vrrp_priority: 2
             <<: *int_svi
-          - name: vlan 40
-            vlan: 40
-            ip_address: *sn_vl40
+          - name: vlan 41
+            vlan: 41
+            ip_address: *sn_vl41
             snd_ip: *snd_ip
-            description: "### SVI interface for VLAN40_DevOps ###"
-            vrrp_group: 40
+            description: "### SVI interface for VLAN41_DevOps ###"
+            vrrp_group: 41
             vrrp_priority: 1
             <<: *int_svi
-          - name: vlan 50
-            vlan: 50
-            ip_address: *sn_vl50
+          - name: vlan 51
+            vlan: 51
+            ip_address: *sn_vl51
             snd_ip: *snd_ip
-            description: "### SVI interface for VLAN50_Data ###"
-            vrrp_group: 50
+            description: "### SVI interface for VLAN51_Data ###"
+            vrrp_group: 51
             vrrp_priority: 2
             <<: *int_svi
-          - name: vlan 60
-            vlan: 60
-            ip_address: *sn_vl60
+          - name: vlan 61
+            vlan: 61
+            ip_address: *sn_vl61
             snd_ip: *snd_ip
-            description: "### SVI interface for VLAN60_Services ###"
-            vrrp_group: 60
+            description: "### SVI interface for VLAN61_Services ###"
+            vrrp_group: 61
             vrrp_priority: 1
             <<: *int_svi
       #### EOF SW-CORE-2 ####
@@ -420,28 +436,28 @@ modelo:
             description: "### Link to SW-CORE-1 - TRUNK ###"
             <<: *int_trunk
             dynamic: desirable
-            allowed_vlan: 1,10,20,30,40,50,60
+            allowed_vlan: 1,11,21,31,41,51,61
           - name: GigabitEthernet0/2
             description: "### Link to SW-CORE-2 - TRUNK ###"
             <<: *int_trunk
             dynamic: desirable
-            allowed_vlan: 1,10,20,30,40,50,60
+            allowed_vlan: 1,11,21,31,41,51,61
           - name: GigabitEthernet0/3
             <<: *int_access
             access_vlan: 99
           - name: GigabitEthernet1/0
-            description: "### Link to PC on VLAN10_Engineering - ACCESS ###"
+            description: "### Link to PC on VLAN11_Engineering - ACCESS ###"
             <<: *int_access
-            access_vlan: 10
+            access_vlan: 11
           - name: GigabitEthernet1/1
-            description: "### Link to PC on VLAN20_Accounting - ACCESS ###"
+            description: "### Link to PC on VLAN21_Accounting - ACCESS ###"
             <<: *int_access
-            access_vlan: 20
+            access_vlan: 21
           - name: GigabitEthernet1/2
             <<: *int_access
             access_vlan: 99
           - name: GigabitEthernet1/3
-            description: "### Link to SW-MGMT-OOB - Uplinks to NetCloud 1 - ACCESS ###"
+            description: "### Link to SW-MGMT-OOB - Uplinks to Net Cloud 1 - ACCESS ###"
             <<: *int_access
             access_vlan: 5          
           - name: vlan 5
@@ -468,28 +484,28 @@ modelo:
             description: "### Link to SW-CORE-1 - TRUNK ###"
             <<: *int_trunk
             dynamic: desirable
-            allowed_vlan: 1,10,20,30,40,50,60
+            allowed_vlan: 1,11,21,31,41,51,61
           - name: GigabitEthernet0/2
             description: "### Link to SW-CORE-2 - TRUNK ###"
             <<: *int_trunk
             dynamic: desirable
-            allowed_vlan: 1,10,20,30,40,50,60
+            allowed_vlan: 1,11,21,31,41,51,61
           - name: GigabitEthernet0/3
             <<: *int_access
             access_vlan: 99
           - name: GigabitEthernet1/0
-            description: "### Link to PC on VLAN30_Production - ACCESS ###"
+            description: "### Link to PC on VLAN31_Production - ACCESS ###"
             <<: *int_access
-            access_vlan: 30
+            access_vlan: 31
           - name: GigabitEthernet1/1
-            description: "### Link to PC on VLAN40_DevOps - ACCESS ###"
+            description: "### Link to PC on VLAN41_DevOps - ACCESS ###"
             <<: *int_access
-            access_vlan: 40
+            access_vlan: 41
           - name: GigabitEthernet1/2
             <<: *int_access
             access_vlan: 99
           - name: GigabitEthernet1/3
-            description: "### Link to SW-MGMT-OOB - Uplinks to NetCloud 1 - ACCESS ###"
+            description: "### Link to SW-MGMT-OOB - Uplinks to Net Cloud 1 - ACCESS ###"
             <<: *int_access
             access_vlan: 5
           - name: vlan 5
@@ -516,28 +532,28 @@ modelo:
             description: "### Link to SW-CORE-1 - TRUNK ###"
             <<: *int_trunk
             dynamic: desirable
-            allowed_vlan: 1,10,20,30,40,50,60
+            allowed_vlan: 1,11,21,31,41,51,61
           - name: GigabitEthernet0/2
             description: "### Link to SW-CORE-2 - TRUNK ###"
             <<: *int_trunk
             dynamic: desirable
-            allowed_vlan: 1,10,20,30,40,50,60
+            allowed_vlan: 1,11,21,31,41,51,61
           - name: GigabitEthernet0/3
             <<: *int_access
             access_vlan: 99
           - name: GigabitEthernet1/0
-            description: "### Link to Server1 on VLAN50_Data - ACCESS ###"
+            description: "### Link to Server1 on VLAN51_Data - ACCESS ###"
             <<: *int_access
-            access_vlan: 50
+            access_vlan: 51
           - name: GigabitEthernet1/1
-            description: "### Link to Server2 on VLAN60_Services - ACCESS ###"
+            description: "### Link to Server2 on VLAN61_Services - ACCESS ###"
             <<: *int_access
-            access_vlan: 60
+            access_vlan: 61
           - name: GigabitEthernet1/2
             <<: *int_access
             access_vlan: 99
           - name: GigabitEthernet1/3
-            description: "### Link to SW-MGMT-OOB - Uplinks to NetCloud 1 - ACCESS ###"
+            description: "### Link to SW-MGMT-OOB - Uplinks to Net Cloud 1 - ACCESS ###"
             <<: *int_access
             access_vlan: 5
           - name: vlan 5
@@ -554,7 +570,7 @@ modelo:
         ip_routing: true
         routers:
           - name: eigrp
-            as_number: 10
+            as_number: 11
             router_id: 1.1.1.3
             networks: *networks
             no_passive_interfaces: *no_passive_interfaces
@@ -562,8 +578,8 @@ modelo:
         vlans: *sw_vlans
         pvst:
           - mode: rapid-pvst
-            rt_pri: 70
-            rt_sec: 80
+            rt_pri: 71
+            rt_sec: 81
         interfaces:
           - name: GigabitEthernet0/0
             <<: *int_access
@@ -571,11 +587,11 @@ modelo:
           - name: GigabitEthernet0/1
             description: "### Link 1 to (e1/ens4) UBUNTU-1 - TRUNK ###"
             <<: *int_trunk
-            allowed_vlan: 1,70,80
+            allowed_vlan: 1,71,81
           - name: GigabitEthernet0/2
             description: "### Link 2 to (e2/ens5) UBUNTU-1 - TRUNK ###"
             <<: *int_trunk
-            allowed_vlan: 1,70,80
+            allowed_vlan: 1,71,81
           - name: GigabitEthernet0/3
             <<: *int_access
             access_vlan: 99
@@ -588,16 +604,16 @@ modelo:
             dynamic: desirable
             channel_group: 1
             channel_mode: active
-            allowed_vlan: 1,3,70,80
+            allowed_vlan: 1,3,71,81
           - name: GigabitEthernet1/2
             description: "### Link 2 to SW-IT-1 - LACP - TRUNK ###"
             <<: *int_trunk
             dynamic: desirable
             channel_group: 1
             channel_mode: active
-            allowed_vlan: 1,3,70,80
+            allowed_vlan: 1,3,71,81
           - name: GigabitEthernet1/3
-            description: "### Link to SW-MGMT-OOB - Uplinks to NetCloud 1 - ACCESS ###"
+            description: "### Link to SW-MGMT-OOB - Uplinks to Net Cloud 1 - ACCESS ###"
             <<: *int_access
             access_vlan: 5
           - name: GigabitEthernet2/0
@@ -621,7 +637,7 @@ modelo:
             <<: *int_trunk
             port_channel: 1
             dynamic: desirable
-            allowed_vlan: 1,3,70,80
+            allowed_vlan: 1,3,71,81
           - name: vlan 3
             vlan: 3
             ip_address: 172.16.3.36
@@ -630,20 +646,20 @@ modelo:
             vlan: 5
             ip_address: 172.16.5.56
             <<: *int_mgmt
-          - name: vlan 70
-            vlan: 70
-            ip_address: *sn_vl70
+          - name: vlan 71
+            vlan: 71
+            ip_address: *sn_vl71
             fst_ip: *fst_ip
-            description: "### SVI interface for VLAN70_IT1 ###"
-            vrrp_group: 70
+            description: "### SVI interface for VLAN71_IT1 ###"
+            vrrp_group: 71
             vrrp_priority: 1
             <<: *int_svi
-          - name: vlan 80
-            vlan: 80
-            ip_address: *sn_vl80
+          - name: vlan 81
+            vlan: 81
+            ip_address: *sn_vl81
             fst_ip: *fst_ip
-            description: "### SVI interface for VLAN80_IT2 ###"
-            vrrp_group: 80
+            description: "### SVI interface for VLAN81_IT2 ###"
+            vrrp_group: 81
             vrrp_priority: 2
             <<: *int_svi
       #### EOF SW-IT-1 ####
@@ -656,7 +672,7 @@ modelo:
         ip_routing: true
         routers:
           - name: eigrp
-            as_number: 10
+            as_number: 11
             router_id: 1.1.1.4
             networks: *networks
             no_passive_interfaces: *no_passive_interfaces
@@ -664,8 +680,8 @@ modelo:
         vlans: *sw_vlans
         pvst:
           - mode: rapid-pvst
-            rt_pri: 80
-            rt_sec: 70
+            rt_pri: 81
+            rt_sec: 71
         interfaces:
           - name: GigabitEthernet0/0
             <<: *int_access
@@ -673,11 +689,11 @@ modelo:
           - name: GigabitEthernet0/1
             description: "### Link 1 to (e3/ens6) UBUNTU-1 - TRUNK ###"
             <<: *int_trunk
-            allowed_vlan: 1,70,80
+            allowed_vlan: 1,71,81
           - name: GigabitEthernet0/2
             description: "### Link 2 to (e4/ens7) UBUNTU-1 - TRUNK ###"
             <<: *int_trunk
-            allowed_vlan: 1,70,80
+            allowed_vlan: 1,71,81
           - name: GigabitEthernet0/3
             <<: *int_access
             access_vlan: 99
@@ -690,16 +706,16 @@ modelo:
             dynamic: desirable
             channel_group: 1
             channel_mode: active
-            allowed_vlan: 1,3,70,80
+            allowed_vlan: 1,3,71,81
           - name: GigabitEthernet1/2
             description: "### Link 2 to SW-IT-1 - LACP - TRUNK ###"
             <<: *int_trunk
             dynamic: desirable
             channel_group: 1
             channel_mode: active
-            allowed_vlan: 1,3,70,80
+            allowed_vlan: 1,3,71,81
           - name: GigabitEthernet1/3
-            description: "### Link to SW-MGMT-OOB - Uplinks to NetCloud 1 - ACCESS ###"
+            description: "### Link to SW-MGMT-OOB - Uplinks to Net Cloud 1 - ACCESS ###"
             <<: *int_access
             access_vlan: 5
           - name: GigabitEthernet2/0
@@ -723,7 +739,7 @@ modelo:
             <<: *int_trunk
             port_channel: 1
             dynamic: desirable
-            allowed_vlan: 1,3,70,80
+            allowed_vlan: 1,3,71,81
           - name: vlan 3
             vlan: 3
             ip_address: 172.16.3.37
@@ -732,20 +748,595 @@ modelo:
             vlan: 5
             ip_address: 172.16.5.57
             <<: *int_mgmt
-          - name: vlan 70
-            vlan: 70
-            ip_address: *sn_vl70
+          - name: vlan 71
+            vlan: 71
+            ip_address: *sn_vl71
             snd_ip: *snd_ip
-            description: "### SVI interface for VLAN70_IT1 ###"
-            vrrp_group: 70
+            description: "### SVI interface for VLAN71_IT1 ###"
+            vrrp_group: 71
             vrrp_priority: 2
             <<: *int_svi
-          - name: vlan 80
-            vlan: 80
-            ip_address: *sn_vl80
+          - name: vlan 81
+            vlan: 81
+            ip_address: *sn_vl81
             snd_ip: *snd_ip
-            description: "### SVI interface for VLAN80_IT2 ###"
-            vrrp_group: 80
+            description: "### SVI interface for VLAN81_IT2 ###"
+            vrrp_group: 81
             vrrp_priority: 1
             <<: *int_svi
       #### EOF SW-IT-2 ####
+
+      #### RT-P-2 ####
+      RT-P-2:
+        management:
+          ip: 172.16.5.32
+          interface: GigabitEthernet0/7
+        ip_routing: true
+        routers_bb:
+          mpls: &mpls
+            ldp_interface: Loopback0
+            ldp_label: explicit-null
+          isis:
+            - name: CORE
+              net: 49.0001.1000.0000.0002.00
+              is_type: level-2-only
+              mpls_ldp_sync: true
+          bgp:
+            - name: 65111
+              bgp_lines: |
+                router bgp 65111
+                  bgp log-neighbor-changes
+                  neighbor MPLS peer-group
+                  neighbor MPLS remote-as 65111
+                  neighbor MPLS update-source Loopback0
+                  neighbor 10.0.0.3 peer-group MPLS
+                  neighbor 10.0.0.4 peer-group MPLS
+                  neighbor 10.0.0.5 peer-group MPLS
+                  neighbor 10.0.0.6 peer-group MPLS
+                  neighbor 10.0.0.11 peer-group MPLS
+                  neighbor 10.0.0.12 peer-group MPLS
+                  neighbor 10.0.0.21 peer-group MPLS
+                  neighbor 10.0.0.22 peer-group MPLS
+                
+                  address-family ipv4
+                    no synchronization
+                    no neighbor 10.0.0.3 activate
+                    no neighbor 10.0.0.4 activate
+                    no neighbor 10.0.0.5 activate
+                    no neighbor 10.0.0.6 activate
+                    no neighbor 10.0.0.11 activate
+                    no neighbor 10.0.0.12 activate
+                    no neighbor 10.0.0.21 activate
+                    no neighbor 10.0.0.22 activate
+                    no auto-summary
+                    exit-address-family
+                  
+                  address-family vpnv4
+                    neighbor MPLS send-community both
+                    neighbor MPLS route-reflector-client
+                    neighbor 10.0.0.3 activate
+                    neighbor 10.0.0.4 activate
+                    neighbor 10.0.0.5 activate
+                    neighbor 10.0.0.6 activate
+                    neighbor 10.0.0.11 activate
+                    neighbor 10.0.0.12 activate
+                    neighbor 10.0.0.21 activate
+                    neighbor 10.0.0.22 activate
+                    exit-address-family
+          vrf: null
+        interfaces:
+          - name: Loopback0
+            description: "### Loopback0 for BGP Router ID ###"            
+            ip_address: 10.0.0.2
+            subnet_mask: *sn_32
+            <<: *int_isis
+            mpls_ip: false
+          - name: GigabitEthernet0/0
+            description: "### Link to RT-P-3 ###"            
+            ip_address: 10.0.32.2
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: true
+          - name: GigabitEthernet0/1
+            description: "### Link to RT-P-4 ###"
+            ip_address: 10.0.42.2
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: true
+          - name: GigabitEthernet0/2
+            description: "### Link to RT-P-5 ###"
+            ip_address: 10.0.25.2
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: True
+          - name: GigabitEthernet0/3
+            description: "### Link to RT-P-6 ###"
+            ip_address: 10.0.26.2
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: true
+          - name: GigabitEthernet0/6
+            description: "### Link to Internet Cloud 0 ###"
+            ip_address: 192.168.100.199
+            subnet_mask: *sn_24
+            <<: *int_internet
+          - name: GigabitEthernet0/7
+            ip_address: 172.16.5.32
+            <<: *int_mgmt
+      #### EOF RT-P-2 ####
+
+      #### RT-P-3 ####
+      RT-P-3:
+        management:
+          ip: 172.16.5.33
+          interface: GigabitEthernet0/7
+        ip_routing: true
+        routers_bb:
+          mpls: *mpls
+          isis:
+            - name: CORE
+              net: 49.0001.1000.0000.0003.00
+              is_type: level-2-only
+              mpls_ldp_sync: true
+          bgp:
+            - name: 65111
+              bgp_lines: &bgp_lines_p |
+                router bgp 65111
+                  bgp log-neighbor-changes
+                  neighbor MPLS peer-group
+                  neighbor MPLS remote-as 65111
+                  neighbor MPLS update-source Loopback0
+                  neighbor 10.0.0.2 peer-group MPLS
+                  
+                  address-family ipv4
+                    no synchronization
+                    neighbor MPLS send-community both
+                    neighbor MPLS soft-reconfiguration inbound
+                    no neighbor 10.0.0.2 activate
+                    no auto-summary
+                    exit-address-family
+                  
+                  address-family vpnv4
+                    neighbor MPLS send-community both
+                    neighbor 10.0.0.2 activate
+                    exit-address-family
+          vrf: null
+        interfaces:
+          - name: Loopback0
+            description: "### Loopback0 for BGP Router ID ###"            
+            ip_address: 10.0.0.3
+            subnet_mask: *sn_32
+            <<: *int_isis
+            mpls_ip: false
+          - name: GigabitEthernet0/0
+            description: "### Link to RT_PE_1 ###"            
+            ip_address: 10.0.13.3
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: true
+          - name: GigabitEthernet0/1
+            description: "### Link to RT-P-2 ###"
+            ip_address: 10.0.32.3
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: true
+          - name: GigabitEthernet0/2
+            description: "### Link to RT-P-4 ###"
+            ip_address: 10.0.34.3
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: True
+          - name: GigabitEthernet0/3
+            description: "### Link to RT-P-5 ###"
+            ip_address: 10.0.35.3
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: true
+          - name: GigabitEthernet0/4
+            description: "### Link to RT-P-6 ###"
+            ip_address: 10.0.36.3
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: true
+          - name: GigabitEthernet0/7
+            ip_address: 172.16.5.33
+            <<: *int_mgmt
+      #### EOF RT-P-3 ####
+
+      #### RT-P-4 ####
+      RT-P-4:
+        management:
+          ip: 172.16.5.34
+          interface: GigabitEthernet0/7
+        ip_routing: true
+        routers_bb:
+          mpls: *mpls
+          isis:
+            - name: CORE
+              net: 49.0001.1000.0000.0004.00
+              is_type: level-2-only
+              mpls_ldp_sync: true
+          bgp:
+            - name: 65111
+              bgp_lines: *bgp_lines_p
+          vrf: null
+        interfaces:
+          - name: Loopback0
+            description: "### Loopback0 for BGP Router ID ###"            
+            ip_address: 10.0.0.4
+            subnet_mask: *sn_32
+            <<: *int_isis
+            mpls_ip: false
+          - name: GigabitEthernet0/0
+            description: "### Link to RT_PE_2 ###"            
+            ip_address: 10.0.24.4
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: true
+          - name: GigabitEthernet0/1
+            description: "### Link to RT-P-2 ###"
+            ip_address: 10.0.42.4
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: true
+          - name: GigabitEthernet0/2
+            description: "### Link to RT-P-3 ###"
+            ip_address: 10.0.34.4
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: True
+          - name: GigabitEthernet0/3
+            description: "### Link to RT-P-5 ###"
+            ip_address: 10.0.45.4
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: true          
+          - name: GigabitEthernet0/7
+            ip_address: 172.16.5.34
+            <<: *int_mgmt
+      #### EOF RT-P-4 ####
+
+      #### RT-P-5 ####
+      RT-P-5:
+        management:
+          ip: 172.16.5.35
+          interface: GigabitEthernet0/7
+        ip_routing: true
+        routers_bb:
+          mpls: *mpls
+          isis:
+            - name: CORE
+              net: 49.0001.1000.0000.0005.00
+              is_type: level-2-only
+              mpls_ldp_sync: true
+          bgp:
+            - name: 65111
+              bgp_lines: *bgp_lines_p
+          vrf: null
+        interfaces:
+          - name: Loopback0
+            description: "### Loopback0 for BGP Router ID ###"            
+            ip_address: 10.0.0.5
+            subnet_mask: *sn_32
+            <<: *int_isis
+            mpls_ip: false
+          - name: GigabitEthernet0/0
+            description: "### Link to RT-PE-1 ###"            
+            ip_address: 10.0.51.5
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: true
+          - name: GigabitEthernet0/1
+            description: "### Link to RT-P-2 ###"
+            ip_address: 10.0.25.5
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: true
+          - name: GigabitEthernet0/2
+            description: "### Link to RT-P-6 ###"
+            ip_address: 10.0.56.5
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: True
+          - name: GigabitEthernet0/3
+            description: "### Link to RT-P-3 ###"
+            ip_address: 10.0.35.5
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: true
+          - name: GigabitEthernet0/4
+            description: "### Link to RT-P-4 ###"
+            ip_address: 10.0.45.5
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: true
+          - name: GigabitEthernet0/7
+            ip_address: 172.16.5.35
+            <<: *int_mgmt
+      #### EOF RT-P-5 ####
+
+      #### RT-P-6 ####
+      RT-P-6:
+        management:
+          ip: 172.16.5.36
+          interface: GigabitEthernet0/7
+        ip_routing: true
+        routers_bb:
+          mpls: *mpls
+          isis:
+            - name: CORE
+              net: 49.0001.1000.0000.0006.00
+              is_type: level-2-only
+              mpls_ldp_sync: true
+          bgp:
+            - name: 65111
+              bgp_lines: *bgp_lines_p
+          vrf: null
+        interfaces:
+          - name: Loopback0
+            description: "### Loopback0 for BGP Router ID ###"            
+            ip_address: 10.0.0.6
+            subnet_mask: *sn_32
+            <<: *int_isis
+            mpls_ip: false
+          - name: GigabitEthernet0/0
+            description: "### Link to RT-PE-2 ###"            
+            ip_address: 10.0.62.6
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: true
+          - name: GigabitEthernet0/1
+            description: "### Link to RT-P-2 ###"
+            ip_address: 10.0.26.6
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: true
+          - name: GigabitEthernet0/2
+            description: "### Link to RT-P-5 ###"
+            ip_address: 10.0.56.6
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: True
+          - name: GigabitEthernet0/3
+            description: "### Link to RT-P-3 ###"
+            ip_address: 10.0.36.6
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: true          
+          - name: GigabitEthernet0/7
+            ip_address: 172.16.5.36
+            <<: *int_mgmt
+      #### EOF RT-P-6 ####
+
+      #### EOF DEVICES ####
+
+      #### RT_PE_1 ####
+      RT_PE_1:
+        management:
+          ip: 172.16.5.11
+          interface: GigabitEthernet0/7
+        ip_routing: true
+        routers_bb:
+          mpls: *mpls
+          isis:
+            - name: CORE
+              net: 49.0001.1000.0000.0011.00
+              is_type: level-2-only
+              mpls_ldp_sync: true
+          bgp:
+            - name: 65111
+              bgp_lines: &bgp_lines_pe |
+                router bgp 65111
+                  no bgp default ipv4-unicast
+                  bgp log-neighbor-changes
+                  neighbor MPLS peer-group
+                  neighbor MPLS remote-as 65111
+                  neighbor MPLS update-source Loopback0
+                  neighbor 10.0.0.2 peer-group MPLS
+                  
+                  address-family ipv4
+                    no synchronization
+                    neighbor MPLS send-community both
+                    neighbor MPLS soft-reconfiguration inbound
+                    no neighbor 10.0.0.2 activate
+                    no auto-summary
+                    exit-address-family
+                  
+                  address-family vpnv4
+                    neighbor MPLS send-community both
+                    neighbor 10.0.0.2 activate
+                    exit-address-family
+          vrf:
+            - name: VRF_blue
+              rd: "65001:1"
+              rt_import: "65001:1"
+              rt_export: "65001:1"
+            - name: VRF_green
+              rd: "65001:2"
+              rt_import: "65001:2"
+              rt_export: "65001:2"
+        interfaces:
+          - name: Loopback0
+            description: "### Loopback0 for BGP Router ID ###"            
+            ip_address: 10.0.0.11
+            subnet_mask: *sn_32
+            <<: *int_isis
+            mpls_ip: false
+          - name: GigabitEthernet0/0
+            description: "### Link to RT-P-3 ###"            
+            ip_address: 10.0.13.1
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: true
+          - name: GigabitEthernet0/1
+            description: "### Link to SW_CORE_1 ###"
+            ip_address: 10.1.1.6
+            subnet_mask: *sn_29
+            <<: *int_vrf
+            vrf_name: VRF_green
+          - name: GigabitEthernet0/2
+            description: "### Link to SW-B1 ###"
+            ip_address: 10.1.0.6
+            subnet_mask: *sn_29
+            <<: *int_vrf
+            vrf_name: VRF_blue
+          - name: GigabitEthernet0/7
+            ip_address: 172.16.5.11
+            <<: *int_mgmt
+      #### EOF RT_PE_1 ####
+
+      #### RT_PE_2 ####
+      RT_PE_2:
+        management:
+          ip: 172.16.5.12
+          interface: GigabitEthernet0/7
+        ip_routing: true
+        routers_bb:
+          mpls: *mpls
+          isis:
+            - name: CORE
+              net: 49.0001.1000.0000.0012.00
+              is_type: level-2-only
+              mpls_ldp_sync: true
+          bgp:
+            - name: 65111
+              bgp_lines: *bgp_lines_pe
+          vrf:
+            - name: VRF_green
+              rd: "65001:2"
+              rt_import: "65001:2"
+              rt_export: "65001:2"
+        interfaces:
+          - name: Loopback0
+            description: "### Loopback0 for BGP Router ID ###"            
+            ip_address: 10.0.0.12
+            subnet_mask: *sn_32
+            <<: *int_isis
+            mpls_ip: false
+          - name: GigabitEthernet0/0
+            description: "### Link to RT-P-4 ###"            
+            ip_address: 10.0.24.2
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: true
+          - name: GigabitEthernet0/1
+            description: "### Link to SW_CORE_2 ###"
+            ip_address: 10.1.2.6
+            subnet_mask: *sn_29
+            <<: *int_vrf
+            vrf_name: VRF_green
+          - name: GigabitEthernet0/7
+            ip_address: 172.16.5.12
+            <<: *int_mgmt
+      #### EOF RT_PE_2 ####
+
+      #### RT-PE-1 ####
+      RT-PE-1:
+        management:
+          ip: 172.16.5.13
+          interface: GigabitEthernet0/7
+        ip_routing: true
+        routers_bb:
+          mpls: *mpls
+          isis:
+            - name: CORE
+              net: 49.0001.1000.0000.0013.00
+              is_type: level-2-only
+              mpls_ldp_sync: true
+          bgp:
+            - name: 65111
+              bgp_lines: *bgp_lines_pe
+          vrf:
+            - name: VRF_blue
+              rd: "65001:1"
+              rt_import: "65001:1"
+              rt_export: "65001:1"
+            - name: VRF_green
+              rd: "65001:2"
+              rt_import: "65001:2"
+              rt_export: "65001:2"
+        interfaces:
+          - name: Loopback0
+            description: "### Loopback0 for BGP Router ID ###"            
+            ip_address: 10.0.0.13
+            subnet_mask: *sn_32
+            <<: *int_isis
+            mpls_ip: false
+          - name: GigabitEthernet0/0
+            description: "### Link to RT-P-5 ###"            
+            ip_address: 10.0.51.1
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: true
+          - name: GigabitEthernet0/1
+            description: "### Link to SW-CORE-1 ###"
+            ip_address: 10.1.3.6
+            subnet_mask: *sn_29
+            <<: *int_vrf
+            vrf_name: VRF_green
+          - name: GigabitEthernet0/2
+            description: "### Link to SW-B2 ###"
+            ip_address: 10.1.5.6
+            subnet_mask: *sn_29
+            <<: *int_vrf
+            vrf_name: VRF_blue
+          - name: GigabitEthernet0/7
+            ip_address: 172.16.5.13
+            <<: *int_mgmt
+      #### EOF RT-PE-1 ####
+
+      #### RT-PE-2 ####
+      RT-PE-2:
+        management:
+          ip: 172.16.5.14
+          interface: GigabitEthernet0/7
+        ip_routing: true
+        routers_bb:
+          mpls: *mpls
+          isis:
+            - name: CORE
+              net: 49.0001.1000.0000.0014.00
+              is_type: level-2-only
+              mpls_ldp_sync: true
+          bgp:
+            - name: 65111
+              bgp_lines: *bgp_lines_pe
+          vrf:
+            - name: VRF_blue
+              rd: "65001:1"
+              rt_import: "65001:1"
+              rt_export: "65001:1"
+            - name: VRF_green
+              rd: "65001:2"
+              rt_import: "65001:2"
+              rt_export: "65001:2"
+        interfaces:
+          - name: Loopback0
+            description: "### Loopback0 for BGP Router ID ###"            
+            ip_address: 10.0.0.14
+            subnet_mask: *sn_32
+            <<: *int_isis
+            mpls_ip: false
+          - name: GigabitEthernet0/0
+            description: "### Link to RT-P-5 ###"            
+            ip_address: 10.0.62.2
+            subnet_mask: *sn_29
+            <<: *int_isis
+            mpls_ip: true
+          - name: GigabitEthernet0/1
+            description: "### Link to SW-CORE-2 ###"
+            ip_address: 10.1.4.6
+            subnet_mask: *sn_29
+            <<: *int_vrf
+            vrf_name: VRF_green
+          - name: GigabitEthernet0/2
+            description: "### Link to SW-B3 ###"
+            ip_address: 10.1.6.6
+            subnet_mask: *sn_29
+            <<: *int_vrf
+            vrf_name: VRF_blue
+          - name: GigabitEthernet0/7
+            ip_address: 172.16.5.14
+            <<: *int_mgmt
+      #### EOF RT-PE-2 ####
+

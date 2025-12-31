@@ -1,0 +1,45 @@
+PE1(config)# interface loopback 2				#
+PE1(config-if)# ip address 2.1.1.1 255.255.255.255		#
+
+PE1(config)# router eigrp 2
+PE1(config-router)# network 10.0.0.8 0.0.0.3
+PE1(config-router)# network 2.1.1.1 0.0.0.0
+
+PE1(config)# router bgp 64501
+PE1(config-router)# neighbor 2.1.1.3 remote-as 64501
+PE1(config-router)# neighbor 2.1.1.3 update-source lo0
+PE1(config-router)# address-family vpnv4
+PE1(config-router-af)# neighbor 2.1.1.3 activate
+PE1(config-router-af)# exit
+
+PE1(config)# ip vrf CustomerA
+PE1(config-vrf)# rd 64501:1
+PE1(config-vrf)# route-target both 64501:1
+
+PE1(config-vrf)# ip vrf CustomerB
+PE1(config-vrf)# rd 64501:2
+PE1(config-vrf)# route-target both 64501:2
+
+PE1(config)# interface gigabitEthernet 0/1
+PE1(config-if)# ip vrf forwarding CustomerA
+PE1(config-if)# ip address 10.0.0.1 255.255.255.252
+
+PE1(config)# interface gigabitEthernet 0/2
+PE1(config-if)# ip vrf forwarding CustomerB
+PE1(config-if)# ip address 10.0.0.5 255.255.255.252
+
+PE1(config)# interface GigabitEthernet 0/3
+PE1(config-if)# mpls ip
+
+PE1(config)# router bgp 64501
+PE1(config-router)# address-family ipv4 vrf CustomerA
+PE1(config-router-af)# neighbor 10.0.0.2 remote-as 64401
+PE1(config-router-af)# exit
+
+PE1(config-router)# address-family ipv4 vrf CustomerB
+PE1(config-router-af)# neighbor 10.0.0.6 remote-as 64301
+
+
+256
+8
+248

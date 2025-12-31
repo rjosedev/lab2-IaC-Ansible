@@ -1,0 +1,296 @@
+R3
+
+interface Loopback0
+ ip address 10.0.0.3 255.255.255.255
+ ip router isis CORE
+!
+interface Ethernet0/0
+ ip address 10.0.34.3 255.255.255.0
+ ip router isis CORE
+!
+
+interface Ethernet1/3
+ ip vrf forwarding VRF_B
+ ip address 10.0.13.3 255.255.255.0
+ 
+router isis CORE
+ mpls ldp sync
+ net 49.0001.1111.1111.1113.00
+ is-type level-2-only
+ 
+mpls ldp explicit-null
+!
+interface Ethernet0/0
+ mpls ip  
+!
+mpls ldp router-id Loopback0
+
+router bgp 65111
+ no bgp default ipv4-unicast
+ bgp log-neighbor-changes
+ neighbor MPLS peer-group
+ neighbor MPLS remote-as 65111
+ neighbor MPLS update-source Loopback0
+ neighbor 10.0.0.5 peer-group MPLS
+ neighbor 10.0.13.1 remote-as 65001
+!
+address-family ipv4
+  no synchronization
+  neighbor MPLS send-community both
+  neighbor MPLS soft-reconfiguration inbound
+  no auto-summary
+ exit-address-family
+ !
+ address-family vpnv4
+  neighbor MPLS send-community both
+  neighbor 10.0.0.5 activate
+ exit-address-family
+ 
+address-family ipv4 vrf VRF_B
+  no synchronization
+  neighbor 10.0.13.1 remote-as 65001
+  neighbor 10.0.13.1 activate
+  neighbor 10.0.13.1 send-community both
+  neighbor 10.0.13.1 soft-reconfiguration inbound
+ exit-address-family
+ 
+ip vrf VRF_B
+ rd 65001:1
+ route-target export 65001:1
+ route-target import 65001:1
+
+R4
+
+interface Loopback0
+ ip address 10.0.0.4 255.255.255.255
+ ip router isis CORE
+!
+interface Ethernet0/0
+ ip address 10.0.34.4 255.255.255.0
+ ip router isis CORE
+ duplex auto
+!
+interface Ethernet0/1
+ ip address 10.0.45.4 255.255.255.0
+ ip router isis CORE
+ duplex auto
+!
+interface Ethernet0/2
+ ip address 10.0.49.4 255.255.255.0
+ ip router isis CORE
+ duplex auto
+!
+
+router isis CORE
+ mpls ldp sync
+ net 49.0001.1111.1111.1114.00
+ is-type level-2-only
+ 
+mpls ldp explicit-null
+!
+interface Ethernet0/0
+ mpls ip  
+!
+interface Ethernet0/1
+ mpls ip  
+!
+interface Ethernet0/2
+ mpls ip  
+!
+mpls ldp router-id Loopback0
+
+router bgp 65111
+ bgp log-neighbor-changes
+ neighbor MPLS peer-group
+ neighbor MPLS remote-as 65111
+ neighbor MPLS update-source Loopback0
+ neighbor 10.0.0.5 peer-group MPLS
+ !
+ address-family ipv4
+  no synchronization
+  neighbor MPLS send-community both
+  neighbor MPLS soft-reconfiguration inbound
+  no neighbor 10.0.0.5 activate
+  no auto-summary
+ exit-address-family
+ !
+ address-family vpnv4
+  neighbor MPLS send-community both
+  neighbor 10.0.0.5 activate
+ exit-address-family
+
+R5
+
+interface Loopback0
+ ip address 10.0.0.5 255.255.255.255
+ ip router isis CORE
+!
+interface Ethernet0/1
+ ip address 10.0.45.5 255.255.255.0
+ ip router isis CORE
+!
+interface Ethernet1/1
+ ip address 10.0.59.5 255.255.255.0
+ ip router isis CORE
+!
+router isis CORE
+ mpls ldp sync
+ net 49.0001.1111.1111.1115.00
+ is-type level-2-only
+ 
+mpls ldp explicit-null
+!
+interface Ethernet0/1
+ mpls ip  
+!
+interface Ethernet1/1
+ mpls ip  
+!
+mpls ldp router-id Loopback0
+
+router bgp 65111
+ bgp log-neighbor-changes
+ neighbor MPLS peer-group
+ neighbor MPLS remote-as 65111
+ neighbor MPLS update-source Loopback0
+ neighbor 10.0.0.3 peer-group MPLS
+ neighbor 10.0.0.4 peer-group MPLS
+ neighbor 10.0.0.8 peer-group MPLS
+ neighbor 10.0.0.9 peer-group MPLS
+ !
+ address-family ipv4
+  no synchronization
+  no neighbor 10.0.0.3 activate
+  no neighbor 10.0.0.4 activate
+  no neighbor 10.0.0.8 activate
+  no neighbor 10.0.0.9 activate
+  no auto-summary
+ exit-address-family
+ !
+ address-family vpnv4
+  neighbor MPLS send-community both
+  neighbor MPLS route-reflector-client
+  neighbor 10.0.0.3 activate
+  neighbor 10.0.0.4 activate
+  neighbor 10.0.0.8 activate
+  neighbor 10.0.0.9 activate
+ exit-address-family
+
+R8
+
+interface Loopback0
+ ip address 10.0.0.8 255.255.255.255
+ ip router isis CORE
+!
+interface Ethernet0/0
+ ip address 10.0.89.8 255.255.255.0
+ ip router isis CORE
+!         
+interface Ethernet1/3
+ ip vrf forwarding VRF_B
+ ip address 10.0.68.8 255.255.255.0
+ 
+router isis CORE
+ mpls ldp sync
+ net 49.0001.1111.1111.1118.00
+ is-type level-2-only
+ 
+mpls ldp explicit-null
+!
+interface Ethernet0/0
+ mpls ip  
+!
+mpls ldp router-id Loopback0
+
+router bgp 65111
+ no bgp default ipv4-unicast
+ bgp log-neighbor-changes
+ neighbor MPLS peer-group
+ neighbor MPLS remote-as 65111
+ neighbor MPLS update-source Loopback0
+ neighbor 10.0.0.5 peer-group MPLS
+ neighbor 10.0.68.6 remote-as 65001
+ !
+ address-family ipv4
+  no synchronization
+  neighbor MPLS send-community both
+  neighbor MPLS soft-reconfiguration inbound
+  no auto-summary
+ exit-address-family
+ !
+ address-family vpnv4
+  neighbor MPLS send-community both
+  neighbor 10.0.0.5 activate
+ exit-address-family
+ 
+address-family ipv4 vrf VRF_B
+  no synchronization
+  neighbor 10.0.68.6 remote-as 65001
+  neighbor 10.0.68.6 activate
+  neighbor 10.0.68.6 send-community both
+  neighbor 10.0.68.6 soft-reconfiguration inbound
+ exit-address-family
+
+ip vrf VRF_B
+ rd 65001:1
+ route-target export 65001:1
+ route-target import 65001:1
+
+
+
+R9
+
+interface Loopback0
+ ip address 10.0.0.9 255.255.255.255
+ ip router isis CORE
+!
+interface Ethernet0/0
+ ip address 10.0.89.9 255.255.255.0
+ ip router isis CORE
+!
+interface Ethernet0/2
+ ip address 10.0.49.9 255.255.255.0
+ ip router isis CORE
+!
+interface Ethernet1/1
+ ip address 10.0.59.9 255.255.255.0
+ ip router isis CORE
+!
+router isis CORE
+ mpls ldp sync
+ net 49.0001.1111.1111.1119.00
+ is-type level-2-only
+ 
+mpls ldp explicit-null
+!
+interface Ethernet0/0
+ mpls ip  
+!
+interface Ethernet0/2
+ mpls ip  
+!
+interface Ethernet1/1
+ mpls ip  
+!
+mpls ldp router-id Loopback0
+
+router bgp 65111
+ bgp log-neighbor-changes
+ neighbor MPLS peer-group
+ neighbor MPLS remote-as 65111
+ neighbor MPLS update-source Loopback0
+ neighbor 10.0.0.5 peer-group MPLS
+ !
+ address-family ipv4
+  no synchronization
+  neighbor MPLS send-community both
+  neighbor MPLS soft-reconfiguration inbound
+  no neighbor 10.0.0.5 activate
+  no auto-summary
+ exit-address-family
+ !
+ address-family vpnv4
+  neighbor MPLS send-community both
+  neighbor 10.0.0.5 activate
+ exit-address-family
+
