@@ -14,6 +14,15 @@ mpls ldp {{ routers_bb.mpls.ldp_label }}
 mpls ldp router-id {{ routers_bb.mpls.ldp_interface }}
 !
 {% endif %}
+{% if routers_bb.vrf -%}
+{% for v in routers_bb.vrf %}
+ip vrf {{ v.name }}
+  rd {{ v.rd }}
+  route-target import {{ v.rt_import }}
+  route-target export {{ v.rt_export }}
+!
+{% endfor %}
+{% endif %}
 {% if routers_bb.isis -%}
 {% for i in routers_bb.isis %}
 router isis {{ i.name }}
@@ -29,12 +38,11 @@ router isis {{ i.name }}
 !
 {% endfor %}
 {% endif %}
-{% if routers_bb.vrf -%}
-{% for v in routers_bb.vrf %}
-ip vrf {{ v.name }}
-  rd {{ v.rd }}
-  route-target import {{ v.rt_import }}
-  route-target export {{ v.rt_export }}
+{% if routers_bb.ospf -%}
+{% for o in routers_bb.ospf %}
+router ospf {{ o.name }} vrf {{ o.vrf_name }}
+  router-id {{ o.router_id }}
+{{ o.ospf_lines }}
 !
 {% endfor %}
 {% endif %}

@@ -3,52 +3,60 @@
 ---
 cisco_ios_sw_core:
   hosts:
-    SW-CORE-1:
+    SWACE1:
+      ansible_host: 172.16.5.101
+    SWACE2:
+      ansible_host: 172.16.5.102
+    SWBCE1:
       ansible_host: 172.16.5.51
-    SW-CORE-2:
+    SWBCE2:
       ansible_host: 172.16.5.52
+    SWCCE1:
+      ansible_host: 172.16.5.61
+    SWCCE2:
+      ansible_host: 172.16.5.62
 
 cisco_ios_sw_bld:
   hosts:
-    SW-BLD-A:
+    SWBBLDA:
       ansible_host: 172.16.5.53
-    SW-BLD-B:
+    SWBBLDB:
       ansible_host: 172.16.5.54
 
 cisco_ios_sw_dc:
   hosts:
-    SW-DC:
+    SWBDC:
       ansible_host: 172.16.5.55
 
 cisco_ios_sw_it:
   hosts:
-    SW-IT-1:
+    SWBIT1:
       ansible_host: 172.16.5.56
-    SW-IT-2:
+    SWBIT2:
       ansible_host: 172.16.5.57
 
 cisco_ios_rt_p:
   hosts:
-    RT-P-2:
+    RTP2:
       ansible_host: 172.16.5.32
-    RT-P-3:
+    RTP3:
       ansible_host: 172.16.5.33
-    RT-P-4:
+    RTP4:
       ansible_host: 172.16.5.34
-    RT-P-5:
+    RTP5:
       ansible_host: 172.16.5.35
-    RT-P-6:
+    RTP6:
       ansible_host: 172.16.5.36
 
 cisco_ios_rt_pe:
   hosts:
-    RT_PE_1:
+    RTAPE1:
       ansible_host: 172.16.5.11
-    RT_PE_2:
+    RTAPE2:
       ansible_host: 172.16.5.12
-    RT-PE-1:
+    RTBPE1:
       ansible_host: 172.16.5.13
-    RT-PE-2:
+    RTBPE2:
       ansible_host: 172.16.5.14
 
 cisco_ios_rt_all:

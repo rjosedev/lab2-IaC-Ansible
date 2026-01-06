@@ -1,19 +1,28 @@
-{# Interface SVI Configuration Template #}
+{# Interface L2 and L3 MGMT configuration Template #}
 !
 {% for interface in interfaces -%}
-{%- if interface.mode == "mgmt" -%}
-  interface vlan {{ interface.vlan }}
+{%- if interface.mode == "l2mgmt" -%}
+interface vlan {{ interface.vlan }}
 {% if interface.vlan == 3 %}
   description ### SVI interface for VLAN03_Routing/Mgmt ###
   ip address {{ interface.ip_address }} {{ interface.subnet_mask }}
   no shutdown
+  exit
+!
 {% elif interface.vlan == 5 %}
   description ### SVI interface for VLAN05_Mgmt/OOB ###
   ip address {{ interface.ip_address }} {{ interface.subnet_mask }}
   no shutdown
   exit
 ip default-gateway 172.16.5.1
-{% endif %}
 !
-{% endif -%}
+{% endif %}
+{% endif %}
+{% if interface.mode == "l3mgmt" -%}
+interface {{ interface.name }}
+  description {{ interface.description }}
+  ip address {{ interface.ip_address }} {{ interface.subnet_mask }}
+  no shutdown
+!
+{% endif %}
 {% endfor -%}

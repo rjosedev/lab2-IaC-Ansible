@@ -1,7 +1,7 @@
 # Playbook para generar codigo utilizando templates Jinja2
 ---
 - name: Generar codigo desde templates Jinja2 para configuracion de ROUTERS BB
-  hosts: "{{ modelo.hosts_groups.rt_all }}"
+  hosts: "{{ modelo.hosts_groups.rt_all }}, {{ modelo.hosts_groups.sw_core }}"
   gather_facts: false
 
   vars_files:
@@ -27,7 +27,7 @@
         var: routers_bb_result
 
 - name: Generar codigo desde templates Jinja2 para interfaces P-PE
-  hosts: "{{ modelo.hosts_groups.rt_all }}"
+  hosts: "{{ modelo.hosts_groups.rt_all }}, {{ modelo.hosts_groups.sw_core }}"
   gather_facts: false
 
   vars_files:
@@ -104,7 +104,7 @@
       ansible.builtin.debug:
         var: int_trunk_result
 
-- name: Generar codigo desde templates Jinja2 para interfaces MGMT
+- name: Generar codigo desde templates Jinja2 para interfaces L2 y L3 MGMT
   hosts: "{{ modelo.hosts_groups.sw_all }}"
   gather_facts: false
 
@@ -116,7 +116,7 @@
       ansible.builtin.set_fact:
         interfaces: "{{ modelo.infra_spec.devices[inventory_hostname].interfaces }}"
 
-    - name: Renderizar template Jinja2 para configurarcion de interfaces MGMT
+    - name: Renderizar template Jinja2 para configurarcion de interfaces L2 y L3 MGMT
       ansible.builtin.template:
         src: "{{ playbook_dir }}/../templates/int_mgmt_{{ item.type }}.j2"
         dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_int_mgmt.{{ item.ext }}"
@@ -126,7 +126,7 @@
         - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
         - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
 
-    - name: Mostrar resultado de la generacion de configuracion de interfaces MGMT
+    - name: Mostrar resultado de la generacion de configuracion de interfaces L2 y L3 MGMT
       ansible.builtin.debug:
         var: int_mgmt_result
 

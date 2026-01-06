@@ -1,0 +1,71 @@
+interface Loopback0
+ ip address 10.0.0.5 255.255.255.255
+ ip router isis CORE
+!
+interface Ethernet0/1
+ ip address 10.0.45.5 255.255.255.0
+ ip router isis CORE
+!
+interface Ethernet1/1
+ ip address 10.0.59.5 255.255.255.0
+ ip router isis CORE
+!
+router isis CORE
+ mpls ldp sync
+ net 49.0001.1111.1111.1115.00
+ is-type level-2-only
+ 
+ mpls ldp explicit-null
+!
+interface Ethernet0/1
+ mpls ip  
+!
+interface Ethernet1/1
+ mpls ip  
+!
+mpls ldp router-id Loopback0
+
+router bgp 65111
+ bgp log-neighbor-changes
+ neighbor MPLS peer-group
+ neighbor MPLS remote-as 65111
+ neighbor MPLS update-source Loopback0
+ neighbor 10.0.0.3 peer-group MPLS
+ neighbor 10.0.0.4 peer-group MPLS
+ neighbor 10.0.0.8 peer-group MPLS
+ neighbor 10.0.0.9 peer-group MPLS
+ !
+ address-family ipv4
+  no synchronization
+  no neighbor 10.0.0.3 activate
+  no neighbor 10.0.0.4 activate
+  no neighbor 10.0.0.8 activate
+  no neighbor 10.0.0.9 activate
+  no auto-summary
+ exit-address-family
+ !
+ address-family vpnv4
+  neighbor MPLS send-community both
+  neighbor MPLS route-reflector-client
+  neighbor 10.0.0.3 activate
+  neighbor 10.0.0.4 activate
+  neighbor 10.0.0.8 activate
+  neighbor 10.0.0.9 activate
+ exit-address-family
+ !
+ 
+ router eigrp 65111
+ !
+ address-family ipv4 vrf VRF_C autonomous-system 65002
+  redistribute bgp 65111 metric 10000000 0 255 1 1500
+  network 10.0.50.0 0.0.0.255
+  no auto-summary
+ exit-address-family
+ no auto-summary
+!
+router bgp 65111
+!
+ address-family ipv4 vrf VRF_C
+  no synchronization
+  redistribute eigrp 65002
+ exit-address-family

@@ -477,13 +477,37 @@ router bgp 65001
 
 
 SW_CORE_1
+int l0
+10.0.0.101 255.255.255.255
+
 int g 2/0
-10.2.11.1 255.255.255.248
+10.1.1.1 255.255.255.248
+
+router bgp 65001
+ no synchronization
+ bgp log-neighbor-changes
+ network 10.0.0.101 mask 255.255.255.255
+ neighbor 10.1.1.6 remote-as 65111
+ neighbor 10.1.1.6 allowas-in
+ neighbor 10.1.1.6 soft-reconfiguration inbound
+ no auto-summary
 
 
 SW_CORE_2
+int l0
+10.0.0.102 255.255.255.255
+
 int g 2/0
-10.2.22.1 255.255.255.248
+10.1.2.1 255.255.255.248
+
+router bgp 65001
+ no synchronization
+ bgp log-neighbor-changes
+ network 10.0.0.102 mask 255.255.255.255
+ neighbor 10.1.2.6 remote-as 65111
+ neighbor 10.1.2.6 allowas-in
+ neighbor 10.1.2.6 soft-reconfiguration inbound
+ no auto-summary
 
 
 
