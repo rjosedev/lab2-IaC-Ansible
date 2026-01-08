@@ -1,0 +1,21 @@
+{# IS-IS Configuration Template #}
+
+# Device - {{inventory_hostname}}
+
+## Configuraciones de IS-IS
+
+### hostname: {{inventory_hostname}}
+
+```
+{# IS-IS Configuration Template #}
+!
+{% if isis is defined and isis|length > 0 -%}
+{% for i in isis %}
+router isis {{ i.name }}
+  net {{ i.net }}
+  is-type {{ i.is_type }}
+  mpls ldp sync
+!
+{% endfor %}
+{% endif -%}
+```

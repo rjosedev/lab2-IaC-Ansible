@@ -1,0 +1,7 @@
+{# MPLS Configuration Template #}
+!
+{% if mpls is defined and mpls is not none %}
+mpls ldp {{ mpls.ldp_label }}
+mpls ldp router-id {{ mpls.ldp_interface }}
+!
+{% endif %}

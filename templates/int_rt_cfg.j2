@@ -15,6 +15,9 @@ interface {{ interface.name }}
 {% if interface.vrf_name %}
   ip vrf forwarding {{ interface.vrf_name }}
 {% endif %}
+{% if interface.ospf_process %}
+  ip ospf process {{ interface.ospf_process }} area {{ interface.ospf_area }}
+{% endif %}
 !
 {% endif -%}
 {% endfor -%}

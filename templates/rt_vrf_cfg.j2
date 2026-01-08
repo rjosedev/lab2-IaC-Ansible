@@ -1,0 +1,11 @@
+{# VRF Configuration Template #}
+!
+{% if vrf is defined and vrf|length > 0 -%}
+{% for v in vrf %}
+ip vrf {{ v.name }}
+  rd {{ v.rd }}
+  route-target import {{ v.rt_import }}
+  route-target export {{ v.rt_export }}
+!
+{% endfor %}
+{% endif -%}

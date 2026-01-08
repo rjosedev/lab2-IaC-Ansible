@@ -1,0 +1,28 @@
+{# EIGRP Configuration Template #}
+
+# Device - {{inventory_hostname}}
+
+## Configuraciones de EIGRP
+
+### hostname: {{inventory_hostname}}
+
+```
+{# EIGRP Configuration Template #}
+!
+{% if eigrp is defined and eigrp|length > 0 -%}
+{% for e in eigrp -%}
+router eigrp {{ e.name }}
+  no auto-summary
+  eigrp log-neighbor-changes
+  eigrp router-id {{ e.router_id }}
+  passive-interface vlan 5
+{% for network in e.networks %}
+  network {{ network }}
+{% endfor %}
+{% for intf in e.no_passive_interfaces %}
+  no passive-interface {{ intf }}
+{% endfor %}
+{% endfor %}
+!
+{%- endif -%}
+```

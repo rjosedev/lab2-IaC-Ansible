@@ -1,0 +1,19 @@
+{# BGP Configuration Template #}
+
+# Device - {{inventory_hostname}}
+
+## Configuraciones de BGP
+
+### hostname: {{inventory_hostname}}
+
+```
+{# BGP Configuration Template #}
+!
+{% if bgp is defined and bgp|length > 0 -%}
+{% for b in bgp -%}
+router bgp {{ b.name }}
+{{ b.bgp_lines }}
+!
+{% endfor %}
+{% endif -%}
+```

@@ -1,0 +1,20 @@
+{# OSPF Configuration Template #}
+!
+{% if ospf is defined and ospf|length > 0 -%}
+{% for o in ospf -%}
+router ospf {{ o.name }}
+{%- if o.vrf_name is defined %}
+ vrf {{ o.vrf_name }}
+{% endif +%}
+{% if o.router_id is defined %}
+  router-id {{ o.router_id }}
+{% endif %}
+{% if o.log_adjacency_changes == true %}
+  log-adjacency-changes
+{% endif %}
+{% if o.ospf_lines is defined %}
+{{ o.ospf_lines }}
+{% endif %}
+!
+{% endfor %}
+{% endif -%}

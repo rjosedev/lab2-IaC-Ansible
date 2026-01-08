@@ -1,7 +1,7 @@
 # Test command to view the inventory:
 # ansible-inventory -i inventario.yml --list
 ---
-cisco_ios_sw_core:
+cisco_ios_sw_l3:
   hosts:
     SWA-CE1:
       ansible_host: 172.16.5.101
@@ -15,30 +15,21 @@ cisco_ios_sw_core:
       ansible_host: 172.16.5.61
     SWC-CE2:
       ansible_host: 172.16.5.62
-    SWD-CE2:
+    SWD-CE1:
       ansible_host: 172.16.5.63
-
-cisco_ios_sw_bld:
-  hosts:
-    SWB-BLDA:
-      ansible_host: 172.16.5.53
-    SWB-BLDB:
-      ansible_host: 172.16.5.54
-
-cisco_ios_sw_dc:
-  hosts:
-    SWB-DC:
-      ansible_host: 172.16.5.55
-
-cisco_ios_sw_it:
-  hosts:
     SWB-IT1:
       ansible_host: 172.16.5.56
     SWB-IT2:
       ansible_host: 172.16.5.57
 
-cisco_ios_sw_bp:
+cisco_ios_sw_l2:
   hosts:
+    SWB-BLDA:
+      ansible_host: 172.16.5.53
+    SWB-BLDB:
+      ansible_host: 172.16.5.54
+    SWB-DC:
+      ansible_host: 172.16.5.55
     SWC-A1:
       ansible_host: 172.16.5.64
     SWC-A2:
@@ -74,13 +65,12 @@ cisco_ios_rt_all:
   children:
     cisco_ios_rt_p:
     cisco_ios_rt_pe:
+    cisco_ios_sw_l3:
 
 cisco_ios_sw_all:
   children:
-    cisco_ios_sw_core:
-    cisco_ios_sw_bld:
-    cisco_ios_sw_dc:
-    cisco_ios_sw_it:
+    cisco_ios_sw_l3:
+    cisco_ios_sw_l2:
 
 cisco_ios_all:
   children:
