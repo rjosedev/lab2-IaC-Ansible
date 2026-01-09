@@ -26,326 +26,326 @@
       ansible.builtin.debug:
         var: int_rt_result
 
-- name: Generar codigo desde templates Jinja2 para interfaces ACCESS
-  hosts: "{{ modelo.hosts_groups.sw_all }}"
-  gather_facts: false
-
-  vars_files:
-    - ../modelo_datos/modelo.yml
-
-  tasks:
-    - name: Defincion de variables locales
-      ansible.builtin.set_fact:
-        interfaces: "{{ modelo.infra_spec.devices[inventory_hostname].interfaces }}"
-
-    - name: Renderizar template Jinja2 para configurarcion de interfaces ACCESS
-      ansible.builtin.template:
-        src: "{{ playbook_dir }}/../templates/int_access_{{ item.type }}.j2"
-        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_int_access.{{ item.ext }}"
-        mode: "0644"
-      register: int_access_result
-      loop:
-        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
-        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
-
-    - name: Mostrar resultado de la generacion de configuracion de interfaces de ACCESS
-      ansible.builtin.debug:
-        var: int_access_result
-
-- name: Generar codigo desde templates Jinja2 para interfaces TRUNK
-  hosts: "{{ modelo.hosts_groups.sw_all }}"
-  gather_facts: false
-
-  vars_files:
-    - ../modelo_datos/modelo.yml
-
-  tasks:
-    - name: Defincion de variables locales
-      ansible.builtin.set_fact:
-        interfaces: "{{ modelo.infra_spec.devices[inventory_hostname].interfaces }}"
-
-    - name: Renderizar template Jinja2 para configurarcion de interfaces TRUNK
-      ansible.builtin.template:
-        src: "{{ playbook_dir }}/../templates/int_trunk_{{ item.type }}.j2"
-        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_int_trunk.{{ item.ext }}"
-        mode: "0644"
-      register: int_trunk_result
-      loop:
-        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
-        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
-
-    - name: Mostrar resultado de la generacion de configuracion de interfaces TRUNK
-      ansible.builtin.debug:
-        var: int_trunk_result
-
-- name: Generar codigo desde templates Jinja2 para interfaces L2 y L3 MGMT
-  hosts: "{{ modelo.hosts_groups.sw_all }}"
-  gather_facts: false
-
-  vars_files:
-    - ../modelo_datos/modelo.yml
-
-  tasks:
-    - name: Defincion de variables locales
-      ansible.builtin.set_fact:
-        interfaces: "{{ modelo.infra_spec.devices[inventory_hostname].interfaces }}"
-
-    - name: Renderizar template Jinja2 para configurarcion de interfaces L2 y L3 MGMT
-      ansible.builtin.template:
-        src: "{{ playbook_dir }}/../templates/int_mgmt_{{ item.type }}.j2"
-        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_int_mgmt.{{ item.ext }}"
-        mode: "0644"
-      register: int_mgmt_result
-      loop:
-        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
-        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
-
-    - name: Mostrar resultado de la generacion de configuracion de interfaces L2 y L3 MGMT
-      ansible.builtin.debug:
-        var: int_mgmt_result
-
-- name: Generar codigo desde templates Jinja2 para configuracion de VLANs
-  hosts: "{{ modelo.hosts_groups.sw_all }}"
-  gather_facts: false
-
-  vars_files:
-    - ../modelo_datos/modelo.yml
-
-  tasks:
-    - name: Defincion de variables locales
-      ansible.builtin.set_fact:
-        vlans: "{{ modelo.infra_spec.devices[inventory_hostname].vlans }}"
-
-    - name: Renderizar template Jinja2 para configurarcion de VLANs
-      ansible.builtin.template:
-        src: "{{ playbook_dir }}/../templates/vlans_{{ item.type }}.j2"
-        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_vlans.{{ item.ext }}"
-        mode: "0644"
-      register: vlans_result
-      loop:
-        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
-        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
-
-    - name: Mostrar resultado de la generacion de configuracion de VLANs
-      ansible.builtin.debug:
-        var: vlans_result
-
-- name: Generar codigo desde templates Jinja2 para configuracion de SVI y VRRP
-  hosts: "{{ modelo.hosts_groups.sw_l3 }}"
-  gather_facts: false
-
-  vars_files:
-    - ../modelo_datos/modelo.yml
-
-  tasks:
-    - name: Defincion de variables locales
-      ansible.builtin.set_fact:
-        interfaces: "{{ modelo.infra_spec.devices[inventory_hostname].interfaces }}"
-
-    - name: Renderizar template Jinja2 para configurarcion de SVI y VRRP
-      ansible.builtin.template:
-        src: "{{ playbook_dir }}/../templates/int_svi_{{ item.type }}.j2"
-        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_int_svi.{{ item.ext }}"
-        mode: "0644"
-      register: svi_vrrp_result
-      loop:
-        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
-        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
-      
-    - name: Mostrar resultado de la generacion de configuracion de SVI y VRRP
-      ansible.builtin.debug:
-        var: svi_vrrp_result
-
-- name: Generar codigo desde templates Jinja2 para configuracion de EIGRP
-  hosts: "{{ modelo.hosts_groups.sw_l3 }}"
-  gather_facts: false
-
-  vars_files:
-    - ../modelo_datos/modelo.yml
-
-  tasks:
-    - name: Defincion de variables locales
-      ansible.builtin.set_fact:
-        eigrp: "{{ modelo.infra_spec.devices[inventory_hostname].eigrp }}"
-
-    - name: Renderizar template Jinja2 para configurarcion de EIGRP
-      ansible.builtin.template:
-        src: "{{ playbook_dir }}/../templates/rt_eigrp_{{ item.type }}.j2"
-        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_eigrp.{{ item.ext }}"
-        mode: "0644"
-      when: eigrp is defined and eigrp|length > 0
-      register: eigrp_result
-      loop:
-        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
-        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
-
-    - name: Mostrar resultado de la generacion de configuracion de EIGRP
-      ansible.builtin.debug:
-        var: eigrp_result
-      when: eigrp is defined and eigrp|length > 0
-
-- name: Generar codigo desde templates Jinja2 para configuracion de OSPF
-  hosts: "{{ modelo.hosts_groups.rt_all }}, {{ modelo.hosts_groups.sw_l3 }}"
-  gather_facts: false
-
-  vars_files:
-    - ../modelo_datos/modelo.yml
-
-  tasks:
-    - name: Defincion de variables locales
-      ansible.builtin.set_fact:
-        ospf: "{{ modelo.infra_spec.devices[inventory_hostname].ospf }}"
-
-    - name: Renderizar template Jinja2 para configurarcion de OSPF
-      ansible.builtin.template:
-        src: "{{ playbook_dir }}/../templates/rt_ospf_{{ item.type }}.j2"
-        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_ospf.{{ item.ext }}"
-        mode: "0644"
-      when: ospf is defined and ospf|length > 0
-      register: ospf_result
-      loop:
-        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
-        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
-
-    - name: Mostrar resultado de la generacion de configuracion de OSPF
-      ansible.builtin.debug:
-        var: ospf_result
-      when: ospf is defined and ospf|length > 0
-
-- name: Generar codigo desde templates Jinja2 para configuracion de BGP
-  hosts: "{{ modelo.hosts_groups.rt_all }}, {{ modelo.hosts_groups.sw_l3 }}"
-  gather_facts: false
-
-  vars_files:
-    - ../modelo_datos/modelo.yml
-
-  tasks:
-    - name: Defincion de variables locales
-      ansible.builtin.set_fact:
-        bgp: "{{ modelo.infra_spec.devices[inventory_hostname].bgp }}"
-
-    - name: Renderizar template Jinja2 para configurarcion de BGP
-      ansible.builtin.template:
-        src: "{{ playbook_dir }}/../templates/rt_bgp_{{ item.type }}.j2"
-        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_bgp.{{ item.ext }}"
-        mode: "0644"
-      when: bgp is defined and bgp|length > 0
-      register: bgp_result
-      loop:
-        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
-        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
-
-    - name: Mostrar resultado de la generacion de configuracion de BGP
-      ansible.builtin.debug:
-        var: bgp_result
-      when: bgp is defined and bgp|length > 0
-
-- name: Generar codigo desde templates Jinja2 para configuracion de IS-IS
-  hosts: "{{ modelo.hosts_groups.rt_all }}, {{ modelo.hosts_groups.sw_l3 }}"
-  gather_facts: false
-
-  vars_files:
-    - ../modelo_datos/modelo.yml
-
-  tasks:
-    - name: Defincion de variables locales
-      ansible.builtin.set_fact:
-        isis: "{{ modelo.infra_spec.devices[inventory_hostname].isis }}"
-
-    - name: Renderizar template Jinja2 para configurarcion de IS-IS
-      ansible.builtin.template:
-        src: "{{ playbook_dir }}/../templates/rt_isis_{{ item.type }}.j2"
-        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_isis.{{ item.ext }}"
-        mode: "0644"
-      when: isis is defined and isis|length > 0
-      register: isis_result
-      loop:
-        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
-        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
-
-    - name: Mostrar resultado de la generacion de configuracion de IS-IS
-      ansible.builtin.debug:
-        var: isis_result
-      when: isis is defined and isis|length > 0
-
-- name: Generar codigo desde templates Jinja2 para configuracion de VRF
-  hosts: "{{ modelo.hosts_groups.rt_all }}, {{ modelo.hosts_groups.sw_l3 }}"
-  gather_facts: false
-
-  vars_files:
-    - ../modelo_datos/modelo.yml
-
-  tasks:
-    - name: Defincion de variables locales
-      ansible.builtin.set_fact:
-        vrf: "{{ modelo.infra_spec.devices[inventory_hostname].vrf }}"
-
-    - name: Renderizar template Jinja2 para configurarcion de VRF
-      ansible.builtin.template:
-        src: "{{ playbook_dir }}/../templates/rt_vrf_{{ item.type }}.j2"
-        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_vrf.{{ item.ext }}"
-        mode: "0644"
-      when: vrf is defined and vrf|length > 0
-      register: vrf_result
-      loop:
-        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
-        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
-
-    - name: Mostrar resultado de la generacion de configuracion de VRF
-      ansible.builtin.debug:
-        var: vrf_result
-      when: vrf is defined and vrf|length > 0
-
-- name: Generar codigo desde templates Jinja2 para configuracion de MPLS
-  hosts: "{{ modelo.hosts_groups.rt_all }}, {{ modelo.hosts_groups.sw_l3 }}"
-  gather_facts: false
-
-  vars_files:
-    - ../modelo_datos/modelo.yml
-
-  tasks:
-    - name: Defincion de variables locales
-      ansible.builtin.set_fact:
-        mpls: "{{ modelo.infra_spec.devices[inventory_hostname].mpls }}"
-
-    - name: Renderizar template Jinja2 para configurarcion de MPLS
-      ansible.builtin.template:
-        src: "{{ playbook_dir }}/../templates/rt_mpls_{{ item.type }}.j2"
-        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_mpls.{{ item.ext }}"
-        mode: "0644"
-      when: mpls is defined and mpls is not none
-      register: mpls_result
-      loop:
-        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
-        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
-
-    - name: Mostrar resultado de la generacion de configuracion de MPLS
-      ansible.builtin.debug:
-        var: mpls_result
-      when: mpls is defined and mpls is not none 
-
-- name: Generar codigo desde templates Jinja2 para configuracion de SERVICES
-  hosts: "{{ modelo.hosts_groups.sw_all }}"
-  gather_facts: false
-
-  vars_files:
-    - ../modelo_datos/modelo.yml
-
-  tasks:
-    - name: Defincion de variables locales
-      ansible.builtin.set_fact:
-        services: "{{ modelo.infra_spec.devices[inventory_hostname].services }}"
-
-    - name: Renderizar template Jinja2 para configurarcion de SERVICES
-      ansible.builtin.template:
-        src: "{{ playbook_dir }}/../templates/services_{{ item.type }}.j2"
-        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_services.{{ item.ext }}"
-        mode: "0644"
-      register: services_result
-      loop:
-        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
-        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
-    
-    - name: Mostrar resultado de la generacion de configuracion de SERVICES
-      ansible.builtin.debug:
-        var: services_result
+#- name: Generar codigo desde templates Jinja2 para interfaces ACCESS
+#  hosts: "{{ modelo.hosts_groups.sw_all }}"
+#  gather_facts: false
+#
+#  vars_files:
+#    - ../modelo_datos/modelo.yml
+#
+#  tasks:
+#    - name: Defincion de variables locales
+#      ansible.builtin.set_fact:
+#        interfaces: "{{ modelo.infra_spec.devices[inventory_hostname].interfaces }}"
+#
+#    - name: Renderizar template Jinja2 para configurarcion de interfaces ACCESS
+#      ansible.builtin.template:
+#        src: "{{ playbook_dir }}/../templates/int_access_{{ item.type }}.j2"
+#        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_int_access.{{ item.ext }}"
+#        mode: "0644"
+#      register: int_access_result
+#      loop:
+#        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+#        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+#
+#    - name: Mostrar resultado de la generacion de configuracion de interfaces de ACCESS
+#      ansible.builtin.debug:
+#        var: int_access_result
+#
+#- name: Generar codigo desde templates Jinja2 para interfaces TRUNK
+#  hosts: "{{ modelo.hosts_groups.sw_all }}"
+#  gather_facts: false
+#
+#  vars_files:
+#    - ../modelo_datos/modelo.yml
+#
+#  tasks:
+#    - name: Defincion de variables locales
+#      ansible.builtin.set_fact:
+#        interfaces: "{{ modelo.infra_spec.devices[inventory_hostname].interfaces }}"
+#
+#    - name: Renderizar template Jinja2 para configurarcion de interfaces TRUNK
+#      ansible.builtin.template:
+#        src: "{{ playbook_dir }}/../templates/int_trunk_{{ item.type }}.j2"
+#        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_int_trunk.{{ item.ext }}"
+#        mode: "0644"
+#      register: int_trunk_result
+#      loop:
+#        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+#        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+#
+#    - name: Mostrar resultado de la generacion de configuracion de interfaces TRUNK
+#      ansible.builtin.debug:
+#        var: int_trunk_result
+#
+#- name: Generar codigo desde templates Jinja2 para interfaces L2 y L3 MGMT
+#  hosts: "{{ modelo.hosts_groups.sw_all }}"
+#  gather_facts: false
+#
+#  vars_files:
+#    - ../modelo_datos/modelo.yml
+#
+#  tasks:
+#    - name: Defincion de variables locales
+#      ansible.builtin.set_fact:
+#        interfaces: "{{ modelo.infra_spec.devices[inventory_hostname].interfaces }}"
+#
+#    - name: Renderizar template Jinja2 para configurarcion de interfaces L2 y L3 MGMT
+#      ansible.builtin.template:
+#        src: "{{ playbook_dir }}/../templates/int_mgmt_{{ item.type }}.j2"
+#        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_int_mgmt.{{ item.ext }}"
+#        mode: "0644"
+#      register: int_mgmt_result
+#      loop:
+#        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+#        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+#
+#    - name: Mostrar resultado de la generacion de configuracion de interfaces L2 y L3 MGMT
+#      ansible.builtin.debug:
+#        var: int_mgmt_result
+#
+#- name: Generar codigo desde templates Jinja2 para configuracion de VLANs
+#  hosts: "{{ modelo.hosts_groups.sw_all }}"
+#  gather_facts: false
+#
+#  vars_files:
+#    - ../modelo_datos/modelo.yml
+#
+#  tasks:
+#    - name: Defincion de variables locales
+#      ansible.builtin.set_fact:
+#        vlans: "{{ modelo.infra_spec.devices[inventory_hostname].vlans }}"
+#
+#    - name: Renderizar template Jinja2 para configurarcion de VLANs
+#      ansible.builtin.template:
+#        src: "{{ playbook_dir }}/../templates/vlans_{{ item.type }}.j2"
+#        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_vlans.{{ item.ext }}"
+#        mode: "0644"
+#      register: vlans_result
+#      loop:
+#        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+#        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+#
+#    - name: Mostrar resultado de la generacion de configuracion de VLANs
+#      ansible.builtin.debug:
+#        var: vlans_result
+#
+#- name: Generar codigo desde templates Jinja2 para configuracion de SVI y VRRP
+#  hosts: "{{ modelo.hosts_groups.sw_l3 }}"
+#  gather_facts: false
+#
+#  vars_files:
+#    - ../modelo_datos/modelo.yml
+#
+#  tasks:
+#    - name: Defincion de variables locales
+#      ansible.builtin.set_fact:
+#        interfaces: "{{ modelo.infra_spec.devices[inventory_hostname].interfaces }}"
+#
+#    - name: Renderizar template Jinja2 para configurarcion de SVI y VRRP
+#      ansible.builtin.template:
+#        src: "{{ playbook_dir }}/../templates/int_svi_{{ item.type }}.j2"
+#        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_int_svi.{{ item.ext }}"
+#        mode: "0644"
+#      register: svi_vrrp_result
+#      loop:
+#        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+#        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+#      
+#    - name: Mostrar resultado de la generacion de configuracion de SVI y VRRP
+#      ansible.builtin.debug:
+#        var: svi_vrrp_result
+#
+#- name: Generar codigo desde templates Jinja2 para configuracion de EIGRP
+#  hosts: "{{ modelo.hosts_groups.sw_l3 }}"
+#  gather_facts: false
+#
+#  vars_files:
+#    - ../modelo_datos/modelo.yml
+#
+#  tasks:
+#    - name: Defincion de variables locales
+#      ansible.builtin.set_fact:
+#        eigrp: "{{ modelo.infra_spec.devices[inventory_hostname].eigrp }}"
+#
+#    - name: Renderizar template Jinja2 para configurarcion de EIGRP
+#      ansible.builtin.template:
+#        src: "{{ playbook_dir }}/../templates/rt_eigrp_{{ item.type }}.j2"
+#        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_eigrp.{{ item.ext }}"
+#        mode: "0644"
+#      when: eigrp is defined and eigrp|length > 0
+#      register: eigrp_result
+#      loop:
+#        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+#        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+#
+#    - name: Mostrar resultado de la generacion de configuracion de EIGRP
+#      ansible.builtin.debug:
+#        var: eigrp_result
+#      when: eigrp is defined and eigrp|length > 0
+#
+#- name: Generar codigo desde templates Jinja2 para configuracion de OSPF
+#  hosts: "{{ modelo.hosts_groups.rt_all }}, {{ modelo.hosts_groups.sw_l3 }}"
+#  gather_facts: false
+#
+#  vars_files:
+#    - ../modelo_datos/modelo.yml
+#
+#  tasks:
+#    - name: Defincion de variables locales
+#      ansible.builtin.set_fact:
+#        ospf: "{{ modelo.infra_spec.devices[inventory_hostname].ospf }}"
+#
+#    - name: Renderizar template Jinja2 para configurarcion de OSPF
+#      ansible.builtin.template:
+#        src: "{{ playbook_dir }}/../templates/rt_ospf_{{ item.type }}.j2"
+#        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_ospf.{{ item.ext }}"
+#        mode: "0644"
+#      when: ospf is defined and ospf|length > 0
+#      register: ospf_result
+#      loop:
+#        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+#        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+#
+#    - name: Mostrar resultado de la generacion de configuracion de OSPF
+#      ansible.builtin.debug:
+#        var: ospf_result
+#      when: ospf is defined and ospf|length > 0
+#
+#- name: Generar codigo desde templates Jinja2 para configuracion de BGP
+#  hosts: "{{ modelo.hosts_groups.rt_all }}, {{ modelo.hosts_groups.sw_l3 }}"
+#  gather_facts: false
+#
+#  vars_files:
+#    - ../modelo_datos/modelo.yml
+#
+#  tasks:
+#    - name: Defincion de variables locales
+#      ansible.builtin.set_fact:
+#        bgp: "{{ modelo.infra_spec.devices[inventory_hostname].bgp }}"
+#
+#    - name: Renderizar template Jinja2 para configurarcion de BGP
+#      ansible.builtin.template:
+#        src: "{{ playbook_dir }}/../templates/rt_bgp_{{ item.type }}.j2"
+#        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_bgp.{{ item.ext }}"
+#        mode: "0644"
+#      when: bgp is defined and bgp|length > 0
+#      register: bgp_result
+#      loop:
+#        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+#        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+#
+#    - name: Mostrar resultado de la generacion de configuracion de BGP
+#      ansible.builtin.debug:
+#        var: bgp_result
+#      when: bgp is defined and bgp|length > 0
+#
+#- name: Generar codigo desde templates Jinja2 para configuracion de IS-IS
+#  hosts: "{{ modelo.hosts_groups.rt_all }}, {{ modelo.hosts_groups.sw_l3 }}"
+#  gather_facts: false
+#
+#  vars_files:
+#    - ../modelo_datos/modelo.yml
+#
+#  tasks:
+#    - name: Defincion de variables locales
+#      ansible.builtin.set_fact:
+#        isis: "{{ modelo.infra_spec.devices[inventory_hostname].isis }}"
+#
+#    - name: Renderizar template Jinja2 para configurarcion de IS-IS
+#      ansible.builtin.template:
+#        src: "{{ playbook_dir }}/../templates/rt_isis_{{ item.type }}.j2"
+#        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_isis.{{ item.ext }}"
+#        mode: "0644"
+#      when: isis is defined and isis|length > 0
+#      register: isis_result
+#      loop:
+#        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+#        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+#
+#    - name: Mostrar resultado de la generacion de configuracion de IS-IS
+#      ansible.builtin.debug:
+#        var: isis_result
+#      when: isis is defined and isis|length > 0
+#
+#- name: Generar codigo desde templates Jinja2 para configuracion de VRF
+#  hosts: "{{ modelo.hosts_groups.rt_all }}, {{ modelo.hosts_groups.sw_l3 }}"
+#  gather_facts: false
+#
+#  vars_files:
+#    - ../modelo_datos/modelo.yml
+#
+#  tasks:
+#    - name: Defincion de variables locales
+#      ansible.builtin.set_fact:
+#        vrf: "{{ modelo.infra_spec.devices[inventory_hostname].vrf }}"
+#
+#    - name: Renderizar template Jinja2 para configurarcion de VRF
+#      ansible.builtin.template:
+#        src: "{{ playbook_dir }}/../templates/rt_vrf_{{ item.type }}.j2"
+#        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_vrf.{{ item.ext }}"
+#        mode: "0644"
+#      when: vrf is defined and vrf|length > 0
+#      register: vrf_result
+#      loop:
+#        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+#        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+#
+#    - name: Mostrar resultado de la generacion de configuracion de VRF
+#      ansible.builtin.debug:
+#        var: vrf_result
+#      when: vrf is defined and vrf|length > 0
+#
+#- name: Generar codigo desde templates Jinja2 para configuracion de MPLS
+#  hosts: "{{ modelo.hosts_groups.rt_all }}, {{ modelo.hosts_groups.sw_l3 }}"
+#  gather_facts: false
+#
+#  vars_files:
+#    - ../modelo_datos/modelo.yml
+#
+#  tasks:
+#    - name: Defincion de variables locales
+#      ansible.builtin.set_fact:
+#        mpls: "{{ modelo.infra_spec.devices[inventory_hostname].mpls }}"
+#
+#    - name: Renderizar template Jinja2 para configurarcion de MPLS
+#      ansible.builtin.template:
+#        src: "{{ playbook_dir }}/../templates/rt_mpls_{{ item.type }}.j2"
+#        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_mpls.{{ item.ext }}"
+#        mode: "0644"
+#      when: mpls is defined and mpls is not none
+#      register: mpls_result
+#      loop:
+#        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+#        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+#
+#    - name: Mostrar resultado de la generacion de configuracion de MPLS
+#      ansible.builtin.debug:
+#        var: mpls_result
+#      when: mpls is defined and mpls is not none 
+#
+#- name: Generar codigo desde templates Jinja2 para configuracion de SERVICES
+#  hosts: "{{ modelo.hosts_groups.sw_all }}"
+#  gather_facts: false
+#
+#  vars_files:
+#    - ../modelo_datos/modelo.yml
+#
+#  tasks:
+#    - name: Defincion de variables locales
+#      ansible.builtin.set_fact:
+#        services: "{{ modelo.infra_spec.devices[inventory_hostname].services }}"
+#
+#    - name: Renderizar template Jinja2 para configurarcion de SERVICES
+#      ansible.builtin.template:
+#        src: "{{ playbook_dir }}/../templates/services_{{ item.type }}.j2"
+#        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_services.{{ item.ext }}"
+#        mode: "0644"
+#      register: services_result
+#      loop:
+#        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+#        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+#    
+#    - name: Mostrar resultado de la generacion de configuracion de SERVICES
+#      ansible.builtin.debug:
+#        var: services_result

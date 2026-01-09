@@ -30,11 +30,11 @@ cisco_ios_sw_l2:
       ansible_host: 172.16.5.54
     SWB-DC:
       ansible_host: 172.16.5.55
-    SWC-A1:
+    SWC-DC1:
       ansible_host: 172.16.5.64
-    SWC-A2:
+    SWC-DC2:
       ansible_host: 172.16.5.65
-    SWD-A:
+    SWD-DC3:
       ansible_host: 172.16.5.66
 
 cisco_ios_rt_p:
@@ -76,6 +76,69 @@ cisco_ios_all:
   children:
     cisco_ios_rt_all:
     cisco_ios_sw_all:
+
+swa:
+  children:
+    SWA-CE1:
+    SWA-CE2:
+
+swb:
+  children:
+    SWB-BLDA:
+    SWB-BLDB:
+    SWB-DC:
+    SWB-CE1:
+    SWB-CE2:
+    SWB-IT1:
+    SWB-IT2:
+
+swc:
+  children:
+    SWC-DC1:
+    SWC-DC2:
+    SWC-CE1:
+    SWC-CE2:
+
+swd:
+  children:
+    SWD-DC3:
+    SWD-CE1:
+
+devices_p:
+  children:
+    RTA-P2:
+    RTA-P3:
+    RTA-P4:
+    RTA-P5:
+    RTA-P6:
+
+devices_pe:
+  children:
+    RTA-PE1:
+    RTA-PE2:
+    RTB-PE1:
+    RTB-PE2:
+
+devices_ce:
+  children:
+    SWA-CE1:
+    SWA-CE2:
+    SWB-CE1:
+    SWB-CE2:
+    SWC-CE1:
+    SWC-CE2:
+    SWD-CE1:
+
+devices_sw:
+  children:
+    SWB-BLDA:
+    SWB-BLDB:
+    SWB-DC:
+    SWC-DC1:
+    SWC-DC2:
+    SWD-DC3:
+    SWB-IT1:
+    SWB-IT2:
 
 all:
   vars:

@@ -1640,7 +1640,7 @@ modelo:
             ospf_process: 1
             ospf_area: 1
           - name: GigabitEthernet0/1
-            description: "### Link to SWC-A1 - TRUNK ###"
+            description: "### Link to SWC-DC1 - TRUNK ###"
             <<: *int_trunk
             dynamic: desirable
             allowed_vlan: 1,50,60
@@ -1721,7 +1721,7 @@ modelo:
             subnet_mask: *sn_32
             <<: *int_routing
           - name: GigabitEthernet0/1
-            description: "### Link to SWC-A2 - TRUNK ###"
+            description: "### Link to SWC-DC2 - TRUNK ###"
             <<: *int_trunk
             dynamic: desirable
             allowed_vlan: 1,50,60
@@ -1753,8 +1753,8 @@ modelo:
       #### EOF SWC-CE2 ####
 
       ##################
-      #### SWC-A1 ####
-      SWC-A1:
+      #### SWC-DC1 ####
+      SWC-DC1:
         management:
           ip: 172.16.5.64
           interface: GigabitEthernet1/3
@@ -1807,11 +1807,11 @@ modelo:
             vlan: 5
             ip_address: 172.16.5.64
             <<: *int_l2mgmt
-      #### EOF SWC-A1 ####
+      #### EOF SWC-DC1 ####
 
       ##################
-      #### SWC-A2 ####
-      SWC-A2:
+      #### SWC-DC2 ####
+      SWC-DC2:
         management:
           ip: 172.16.5.65
           interface: GigabitEthernet1/3
@@ -1854,7 +1854,7 @@ modelo:
             vlan: 5
             ip_address: 172.16.5.65
             <<: *int_l2mgmt
-      #### EOF SWC-A2 ####
+      #### EOF SWC-DC2 ####
 
       #################
       #### SWD-CE1 ####
@@ -1901,7 +1901,7 @@ modelo:
             subnet_mask: *sn_32
             <<: *int_routing
           - name: GigabitEthernet0/1
-            description: "### Link to SWD-A - TRUNK ###"
+            description: "### Link to SWD-DC3 - TRUNK ###"
             <<: *int_trunk
             dynamic: desirable
             allowed_vlan: 1,50,60
@@ -1933,8 +1933,8 @@ modelo:
       #### EOF SWD-CE1 ####
 
       ##################
-      #### SWD-A ####
-      SWD-A:
+      #### SWD-DC3 ####
+      SWD-DC3:
         management:
           ip: 172.16.5.66
           interface: GigabitEthernet1/3
@@ -1977,4 +1977,4 @@ modelo:
             vlan: 5
             ip_address: 172.16.5.66
             <<: *int_l2mgmt
-      #### EOF SWD-A ####
+      #### EOF SWD-DC3 ####
