@@ -1,0 +1,7 @@
+---
+- name: Configure SNMPv3 on Cisco IOS Devices
+  ios_config:
+    lines:
+      - snmp-server group SNMPv3 v3 priv
+    after:
+      - snmp-server user USR SNMPv3 v3 auth sha PW priv aes 128 PW

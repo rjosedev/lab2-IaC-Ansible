@@ -1,5 +1,36 @@
 # Playbook para generar codigo utilizando templates Jinja2
 ---
+#- name: Generar codigo desde templates Jinja2 para interfaces P-PE
+#  hosts: "{{ modelo.hosts_groups.rt_all }}, {{ modelo.hosts_groups.sw_all }}"
+#  gather_facts: false
+#
+#  vars_files:
+#    - ../modelo_datos/modelo.yml
+#
+#  tasks:
+#    - name: Create destination directory if it does not exist
+#      ansible.builtin.file:
+#        path: "{{ playbook_dir }}/{{ item.dest }}/{{ inventory_hostname }}"
+#        state: directory
+#        mode: '0755'
+#      loop:
+#        - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+#        - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+#      #vars:
+#      #  config_dir: "{{ hostvars[inventory_hostname].config_dir | default(inventory_hostname) }}"
+
+# Configure IOS devices by using roles  > https://journey2theccie.wordpress.com/2020/10/02/automating-my-ccie-lab-pt-6-using-ansible-roles/
+- name: Configure IOS Switches
+  hosts: "{{ modelo.hosts_groups.rt_all }}"
+  connection: network_cli
+  gather_facts: False
+
+  vars_files:
+    - ../modelo_datos/modelo.yml
+
+  roles:
+    - snmpv3
+
 - name: Generar codigo desde templates Jinja2 para interfaces P-PE
   hosts: "{{ modelo.hosts_groups.rt_all }}, {{ modelo.hosts_groups.sw_l3 }}"
   gather_facts: false
@@ -15,7 +46,7 @@
     - name: Renderizar template Jinja2 para configurarcion de interfaces P-PE
       ansible.builtin.template:
         src: "{{ playbook_dir }}/../templates/int_rt_{{ item.type }}.j2"
-        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ item.orden }}{{ inventory_hostname }}_int_rt.{{ item.ext }}"
+        dest: "{{ playbook_dir }}/{{ item.dest }}/{{ inventory_hostname }}/{{ item.orden }}{{ inventory_hostname }}_int_rt.{{ item.ext }}"
         mode: "0644"
       register: int_rt_result
       loop:

@@ -811,7 +811,9 @@ modelo:
         management:
           ip: 172.16.5.32
           interface: GigabitEthernet0/7
-        ip_routing: true#        
+        ip_routing: true
+        host_type: "P"
+        zone: "MPLS"
         mpls: &mpls
           ldp_interface: Loopback0
           ldp_label: explicit-null
