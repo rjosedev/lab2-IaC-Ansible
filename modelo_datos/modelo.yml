@@ -812,8 +812,6 @@ modelo:
           ip: 172.16.5.32
           interface: GigabitEthernet0/7
         ip_routing: true
-        host_type: "P"
-        zone: "MPLS"
         mpls: &mpls
           ldp_interface: Loopback0
           ldp_label: explicit-null
@@ -865,6 +863,7 @@ modelo:
               neighbor 10.0.0.22 activate
               exit-address-family
         ospf: []
+        eigrp: []
         interfaces:
           - name: Loopback0
             description: "### Loopback0 for BGP Router ID ###"            

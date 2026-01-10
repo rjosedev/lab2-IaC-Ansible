@@ -1,0 +1,4 @@
+---
+- name: Guardar configuracion
+  cisco.ios.ios_config:
+    save_when: modified

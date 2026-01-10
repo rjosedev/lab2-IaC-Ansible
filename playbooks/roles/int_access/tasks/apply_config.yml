@@ -1,0 +1,6 @@
+---
+- name: Aplicar configuracion de interfaces ACCESS
+  cisco.ios.ios_config:
+    src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}/{{ inventory_hostname }}_int_access.cfg"
+  register: apply_access_result
+  notify: Guardar configuracion

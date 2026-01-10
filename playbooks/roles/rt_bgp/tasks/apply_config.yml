@@ -1,0 +1,6 @@
+---
+- name: Aplicar configuracion de BGP
+  cisco.ios.ios_config:
+    src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}/{{ inventory_hostname }}_rt_bgp.cfg"
+  register: apply_bgp_result
+  notify: Guardar configuracion

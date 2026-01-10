@@ -1,0 +1,6 @@
+---
+- name: Aplicar configuracion de VLANs
+  cisco.ios.ios_config:
+    src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}/{{ inventory_hostname }}_vlans.cfg"
+  register: apply_vlans_result
+  notify: Guardar configuracion

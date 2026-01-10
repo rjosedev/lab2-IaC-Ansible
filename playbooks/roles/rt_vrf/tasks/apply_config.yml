@@ -1,0 +1,6 @@
+---
+- name: Aplicar configuracion de VRF
+  cisco.ios.ios_config:
+    src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}/{{ inventory_hostname }}_rt_vrf.cfg"
+  register: apply_vrf_result
+  notify: Guardar configuracion

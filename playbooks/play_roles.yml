@@ -1,0 +1,27 @@
+# https://journey2theccie.wordpress.com/2020/10/02/automating-my-ccie-lab-pt-6-using-ansible-roles/
+
+# Configure IOS devices by using roles
+#- name: Configure IOS Switches
+#  hosts: "{{ modelo.hosts_groups.rt_all }}"
+#  connection: network_cli
+#  gather_facts: False
+#
+#  vars_files:
+#    - ../modelo_datos/modelo.yml
+#
+#  roles:
+#    - snmpv3
+
+- name: Generate Code from Jinja2 Templates & Apply Configurations for Routing Interfaces
+  hosts: "{{ modelo.hosts_groups.rt_all }}, {{ modelo.hosts_groups.sw_l3 }}"
+  gather_facts: false
+
+  vars_files:
+    - ../modelo_datos/modelo.yml
+
+  roles:
+    - int_rt 
+    - rt_bgp
+
+# roles/int_rt/tasks/main.yml
+# roles/rt_bgp/tasks/main.yml

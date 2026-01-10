@@ -1,0 +1,6 @@
+---
+- name: Aplicar configuracion de SERVICES
+  cisco.ios.ios_config:
+    src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}/{{ inventory_hostname }}_services.cfg"
+  register: apply_services_result
+  notify: Guardar configuracion

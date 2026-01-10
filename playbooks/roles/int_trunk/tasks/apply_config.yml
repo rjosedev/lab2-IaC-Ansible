@@ -1,0 +1,6 @@
+---
+- name: Aplicar configuracion de interfaces TRUNK
+  cisco.ios.ios_config:
+    src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}/{{ inventory_hostname }}_int_trunk.cfg"
+  register: apply_trunk_result
+  notify: Guardar configuracion

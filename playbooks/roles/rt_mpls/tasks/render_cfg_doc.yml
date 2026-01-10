@@ -1,0 +1,20 @@
+---
+- name: Defincion de variables locales
+  ansible.builtin.set_fact:
+    mpls: "{{ modelo.infra_spec.devices[inventory_hostname].mpls }}"
+
+- name: Renderizar template Jinja2 para configurarcion de MPLS
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/roles/rt_mpls/templates/rt_mpls_{{ item.type }}.j2"
+    dest: "{{ playbook_dir }}/{{ item.dest }}/{{ inventory_hostname }}/{{ item.orden }}{{ inventory_hostname }}_rt_mpls.{{ item.ext }}"
+    mode: "0644"
+  when: mpls is defined and mpls is not none
+  register: mpls_result
+  loop:
+    - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+    - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+
+- name: Mostrar resultado de la generacion de configuracion de MPLS
+  ansible.builtin.debug:
+    var: mpls_result
+  when: mpls is defined and mpls is not none 

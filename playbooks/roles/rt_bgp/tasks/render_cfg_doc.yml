@@ -1,0 +1,20 @@
+---
+- name: Defincion de variables locales
+  ansible.builtin.set_fact:
+    bgp: "{{ modelo.infra_spec.devices[inventory_hostname].bgp }}"
+
+- name: Renderizar template Jinja2 para configurarcion de BGP
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/roles/rt_bgp/templates/rt_bgp_{{ item.type }}.j2"
+    dest: "{{ playbook_dir }}/{{ item.dest }}/{{ inventory_hostname }}/{{ item.orden }}{{ inventory_hostname }}_rt_bgp.{{ item.ext }}"
+    mode: "0644"
+  when: bgp is defined and bgp|length > 0
+  register: bgp_result
+  loop:
+    - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+    - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+
+- name: Mostrar resultado de la generacion de configuracion de BGP
+  ansible.builtin.debug:
+    var: bgp_result
+  when: bgp is defined and bgp|length > 0

@@ -1,0 +1,97 @@
+# https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/include_role_module.html
+
+# ansible-playbook -i inventario.yml ./playbooks/play_option_tag.yml --ask-vault-pass --tag render_in,render_out
+
+# ansible-playbook -i inventario.yml ./playbooks/play_option_tag.yml --ask-vault-pass --tag apply_in,apply_out
+
+# ansible-playbook -i inventario.yml ./playbooks/play_option_tag.yml --ask-vault-pass --tag render_in,apply_in
+
+# # Run the playbook only on a specific host named 'specific_host_name' 
+# ansible-playbook -i inventario.yml ./playbooks/play_option_tag.yml --limit 'RTA-P2' --ask-vault-pass --tag render_out
+
+# Run the playbook only on the first host of the 'cisco_ios_rt_p' group
+# ansible-playbook -i inventario.yml ./playbooks/play_option_tag.yml --limit 'cisco_ios_rt_p[0]' --ask-vault-pass --tag render_out
+
+# ansible-inventory --list -i inventario.yml
+
+- name: Generate Code from Jinja2 Templates & Apply Configurations
+  hosts: "{{ modelo.hosts_groups.rt_all }}, {{ modelo.hosts_groups.sw_l3 }}"
+  gather_facts: false
+
+  vars_files:
+    - ../modelo_datos/modelo.yml
+ 
+  tasks:
+    - name: Run tasks render_cfg_doc instead of 'main'
+      ansible.builtin.include_role:        
+        name: "{{ item }}"
+        tasks_from: render_cfg_doc
+        apply:
+          tags: render_out
+      loop:
+        - int_rt
+        - rt_bgp
+        - rt_eigrp
+        - rt_isis
+        - rt_mpls
+        - rt_ospf
+        - rt_vrf
+      tags: 
+        - render_out
+        
+    - name: Run tasks apply_config instead of 'main'
+      ansible.builtin.include_role:
+        name: "{{ item }}"
+        tasks_from: apply_config
+        apply:
+         tags: apply_out
+      loop:
+        - int_rt
+        - rt_bgp
+        - rt_eigrp
+        - rt_isis
+        - rt_mpls
+        - rt_ospf
+        - rt_vrf
+      tags: 
+        - apply_out
+
+- name: Generate Code from Jinja2 Templates & Apply Configurations
+  hosts: "{{ modelo.hosts_groups.sw_all }}"
+  gather_facts: false
+
+  vars_files:
+    - ../modelo_datos/modelo.yml
+ 
+  tasks:
+    - name: Run tasks render_cfg_doc instead of 'main'
+      ansible.builtin.include_role:        
+        name: "{{ item }}"
+        tasks_from: render_cfg_doc
+        apply:
+          tags: render_in
+      loop:
+        - int_access
+        - int_mgmt
+        - int_svi
+        - int_trunk
+        - vlans
+        - services
+      tags: 
+        - render_in
+  
+    - name: Run tasks apply_config instead of 'main'
+      ansible.builtin.include_role:
+        name: "{{ item }}"
+        tasks_from: apply_config
+        apply:
+          tags: apply_in
+      loop:
+        - int_access
+        - int_mgmt
+        - int_svi
+        - int_trunk
+        - vlans
+        - services
+      tags: 
+        - apply_in

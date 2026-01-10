@@ -1,0 +1,20 @@
+---
+- name: Defincion de variables locales
+  ansible.builtin.set_fact:
+    vrf: "{{ modelo.infra_spec.devices[inventory_hostname].vrf }}"
+
+- name: Renderizar template Jinja2 para configurarcion de VRF
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/roles/rt_vrf/templates/rt_vrf_{{ item.type }}.j2"
+    dest: "{{ playbook_dir }}/{{ item.dest }}/{{ inventory_hostname }}/{{ item.orden }}{{ inventory_hostname }}_rt_vrf.{{ item.ext }}"
+    mode: "0644"
+  when: vrf is defined and vrf|length > 0
+  register: vrf_result
+  loop:
+    - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+    - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+
+- name: Mostrar resultado de la generacion de configuracion de VRF
+  ansible.builtin.debug:
+    var: vrf_result
+  when: vrf is defined and vrf|length > 0

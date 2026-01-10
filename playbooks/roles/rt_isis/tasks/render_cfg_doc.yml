@@ -1,0 +1,20 @@
+---
+- name: Defincion de variables locales
+  ansible.builtin.set_fact:
+    isis: "{{ modelo.infra_spec.devices[inventory_hostname].isis }}"
+
+- name: Renderizar template Jinja2 para configurarcion de IS-IS
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/roles/rt_isis/templates/rt_isis_{{ item.type }}.j2"
+    dest: "{{ playbook_dir }}/{{ item.dest }}/{{ inventory_hostname }}/{{ item.orden }}{{ inventory_hostname }}_rt_isis.{{ item.ext }}"
+    mode: "0644"
+  when: isis is defined and isis|length > 0
+  register: isis_result
+  loop:
+    - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+    - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+
+- name: Mostrar resultado de la generacion de configuracion de IS-IS
+  ansible.builtin.debug:
+    var: isis_result
+  when: isis is defined and isis|length > 0

@@ -1,0 +1,6 @@
+---
+- name: Aplicar configuracion de IS-IS
+  cisco.ios.ios_config:
+    src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}/{{ inventory_hostname }}_rt_isis.cfg"
+  register: apply_isis_result
+  notify: Guardar configuracion

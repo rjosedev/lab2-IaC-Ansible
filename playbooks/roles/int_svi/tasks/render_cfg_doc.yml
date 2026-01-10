@@ -1,0 +1,20 @@
+---
+- name: Defincion de variables locales
+  ansible.builtin.set_fact:
+    interfaces: "{{ modelo.infra_spec.devices[inventory_hostname].interfaces }}"
+
+- name: Renderizar template Jinja2 para configurarcion de SVI y VRRP
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/roles/int_svi/templates/int_svi_{{ item.type }}.j2"
+    dest: "{{ playbook_dir }}/{{ item.dest }}/{{ inventory_hostname }}/{{ item.orden }}{{ inventory_hostname }}_int_svi.{{ item.ext }}"
+    mode: "0644"
+  when: int_svi is defined and int_svi|length > 0
+  register: svi_vrrp_result
+  loop:
+    - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+    - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+
+- name: Mostrar resultado de la generacion de configuracion de SVI y VRRP
+  ansible.builtin.debug:
+    var: svi_vrrp_result
+  when: int_svi is defined and int_svi|length > 0

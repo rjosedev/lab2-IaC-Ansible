@@ -1,0 +1,20 @@
+---
+- name: Defincion de variables locales
+  ansible.builtin.set_fact:
+    eigrp: "{{ modelo.infra_spec.devices[inventory_hostname].eigrp }}"
+
+- name: Renderizar template Jinja2 para configurarcion de EIGRP
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/roles/rt_eigrp/templates/rt_eigrp_{{ item.type }}.j2"
+    dest: "{{ playbook_dir }}/{{ item.dest }}/{{ inventory_hostname }}/{{ item.orden }}{{ inventory_hostname }}_rt_eigrp.{{ item.ext }}"
+    mode: "0644"
+  when: eigrp is defined and eigrp|length > 0
+  register: eigrp_result
+  loop:
+    - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+    - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+
+- name: Mostrar resultado de la generacion de configuracion de EIGRP
+  ansible.builtin.debug:
+    var: eigrp_result
+  when: eigrp is defined and eigrp|length > 0

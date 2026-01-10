@@ -1,0 +1,18 @@
+---
+- name: Defincion de variables locales
+  ansible.builtin.set_fact:
+    interfaces: "{{ modelo.infra_spec.devices[inventory_hostname].interfaces }}"
+
+- name: Renderizar template Jinja2 para configurarcion de interfaces L2 y L3 MGMT
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/roles/int_mgmt/templates/int_mgmt_{{ item.type }}.j2"
+    dest: "{{ playbook_dir }}/{{ item.dest }}/{{ inventory_hostname }}/{{ item.orden }}{{ inventory_hostname }}_int_mgmt.{{ item.ext }}"
+    mode: "0644"
+  register: int_mgmt_result
+  loop:
+    - {type: cfg, dest: "../configs", ext: cfg, orden: ""}
+    - {type: doc, dest: "../doc/modulos", ext: md, orden: "1.1"}
+
+- name: Mostrar resultado de la generacion de configuracion de interfaces L2 y L3 MGMT
+  ansible.builtin.debug:
+    var: int_mgmt_result
