@@ -27,7 +27,6 @@ interface Vlan5
  ip address 172.16.5.50 255.255.255.0
  no shutdown
 
-
 ip default-gateway 172.16.5.1
  
 interface GigabitEthernet0/7	# los RT
