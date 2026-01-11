@@ -807,8 +807,8 @@ modelo:
       #### EOF SWB-IT2 ####
 
       ################
-      #### RTA-P2 ####
-      RTA-P2:
+      #### RTM-P2 ####
+      RTM-P2:
         management:
           ip: 172.16.5.32
           interface: GigabitEthernet0/7
@@ -835,8 +835,8 @@ modelo:
               neighbor 10.0.0.36 peer-group MPLS
               neighbor 10.0.0.11 peer-group MPLS
               neighbor 10.0.0.12 peer-group MPLS
-              neighbor 10.0.0.21 peer-group MPLS
-              neighbor 10.0.0.22 peer-group MPLS
+              neighbor 10.0.0.13 peer-group MPLS
+              neighbor 10.0.0.14 peer-group MPLS
             
               address-family ipv4
               no synchronization
@@ -846,10 +846,9 @@ modelo:
               no neighbor 10.0.0.36 activate
               no neighbor 10.0.0.11 activate
               no neighbor 10.0.0.12 activate
-              no neighbor 10.0.0.21 activate
-              no neighbor 10.0.0.22 activate
+              no neighbor 10.0.0.13 activate
+              no neighbor 10.0.0.14 activate
               no auto-summary
-              exit-address-family
               
               address-family vpnv4
               neighbor MPLS send-community both
@@ -860,9 +859,8 @@ modelo:
               neighbor 10.0.0.36 activate
               neighbor 10.0.0.11 activate
               neighbor 10.0.0.12 activate
-              neighbor 10.0.0.21 activate
-              neighbor 10.0.0.22 activate
-              exit-address-family
+              neighbor 10.0.0.13 activate
+              neighbor 10.0.0.14 activates
         ospf: []
         eigrp: []
         interfaces:
@@ -873,28 +871,28 @@ modelo:
             <<: *int_routing
             isis_name: CORE
           - name: GigabitEthernet0/0
-            description: "### Link to RTA-P3 ###"            
+            description: "### Link to RTM-P3 ###"            
             ip_address: 10.0.32.2
             subnet_mask: *sn_29
             <<: *int_routing
             isis_name: CORE
             mpls_ip: true
           - name: GigabitEthernet0/1
-            description: "### Link to RTA-P4 ###"
+            description: "### Link to RTM-P4 ###"
             ip_address: 10.0.42.2
             subnet_mask: *sn_29
             <<: *int_routing
             isis_name: CORE
             mpls_ip: true
           - name: GigabitEthernet0/2
-            description: "### Link to RTA-P5 ###"
+            description: "### Link to RTM-P5 ###"
             ip_address: 10.0.25.2
             subnet_mask: *sn_29
             <<: *int_routing
             isis_name: CORE
             mpls_ip: true
           - name: GigabitEthernet0/3
-            description: "### Link to RTA-P6 ###"
+            description: "### Link to RTM-P6 ###"
             ip_address: 10.0.26.2
             subnet_mask: *sn_29
             <<: *int_routing
@@ -908,11 +906,11 @@ modelo:
           - name: GigabitEthernet0/7
             ip_address: 172.16.5.32
             <<: *int_l3mgmt
-      #### EOF RTA-P2 ####
+      #### EOF RTM-P2 ####
 
       ################
-      #### RTA-P3 ####
-      RTA-P3:
+      #### RTM-P3 ####
+      RTM-P3:
         management:
           ip: 172.16.5.33
           interface: GigabitEthernet0/7
@@ -939,12 +937,10 @@ modelo:
               neighbor MPLS soft-reconfiguration inbound
               no neighbor 10.0.0.32 activate
               no auto-summary
-              exit-address-family
               
               address-family vpnv4
               neighbor MPLS send-community both
               neighbor 10.0.0.32 activate
-              exit-address-family
         ospf: []
         eigrp: []
         interfaces:
@@ -962,28 +958,28 @@ modelo:
             isis_name: CORE
             mpls_ip: true
           - name: GigabitEthernet0/1
-            description: "### Link to RTA-P2 ###"
+            description: "### Link to RTM-P2 ###"
             ip_address: 10.0.32.3
             subnet_mask: *sn_29
             <<: *int_routing
             isis_name: CORE
             mpls_ip: true
           - name: GigabitEthernet0/2
-            description: "### Link to RTA-P4 ###"
+            description: "### Link to RTM-P4 ###"
             ip_address: 10.0.34.3
             subnet_mask: *sn_29
             <<: *int_routing
             isis_name: CORE
             mpls_ip: true
           - name: GigabitEthernet0/3
-            description: "### Link to RTA-P5 ###"
+            description: "### Link to RTM-P5 ###"
             ip_address: 10.0.35.3
             subnet_mask: *sn_29
             <<: *int_routing
             isis_name: CORE
             mpls_ip: true
           - name: GigabitEthernet0/4
-            description: "### Link to RTA-P6 ###"
+            description: "### Link to RTM-P6 ###"
             ip_address: 10.0.36.3
             subnet_mask: *sn_29
             <<: *int_routing
@@ -992,11 +988,11 @@ modelo:
           - name: GigabitEthernet0/7
             ip_address: 172.16.5.33
             <<: *int_l3mgmt
-      #### EOF RTA-P3 ####
+      #### EOF RTM-P3 ####
 
       ################
-      #### RTA-P4 ####
-      RTA-P4:
+      #### RTM-P4 ####
+      RTM-P4:
         management:
           ip: 172.16.5.34
           interface: GigabitEthernet0/7
@@ -1028,21 +1024,21 @@ modelo:
             isis_name: CORE
             mpls_ip: true
           - name: GigabitEthernet0/1
-            description: "### Link to RTA-P2 ###"
+            description: "### Link to RTM-P2 ###"
             ip_address: 10.0.42.4
             subnet_mask: *sn_29
             <<: *int_routing
             isis_name: CORE
             mpls_ip: true
           - name: GigabitEthernet0/2
-            description: "### Link to RTA-P3 ###"
+            description: "### Link to RTM-P3 ###"
             ip_address: 10.0.34.4
             subnet_mask: *sn_29
             <<: *int_routing
             isis_name: CORE
             mpls_ip: true
           - name: GigabitEthernet0/3
-            description: "### Link to RTA-P5 ###"
+            description: "### Link to RTM-P5 ###"
             ip_address: 10.0.45.4
             subnet_mask: *sn_29
             <<: *int_routing
@@ -1051,11 +1047,11 @@ modelo:
           - name: GigabitEthernet0/7
             ip_address: 172.16.5.34
             <<: *int_l3mgmt
-      #### EOF RTA-P4 ####
+      #### EOF RTM-P4 ####
 
       ################
-      #### RTA-P5 ####
-      RTA-P5:
+      #### RTM-P5 ####
+      RTM-P5:
         management:
           ip: 172.16.5.35
           interface: GigabitEthernet0/7
@@ -1087,28 +1083,28 @@ modelo:
             isis_name: CORE
             mpls_ip: true
           - name: GigabitEthernet0/1
-            description: "### Link to RTA-P2 ###"
+            description: "### Link to RTM-P2 ###"
             ip_address: 10.0.25.5
             subnet_mask: *sn_29
             <<: *int_routing
             isis_name: CORE
             mpls_ip: true
           - name: GigabitEthernet0/2
-            description: "### Link to RTA-P6 ###"
+            description: "### Link to RTM-P6 ###"
             ip_address: 10.0.56.5
             subnet_mask: *sn_29
             <<: *int_routing
             isis_name: CORE
             mpls_ip: true
           - name: GigabitEthernet0/3
-            description: "### Link to RTA-P3 ###"
+            description: "### Link to RTM-P3 ###"
             ip_address: 10.0.35.5
             subnet_mask: *sn_29
             <<: *int_routing
             isis_name: CORE
             mpls_ip: true
           - name: GigabitEthernet0/4
-            description: "### Link to RTA-P4 ###"
+            description: "### Link to RTM-P4 ###"
             ip_address: 10.0.45.5
             subnet_mask: *sn_29
             <<: *int_routing
@@ -1117,11 +1113,11 @@ modelo:
           - name: GigabitEthernet0/7
             ip_address: 172.16.5.35
             <<: *int_l3mgmt
-      #### EOF RTA-P5 ####
+      #### EOF RTM-P5 ####
 
       ################
-      #### RTA-P6 ####
-      RTA-P6:
+      #### RTM-P6 ####
+      RTM-P6:
         management:
           ip: 172.16.5.36
           interface: GigabitEthernet0/7
@@ -1153,21 +1149,21 @@ modelo:
             isis_name: CORE
             mpls_ip: true
           - name: GigabitEthernet0/1
-            description: "### Link to RTA-P2 ###"
+            description: "### Link to RTM-P2 ###"
             ip_address: 10.0.26.6
             subnet_mask: *sn_29
             <<: *int_routing
             isis_name: CORE
             mpls_ip: true
           - name: GigabitEthernet0/2
-            description: "### Link to RTA-P5 ###"
+            description: "### Link to RTM-P5 ###"
             ip_address: 10.0.56.6
             subnet_mask: *sn_29
             <<: *int_routing
             isis_name: CORE
             mpls_ip: true
           - name: GigabitEthernet0/3
-            description: "### Link to RTA-P3 ###"
+            description: "### Link to RTM-P3 ###"
             ip_address: 10.0.36.6
             subnet_mask: *sn_29
             <<: *int_routing
@@ -1176,7 +1172,7 @@ modelo:
           - name: GigabitEthernet0/7
             ip_address: 172.16.5.36
             <<: *int_l3mgmt
-      #### EOF RTA-P6 ####
+      #### EOF RTM-P6 ####
 
       #################
       #### RTA-PE1 ####
@@ -1220,7 +1216,6 @@ modelo:
               neighbor MPLS send-community both
               neighbor MPLS soft-reconfiguration inbound
               no auto-summary
-              exit-address-family
               
               address-family ipv4 vrf VRFgreen
               no synchronization
@@ -1228,30 +1223,26 @@ modelo:
               neighbor 10.1.1.1 activate
               neighbor 10.1.1.1 send-community both
               neighbor 10.1.1.1 soft-reconfiguration inbound
-              exit-address-family
               
               address-family ipv4 vrf VRFblue
               no synchronization
               redistribute ospf 1 vrf VRFblue match internal external 1 external 2
-              exit-address-family
 
               address-family ipv4 vrf VRFpink
               no synchronization
               redistribute eigrp 65003
-              exit-address-family
               
               address-family vpnv4
               neighbor MPLS send-community both
               neighbor 10.0.0.32 activate
-              exit-address-family
         ospf:
           - name: 1
             vrf_name: VRFblue
             router_id: 10.0.0.11
             log_adjacency_changes: true
             ospf_lines: |-
-                redistribute bgp 65111 subnets
-                network 10.3.1.0 0.0.0.7 area 1
+              redistribute bgp 65111 subnets
+              network 10.3.1.0 0.0.0.7 area 1
         eigrp:
           - name: 65111
             eigrp_lines: |-
@@ -1259,7 +1250,6 @@ modelo:
               redistribute bgp 65111 metric 10000000 0 255 1 1500
               network 10.3.1.0 0.0.0.7
               no auto-summary
-              exit-address-family
         interfaces:
           - name: Loopback0
             description: "### Loopback0 for BGP Router ID ###"            
@@ -1268,7 +1258,7 @@ modelo:
             <<: *int_routing
             isis_name: CORE
           - name: GigabitEthernet0/0
-            description: "### Link to RTA-P3 ###"            
+            description: "### Link to RTM-P3 ###"            
             ip_address: 10.0.13.1
             subnet_mask: *sn_29
             <<: *int_routing
@@ -1323,27 +1313,22 @@ modelo:
               no synchronization
               neighbor MPLS send-community both
               neighbor MPLS soft-reconfiguration inbound
-              no neighbor 10.0.0.32 activate
               no auto-summary
-              exit-address-family
 
               address-family ipv4 vrf VRFgreen
               no synchronization
-              neighbor 10.1.1.1 remote-as 65001
-              neighbor 10.1.1.1 activate
-              neighbor 10.1.1.1 send-community both
-              neighbor 10.1.1.1 soft-reconfiguration inbound
-              exit-address-family
+              neighbor 10.1.2.1 remote-as 65001
+              neighbor 10.1.2.1 activate
+              neighbor 10.1.2.1 send-community both
+              neighbor 10.1.2.1 soft-reconfiguration inbound
 
               address-family ipv4 vrf VRFblue
               no synchronization
               redistribute ospf 1 vrf VRFblue match internal external 1 external 2
-              exit-address-family
             
               address-family vpnv4
               neighbor MPLS send-community both
               neighbor 10.0.0.32 activate
-              exit-address-family
         ospf:
           - name: 1
             vrf_name: VRFblue
@@ -1361,7 +1346,7 @@ modelo:
             <<: *int_routing
             isis_name: CORE
           - name: GigabitEthernet0/0
-            description: "### Link to RTA-P4 ###"            
+            description: "### Link to RTM-P4 ###"            
             ip_address: 10.0.24.2
             subnet_mask: *sn_29
             <<: *int_routing
@@ -1391,10 +1376,6 @@ modelo:
             rd: "65001:1"
             rt_import: "65001:1"
             rt_export: "65001:1"
-          - name: VRFblue
-            rd: "65002:1"
-            rt_import: "65002:1"
-            rt_export: "65002:1"
           - name: VRFpink
             rd: "65003:1"
             rt_import: "65003:1"
@@ -1407,7 +1388,34 @@ modelo:
         bgp:
           - name: 65111
             bgp_lines: |-
+              no bgp default ipv4-unicast
               bgp log-neighbor-changes
+              neighbor MPLS peer-group
+              neighbor MPLS remote-as 65111
+              neighbor MPLS update-source Loopback0
+              neighbor 10.0.0.11 peer-group MPLS
+              neighbor 10.1.1.1 remote-as 65001
+              
+              address-family ipv4
+              no synchronization
+              neighbor MPLS send-community both
+              neighbor MPLS soft-reconfiguration inbound
+              no auto-summary
+              
+              address-family ipv4 vrf VRFgreen
+              no synchronization
+              neighbor 10.3.1.1 remote-as 65001
+              neighbor 10.3.1.1 activate
+              neighbor 10.3.1.1 send-community both
+              neighbor 10.3.1.1 soft-reconfiguration inbound
+              
+              address-family ipv4 vrf VRFpink
+              no synchronization
+              redistribute eigrp 65003
+              
+              address-family vpnv4
+              neighbor MPLS send-community both
+              neighbor 10.0.0.11 activate
         ospf: []
         eigrp:
           - name: 65111
@@ -1416,7 +1424,6 @@ modelo:
               redistribute bgp 65111 metric 10000000 0 255 1 1500
               network 10.4.1.0 0.0.0.7
               no auto-summary
-              exit-address-family
         interfaces:
           - name: Loopback0
             description: "### Loopback0 for BGP Router ID ###"            
@@ -1425,7 +1432,7 @@ modelo:
             <<: *int_routing
             isis_name: CORE
           - name: GigabitEthernet0/0
-            description: "### Link to RTA-P5 ###"            
+            description: "### Link to RTM-P5 ###"            
             ip_address: 10.0.51.1
             subnet_mask: *sn_29
             <<: *int_routing
@@ -1442,7 +1449,6 @@ modelo:
             ip_address: 10.4.1.6
             subnet_mask: *sn_29
             <<: *int_routing
-            vrf_name: VRFblue
           - name: GigabitEthernet0/7
             ip_address: 172.16.5.13
             <<: *int_l3mgmt
@@ -1484,7 +1490,7 @@ modelo:
             <<: *int_routing
             isis_name: CORE
           - name: GigabitEthernet0/0
-            description: "### Link to RTA-P5 ###"            
+            description: "### Link to RTM-P5 ###"            
             ip_address: 10.0.62.2
             subnet_mask: *sn_29
             <<: *int_routing

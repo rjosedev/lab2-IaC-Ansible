@@ -1,4 +1,4 @@
-hostname SW-MGMT-OOB
+hostname SWMO
 no ip domain lookup
 ip domain-name mydomain.local
 crypto key generate rsa label sshkeys
@@ -9,12 +9,12 @@ ip ssh source-interface GigabitEthernet0/0	# SW-MGMT-OOB
 ip ssh source-interface GigabitEthernet1/3	# los demás
 
 username utnfrc privilege 15 secret 5 Mypass123!
-enable secret Mypass123!
 
 line vty 0 15
- exec-timeout 20 0
  login local
  transport input ssh
+ 
+  exec-timeout 20 0
 
 interface GigabitEthernet0/0	# SW-MGMT-OOB
 
@@ -37,32 +37,33 @@ line aux 0
  exec-timeout 0 1
  no exec
  transport output none
- 
- 
- 
-hostname RT-PE-1
+
+enable secret Mypass123!
+
+###############################################################################
+hostname RTB-PE1
 no ip domain lookup
 ip domain-name mydomain.local	# CSR ip domain name mydomain.local
 crypto key generate rsa label sshkeys
 1024
 ip ssh version 2
 ip ssh rsa keypair-name sshkeys
-ip ssh time-out 30
-ip ssh source-interface GigabitEthernet0/5	# hacia SW-MGMT-OOB
-ip ssh source-interface GigabitEthernet5	# CSR
-int GigabitEthernet 0/5				# CSR int GigabitEthernet 5
+ip ssh source-interface GigabitEthernet0/7	# hacia SWMO
 ip address 172.16.5.41 255.255.255.0
 no shutdown
 
 username utnfrc privilege 15 secret 5 Mypass123!
-enable secret Mypass123!
 
 line vty 0 15
- exec-timeout 20 0
  login local
  transport input ssh
+ 
+ exec-timeout 20 0
 
 line aux 0
  exec-timeout 0 1
  no exec
  transport output none
+ 
+enable secret Mypass123!
+ip ssh time-out 30

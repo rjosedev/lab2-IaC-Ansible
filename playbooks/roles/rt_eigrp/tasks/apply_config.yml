@@ -1,6 +1,12 @@
 ---
+- name: Check if a file exists
+  ansible.builtin.stat:
+    path: '{{ playbook_dir }}/../configs/{{ inventory_hostname }}/{{ inventory_hostname }}_rt_eigrp.cfg'
+  register: file_check
+
 - name: Aplicar configuracion de EIGRP
   cisco.ios.ios_config:
     src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}/{{ inventory_hostname }}_rt_eigrp.cfg"
   register: apply_eigrp_result
   notify: Guardar configuracion
+  when: file_check.stat.exists

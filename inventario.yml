@@ -39,15 +39,15 @@ cisco_ios_sw_l2:
 
 cisco_ios_rt_p:
   hosts:
-    RTA-P2:
+    RTM-P2:
       ansible_host: 172.16.5.32
-    RTA-P3:
+    RTM-P3:
       ansible_host: 172.16.5.33
-    RTA-P4:
+    RTM-P4:
       ansible_host: 172.16.5.34
-    RTA-P5:
+    RTM-P5:
       ansible_host: 172.16.5.35
-    RTA-P6:
+    RTM-P6:
       ansible_host: 172.16.5.36
 
 cisco_ios_rt_pe:

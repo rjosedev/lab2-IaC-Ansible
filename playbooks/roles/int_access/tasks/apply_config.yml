@@ -1,6 +1,12 @@
 ---
+- name: Check if a file exists
+  ansible.builtin.stat:
+    path: '{{ playbook_dir }}/../configs/{{ inventory_hostname }}/{{ inventory_hostname }}_int_access.cfg'
+  register: file_check
+
 - name: Aplicar configuracion de interfaces ACCESS
   cisco.ios.ios_config:
     src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}/{{ inventory_hostname }}_int_access.cfg"
   register: apply_access_result
   notify: Guardar configuracion
+  when: file_check.stat.exists

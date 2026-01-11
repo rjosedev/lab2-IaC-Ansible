@@ -14,7 +14,7 @@
 # ansible-playbook -i inventario.yml ./playbooks/play_option_tag.yml --limit 'cisco_ios_rt_p[0]' --ask-vault-pass --tag render_out
 
 # ansible-inventory --list -i inventario.yml
-
+---
 - name: Generate Code from Jinja2 Templates & Apply Configurations
   hosts: "{{ modelo.hosts_groups.rt_all }}, {{ modelo.hosts_groups.sw_l3 }}"
   gather_facts: false
@@ -30,13 +30,13 @@
         apply:
           tags: render_out
       loop:
-        #- int_rt
-        #- rt_bgp
         - rt_eigrp
-        #- rt_isis
-        #- rt_mpls
-        #- rt_ospf
-        #- rt_vrf
+        - rt_isis
+        - rt_mpls
+        - rt_ospf
+        - rt_vrf
+        - rt_bgp
+        - int_rt
       tags: 
         - render_out
         
@@ -47,13 +47,13 @@
         apply:
          tags: apply_out
       loop:
-        - int_rt
-        - rt_bgp
         - rt_eigrp
         - rt_isis
         - rt_mpls
         - rt_ospf
         - rt_vrf
+        - rt_bgp
+        - int_rt
       tags: 
         - apply_out
 
