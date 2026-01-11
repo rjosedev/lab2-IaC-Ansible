@@ -5,6 +5,7 @@
 # ansible-playbook -i inventario.yml ./playbooks/play_option_tag.yml --ask-vault-pass --tag apply_in,apply_out
 
 # ansible-playbook -i inventario.yml ./playbooks/play_option_tag.yml --ask-vault-pass --tag render_in,apply_in
+# ansible-playbook -i inventario.yml ./playbooks/play_option_tag.yml --ask-vault-pass --tag render_out,apply_out
 
 # # Run the playbook only on a specific host named 'specific_host_name' 
 # ansible-playbook -i inventario.yml ./playbooks/play_option_tag.yml --limit 'RTA-P2' --ask-vault-pass --tag render_out

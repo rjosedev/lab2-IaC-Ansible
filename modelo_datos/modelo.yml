@@ -16,15 +16,6 @@ vars:
   fst_ip: &fst_ip ".250"
   snd_ip: &snd_ip ".251"
   lst_ip: &lst_ip ".254"
-  networks: &networks
-    - 172.16.11.0
-    - 172.16.21.0
-    - 172.16.31.0
-    - 172.31.41.0 
-    - 10.0.51.0
-    - 10.0.61.0
-    - 10.0.71.0
-    - 10.0.81.0
   services: &services
     dns:
       server1: &server1 10.0.71.11
@@ -83,13 +74,6 @@ vars:
     mode: internet
     subnet_mask: *sn_24
     description: "### Link to Internet Cloud 0 ###"
-  # int_isis: &int_isis
-  #   mode: isis
-  #   isis_name: CORE
-  #   mpls_ip: null
-  # int_vrf: &int_vrf
-  #   mode: vrf
-  #   vrf_name: null
   int_routing: &int_routing
     mode: routing
     isis_name: null
@@ -112,6 +96,7 @@ modelo:
     rt_all: cisco_ios_rt_all
     rt_p: cisco_ios_rt_p
     rt_pe: cisco_ios_rt_pe
+    srv_it: ubuntu_os_srv
   # Infrastructure inventory
   infra_spec:
     # Devices inventory
@@ -131,9 +116,19 @@ modelo:
         ospf: []
         eigrp:
           - name: 11
+            log_neighbor_chages: true
             router_id: 10.0.0.51
-            networks: *networks
-            no_passive_interfaces: &no_passive_interfaces
+            passive_interface: vlan 5
+            networks: &networks_11
+              - 172.16.11.0 0.0.0.255
+              - 172.16.21.0 0.0.0.255
+              - 172.16.31.0 0.0.0.255
+              - 172.31.41.0 0.0.0.255
+              - 10.0.51.0 0.0.0.255
+              - 10.0.61.0 0.0.0.255
+              - 10.0.71.0 0.0.0.255
+              - 10.0.81.0 0.0.0.255
+            no_passive_interfaces: &no_passive_11
               - GigabitEthernet1/1
               - GigabitEthernet1/2
               - GigabitEthernet2/1
@@ -313,9 +308,11 @@ modelo:
         ospf: []
         eigrp:
           - name: 11
+            log_neighbor_chages: true
             router_id: 10.0.0.52
-            networks: *networks
-            no_passive_interfaces: *no_passive_interfaces
+            passive_interface: vlan 5
+            networks: *networks_11
+            no_passive_interfaces: *no_passive_11
         services: *services
         vlans: *sw_vlans1
         pvst:
@@ -605,9 +602,11 @@ modelo:
         ospf: []
         eigrp:
           - name: 11
+            log_neighbor_chages: true
             router_id: 10.0.0.56
-            networks: *networks
-            no_passive_interfaces: *no_passive_interfaces
+            passive_interface: vlan 5
+            networks: *networks_11
+            no_passive_interfaces: *no_passive_11
         services: *services
         vlans: *sw_vlans1
         pvst:
@@ -712,9 +711,11 @@ modelo:
         ospf: []
         eigrp:
           - name: 11
+            log_neighbor_chages: true
             router_id: 10.0.0.57
-            networks: *networks
-            no_passive_interfaces: *no_passive_interfaces
+            passive_interface: vlan 5
+            networks: *networks_11
+            no_passive_interfaces: *no_passive_11
         services: *services
         vlans: *sw_vlans1
         pvst:
@@ -1619,7 +1620,12 @@ modelo:
           - name: 1
             router_id: 10.0.0.61
             log_adjacency_changes: true
-        eigrp: []
+        eigrp:
+          - name: 65002
+            router_id: 10.0.0.61
+            networks:
+              - 10.0.0.61 0.0.0.0
+              - 10.3.1.0 0.0.0.7
         services: *services
         vlans:
           - id: 1
@@ -1882,7 +1888,12 @@ modelo:
               neighbor 10.0.51.5 soft-reconfiguration inbound
               no auto-summary
         ospf: []
-        eigrp: []
+        eigrp:
+          - name: 65002
+            router_id: 10.0.0.63
+            networks:
+              - 10.0.0.63 0.0.0.0
+              - 10.4.1.0 0.0.0.7
         services: *services
         vlans:
           - id: 1
@@ -1979,3 +1990,35 @@ modelo:
             ip_address: 172.16.5.66
             <<: *int_l2mgmt
       #### EOF SWD-DC3 ####
+
+      ##################
+      #### UBUNA ####
+      UBUNA:
+        management:
+          ip: 172.16.5.200
+          interface: ens3
+      #### UBUNA ####
+
+      ##################
+      #### UBUNB ####
+      UBUNB:
+        management:
+          ip: 172.16.5.201
+          interface: ens3
+      #### UBUNB ####
+
+      ##################
+      #### UBUNC ####
+      UBUNC:
+        management:
+          ip: 172.16.5.202
+          interface: ens3
+      #### UBUNC ####
+
+      ##################
+      #### UBUND ####
+      UBUND:
+        management:
+          ip: 172.16.5.203
+          interface: ens3
+      #### UBUND ####

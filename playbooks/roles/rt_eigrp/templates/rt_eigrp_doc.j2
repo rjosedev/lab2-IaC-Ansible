@@ -13,15 +13,23 @@
 {% for e in eigrp -%}
 router eigrp {{ e.name }}
   no auto-summary
+{% if e.log_neighbor_chages is defined %}
   eigrp log-neighbor-changes
+{% endif %}
+{% if e.router_id is defined %}
   eigrp router-id {{ e.router_id }}
-  passive-interface vlan 5
+{% endif %}
+{% if e.passive_interface is defined %}
+  passive-interface {{ e.passive_interface }}
+{% endif %}
 {% for network in e.networks %}
   network {{ network }}
 {% endfor %}
-{% for intf in e.no_passive_interfaces %}
-  no passive-interface {{ intf }}
+{% if e.no_passive_interfaces is defined %}
+{% for npi in e.no_passive_interfaces %}
+  no passive-interface {{ npi }}
 {% endfor %}
+{% endif %}
 {% endfor %}
 !
 {%- endif -%}

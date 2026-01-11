@@ -61,6 +61,17 @@ cisco_ios_rt_pe:
     RTB-PE2:
       ansible_host: 172.16.5.14
 
+ubuntu_os_srv:
+  hosts:
+    UBUNA:
+      ansible_host: 172.16.5.200
+    UBUNB:
+      ansible_host: 172.16.5.201
+    UBUNC:
+      ansible_host: 172.16.5.202
+    UBUND:
+      ansible_host: 172.16.5.203
+
 cisco_ios_rt_all:
   children:
     cisco_ios_rt_p:
