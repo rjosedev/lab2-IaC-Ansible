@@ -1,89 +1,89 @@
-interface Loopback0
- ip address 10.0.0.3 255.255.255.255
- ip router isis CORE
-!
-interface Ethernet0/0
- ip address 10.0.34.3 255.255.255.0
- ip router isis CORE
-!
-router isis CORE
- mpls ldp sync
- net 49.0001.1111.1111.1113.00
- is-type level-2-only
- 
-mpls ldp explicit-null
-!
-interface Ethernet0/0
- mpls ip  
-!
-mpls ldp router-id Loopback0
+    interface Loopback0
+     ip address 10.0.0.3 255.255.255.255
+     ip router isis CORE
+    !
+    interface Ethernet0/0
+     ip address 10.0.34.3 255.255.255.0
+     ip router isis CORE
+    !
+    router isis CORE
+     mpls ldp sync
+     net 49.0001.1111.1111.1113.00
+     is-type level-2-only
 
-router bgp 65111
- no bgp default ipv4-unicast
- bgp log-neighbor-changes
- neighbor MPLS peer-group
- neighbor MPLS remote-as 65111
- neighbor MPLS update-source Loopback0
- neighbor 10.0.0.5 peer-group MPLS
-!
-address-family ipv4
-  no synchronization
-  neighbor MPLS send-community both
-  neighbor MPLS soft-reconfiguration inbound
-  no auto-summary
- exit-address-family
- !
- address-family vpnv4
-  neighbor MPLS send-community both
-  neighbor 10.0.0.5 activate
- exit-address-family
+    mpls ldp explicit-null
+    !
+    interface Ethernet0/0
+     mpls ip  
+    !
+    mpls ldp router-id Loopback0
 
-ip vrf VRF_B
- rd 65001:1
- route-target export 65001:1
- route-target import 65001:1
-
-interface Ethernet1/3
- ip vrf forwarding VRF_B
- ip address 10.0.13.3 255.255.255.0
-
-router bgp 65111
- no bgp default ipv4-unicast
- bgp log-neighbor-changes
- neighbor 10.0.13.1 remote-as 65001
- !        
- address-family ipv4 vrf VRF_B
-  no synchronization
-  neighbor 10.0.13.1 remote-as 65001
-  neighbor 10.0.13.1 activate
-  neighbor 10.0.13.1 send-community both
-  neighbor 10.0.13.1 soft-reconfiguration inbound
- exit-address-family
- 
-router ospf 1 vrf VRF_A
- router-id 10.0.0.3
- log-adjacency-changes
- redistribute bgp 65111 subnets
- network 10.0.23.0 0.0.0.255 area 1
-!
-router bgp 65111
-!
- address-family ipv4 vrf VRF_A
-  no synchronization
-  redistribute ospf 1 vrf VRF_A match internal external 1 external 2
- exit-address-family
- 
-router eigrp 65111
- !
- address-family ipv4 vrf VRF_C autonomous-system 65002
-  redistribute bgp 65111 metric 10000000 0 255 1 1500
-  network 10.0.23.0 0.0.0.255
-  no auto-summary
- exit-address-family
- no auto-summary
-!
-router bgp 65111
- address-family ipv4 vrf VRF_C
-  no synchronization
-  redistribute eigrp 65002
- exit-address-family
+    router bgp 65111
+     no bgp default ipv4-unicast
+     bgp log-neighbor-changes
+     neighbor MPLS peer-group
+     neighbor MPLS remote-as 65111
+     neighbor MPLS update-source Loopback0
+     neighbor 10.0.0.5 peer-group MPLS
+    !
+    address-family ipv4
+      no synchronization
+      neighbor MPLS send-community both
+      neighbor MPLS soft-reconfiguration inbound
+      no auto-summary
+     exit-address-family
+     !
+     address-family vpnv4
+      neighbor MPLS send-community both
+      neighbor 10.0.0.5 activate
+     exit-address-family
+    
+    ip vrf VRF_B
+     rd 65001:1
+     route-target export 65001:1
+     route-target import 65001:1
+    
+    interface Ethernet1/3
+     ip vrf forwarding VRF_B
+     ip address 10.0.13.3 255.255.255.0
+    
+    router bgp 65111
+     no bgp default ipv4-unicast
+     bgp log-neighbor-changes
+     neighbor 10.0.13.1 remote-as 65001
+     !        
+     address-family ipv4 vrf VRF_B
+      no synchronization
+      neighbor 10.0.13.1 remote-as 65001
+      neighbor 10.0.13.1 activate
+      neighbor 10.0.13.1 send-community both
+      neighbor 10.0.13.1 soft-reconfiguration inbound
+     exit-address-family
+    
+    router ospf 1 vrf VRF_A
+     router-id 10.0.0.3
+     log-adjacency-changes
+     redistribute bgp 65111 subnets
+     network 10.0.23.0 0.0.0.255 area 1
+    !
+    router bgp 65111
+    !
+     address-family ipv4 vrf VRF_A
+      no synchronization
+      redistribute ospf 1 vrf VRF_A match internal external 1 external 2
+     exit-address-family
+    
+    router eigrp 65111
+     !
+     address-family ipv4 vrf VRF_C autonomous-system 65002
+      redistribute bgp 65111 metric 10000000 0 255 1 1500
+      network 10.0.23.0 0.0.0.255
+      no auto-summary
+     exit-address-family
+     no auto-summary
+    !
+    router bgp 65111
+     address-family ipv4 vrf VRF_C
+      no synchronization
+      redistribute eigrp 65002
+     exit-address-family

@@ -4,6 +4,9 @@
 {% for e in eigrp -%}
 router eigrp {{ e.name }}
   no auto-summary
+{% if e.eigrp_lines is defined %}
+{{ e.eigrp_lines }}
+{% endif %}
 {% if e.log_neighbor_chages is defined %}
   eigrp log-neighbor-changes
 {% endif %}
@@ -13,9 +16,11 @@ router eigrp {{ e.name }}
 {% if e.passive_interface is defined %}
   passive-interface {{ e.passive_interface }}
 {% endif %}
+{% if e.networks is defined %}
 {% for network in e.networks %}
   network {{ network }}
 {% endfor %}
+{% endif %}
 {% if e.no_passive_interfaces is defined %}
 {% for npi in e.no_passive_interfaces %}
   no passive-interface {{ npi }}

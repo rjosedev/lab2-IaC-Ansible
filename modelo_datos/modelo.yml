@@ -1187,14 +1187,18 @@ modelo:
         ip_routing: true
         mpls: *mpls
         vrf:
-          - name: VRFblue
-            rd: "65002:1"
-            rt_import: "65002:1"
-            rt_export: "65002:1"
           - name: VRFgreen
             rd: "65001:1"
             rt_import: "65001:1"
             rt_export: "65001:1"
+          - name: VRFblue
+            rd: "65002:1"
+            rt_import: "65002:1"
+            rt_export: "65002:1"
+          - name: VRFpink
+            rd: "65003:1"
+            rt_import: "65003:1"
+            rt_export: "65003:1"
         isis:
           - name: CORE
             net: 49.0001.1000.0000.0011.00
@@ -1215,9 +1219,9 @@ modelo:
               no synchronization
               neighbor MPLS send-community both
               neighbor MPLS soft-reconfiguration inbound
-              no neighbor 10.0.0.32 activate
               no auto-summary
               exit-address-family
+              
               address-family ipv4 vrf VRFgreen
               no synchronization
               neighbor 10.1.1.1 remote-as 65001
@@ -1225,9 +1229,15 @@ modelo:
               neighbor 10.1.1.1 send-community both
               neighbor 10.1.1.1 soft-reconfiguration inbound
               exit-address-family
-              address-family ipv4 vrf VRFgreen
+              
+              address-family ipv4 vrf VRFblue
               no synchronization
-              redistribute ospf 1 vrf VRFgreen match internal external 1 external 2
+              redistribute ospf 1 vrf VRFblue match internal external 1 external 2
+              exit-address-family
+
+              address-family ipv4 vrf VRFpink
+              no synchronization
+              redistribute eigrp 65003
               exit-address-family
               
               address-family vpnv4
@@ -1236,13 +1246,20 @@ modelo:
               exit-address-family
         ospf:
           - name: 1
-            vrf_name: VRFgreen
+            vrf_name: VRFblue
             router_id: 10.0.0.11
             log_adjacency_changes: true
             ospf_lines: |-
                 redistribute bgp 65111 subnets
-                network 10.1.2.0 0.0.0.7 area 1
-        eigrp: []
+                network 10.3.1.0 0.0.0.7 area 1
+        eigrp:
+          - name: 65111
+            eigrp_lines: |-
+              address-family ipv4 vrf VRFpink autonomous-system 65003
+              redistribute bgp 65111 metric 10000000 0 255 1 1500
+              network 10.3.1.0 0.0.0.7
+              no auto-summary
+              exit-address-family
         interfaces:
           - name: Loopback0
             description: "### Loopback0 for BGP Router ID ###"            
@@ -1265,7 +1282,7 @@ modelo:
             vrf_name: VRFgreen
           - name: GigabitEthernet0/2
             description: "### Link to SWC-CE1 ###"
-            ip_address: 10.1.5.6
+            ip_address: 10.3.1.6
             subnet_mask: *sn_29
             <<: *int_routing
           - name: GigabitEthernet0/7
@@ -1370,14 +1387,18 @@ modelo:
         ip_routing: true
         mpls: *mpls
         vrf:
-          - name: VRFblue
-            rd: "65002:1"
-            rt_import: "65002:1"
-            rt_export: "65002:1"
           - name: VRFgreen
             rd: "65001:1"
             rt_import: "65001:1"
             rt_export: "65001:1"
+          - name: VRFblue
+            rd: "65002:1"
+            rt_import: "65002:1"
+            rt_export: "65002:1"
+          - name: VRFpink
+            rd: "65003:1"
+            rt_import: "65003:1"
+            rt_export: "65003:1"
         isis:
           - name: CORE
             net: 49.0001.1000.0000.0013.00
@@ -1388,7 +1409,14 @@ modelo:
             bgp_lines: |-
               bgp log-neighbor-changes
         ospf: []
-        eigrp: []
+        eigrp:
+          - name: 65111
+            eigrp_lines: |-
+              address-family ipv4 vrf VRFpink autonomous-system 65003
+              redistribute bgp 65111 metric 10000000 0 255 1 1500
+              network 10.4.1.0 0.0.0.7
+              no auto-summary
+              exit-address-family
         interfaces:
           - name: Loopback0
             description: "### Loopback0 for BGP Router ID ###"            
@@ -1621,7 +1649,7 @@ modelo:
             router_id: 10.0.0.61
             log_adjacency_changes: true
         eigrp:
-          - name: 65002
+          - name: 65003
             router_id: 10.0.0.61
             networks:
               - 10.0.0.61 0.0.0.0
@@ -1893,7 +1921,7 @@ modelo:
               no auto-summary
         ospf: []
         eigrp:
-          - name: 65002
+          - name: 65003
             router_id: 10.0.0.63
             networks:
               - 10.0.0.63 0.0.0.0

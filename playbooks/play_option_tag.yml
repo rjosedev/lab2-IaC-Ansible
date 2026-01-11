@@ -30,9 +30,9 @@
         apply:
           tags: render_out
       loop:
-        - int_rt
+        #- int_rt
         #- rt_bgp
-        #- rt_eigrp
+        - rt_eigrp
         #- rt_isis
         #- rt_mpls
         #- rt_ospf
