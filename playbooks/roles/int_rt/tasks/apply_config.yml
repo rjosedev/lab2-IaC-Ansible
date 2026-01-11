@@ -1,5 +1,5 @@
 ---
-- name: Aplicar configuracion de interfaces Routing
+- name: Aplicar configuracion de interfaces ROUTING
   cisco.ios.ios_config:
     src: "{{ playbook_dir }}/../configs/{{ inventory_hostname }}/{{ inventory_hostname }}_int_rt.cfg"
   register: apply_rt_result

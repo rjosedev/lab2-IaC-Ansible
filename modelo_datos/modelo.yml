@@ -1727,6 +1727,8 @@ modelo:
             ip_address: 10.0.0.62
             subnet_mask: *sn_32
             <<: *int_routing
+            ospf_process: 1
+            ospf_area: 0
           - name: GigabitEthernet0/1
             description: "### Link to SWC-DC2 - TRUNK ###"
             <<: *int_trunk
@@ -1737,6 +1739,8 @@ modelo:
             ip_address: 10.3.2.1
             subnet_mask: *sn_29
             <<: *int_routing
+            ospf_process: 1
+            ospf_area: 0
           - name: GigabitEthernet1/3
             description: "### Link to SWMO - Uplinks to Net Cloud 1 - ACCESS ###"
             <<: *int_access

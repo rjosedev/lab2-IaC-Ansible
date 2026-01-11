@@ -31,12 +31,12 @@
           tags: render_out
       loop:
         - int_rt
-        - rt_bgp
-        - rt_eigrp
-        - rt_isis
-        - rt_mpls
-        - rt_ospf
-        - rt_vrf
+        #- rt_bgp
+        #- rt_eigrp
+        #- rt_isis
+        #- rt_mpls
+        #- rt_ospf
+        #- rt_vrf
       tags: 
         - render_out
         

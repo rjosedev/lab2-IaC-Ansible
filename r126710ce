@@ -20,35 +20,35 @@
      neighbor 10.0.68.8 soft-reconfiguration inbound
      no auto-summary
  
- R2
- 
- interface Loopback0
- ip address 10.0.0.2 255.255.255.255
- ip ospf 1 area 1
-!
-nterface Ethernet0/1
- ip address 10.0.23.2 255.255.255.0
- ip ospf 1 area 1
-!
-router ospf 1
- log-adjacency-changes
+    R2
+    
+    interface Loopback0
+     ip address 10.0.0.2 255.255.255.255
+     ip ospf 1 area 1
+    !
+    interface Ethernet0/1
+     ip address 10.0.23.2 255.255.255.0
+     ip ospf 1 area 1
+    !
+    router ospf 1
+     log-adjacency-changes
  
     router eigrp 65002
      network 10.0.23.0 0.0.0.255
      no auto-summary
 
-R7
-
- interface Loopback0
- ip address 10.0.0.7 255.255.255.255
- ip ospf 1 area 0
-!
-interface Ethernet0/1
- ip address 10.0.78.7 255.255.255.0
- ip ospf 1 area 0
-!
-router ospf 1
- log-adjacency-changes
+    R7
+    
+    interface Loopback0
+     ip address 10.0.0.7 255.255.255.255
+     ip ospf 1 area 0
+    !
+    interface Ethernet0/1
+     ip address 10.0.78.7 255.255.255.0
+     ip ospf 1 area 0
+    !
+    router ospf 1
+     log-adjacency-changes
 
     R10 
     router eigrp 65002

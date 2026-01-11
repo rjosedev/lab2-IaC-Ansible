@@ -1,22 +1,22 @@
 {# Interface P-PE Configuration Template #}
 !
-{% for interface in interfaces -%}
-{% if interface.mode == "routing" -%}
-interface {{ interface.name }}
-  description {{ interface.description }}
-  ip address {{ interface.ip_address }} {{ interface.subnet_mask }}
+{% for i in interfaces -%}
+{% if i.mode == "routing" -%}
+interface {{ i.name }}
+  description {{ i.description }}
+  ip address {{ i.ip_address }} {{ i.subnet_mask }}
   no shutdown
-{% if interface.isis_name %}
-  ip router isis {{ interface.isis_name }}
+{% if i.isis_name %}
+  ip router isis {{ i.isis_name }}
 {% endif %}
-{% if interface.mpls_ip == True %}
+{% if i.mpls_ip == true %}
   mpls ip
 {% endif %}
-{% if interface.vrf_name %}
-  ip vrf forwarding {{ interface.vrf_name }}
+{% if i.vrf_name %}
+  ip vrf forwarding {{ i.vrf_name }}
 {% endif %}
-{% if interface.ospf_process %}
-  ip ospf process {{ interface.ospf_process }} area {{ interface.ospf_area }}
+{% if i.ospf_process %}
+  ip ospf process {{ i.ospf_process }} area {{ i.ospf_area }}
 {% endif %}
 !
 {% endif -%}
