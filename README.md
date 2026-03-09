@@ -45,5 +45,6 @@ Este proyecto implementa una solución avanzada de automatización de red basado
 
 ## Topología de red
 
-![Topología de red lab2](/media/Screenshot_from_2026-01-06_07-45-20.png)
+![Topología de red lab2](/media/Screenshot from 2026-01-06 07-45-20.png)
+
 
