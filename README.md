@@ -11,8 +11,9 @@ Este proyecto implementa una solución avanzada de automatización de red basado
 - **Proyecto**: Simulacro de Caso de Uso
 - **Versión**: 1.0
 - **Autor**: Roman Jose Ballesteros
-- **Fecha de Creación**: 2025-10-23
-- **Python Requerido**: >= 3.12
+- **Fecha de creación**: 2025-10-23
+- **Python requerido**: >= 3.12
+- **Ansible requerido**: >= ansible-core 2.18
 
 ## Tecnologías utilizadas
 
@@ -46,5 +47,6 @@ Este proyecto implementa una solución avanzada de automatización de red basado
 ## Topología de red
 
 ![Topología de red lab2](/media/Screenshot from 2026-01-06 07-45-20.png)
+
 
 
