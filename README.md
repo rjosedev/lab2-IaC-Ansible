@@ -42,11 +42,12 @@ Este proyecto implementa una solución avanzada de automatización de red basado
 - **Tags**: Las etiquetas (tags) en Ansible son metadatos asignados a tareas o roles en un playbook que permiten ejecutar u omitir secciones específicas selectivamente. Actúan como filtros para correr solo una parte de la automatización en lugar del playbook completo, optimizando tiempo y permitiendo precisión quirúrgica
 - **Vault**: Ansible Vault es una funcionalidad integrada en Ansible que permite cifrar archivos, variables o secretos confidenciales (contraseñas, claves API) dentro de los proyectos de automatización. Utiliza cifrado simétrico AES256, asegurando que los datos sensibles estén protegidos en reposo, pero puedan descifrarse automáticamente durante la ejecución de playbooks
 - **Validación**: La validación de JSON Schema en Ansible asegura que los datos estructurados (variables, archivos de configuración) cumplan con un formato predefinido, evitando errores en la automatización
-- **Documentación**: Playbook para creación de archivos .MD asociados a cada dispositivo del inventario con la descripción de las configuraciones aplicadas en el dispositivo
+- **Documentación**: Playbook para creación automática de archivos .md asociados a cada dispositivo del inventario con la descripción de las configuraciones aplicadas en el dispositivo
 
 ## Topología de red
 
-![Topología de red lab2](/media/Screenshot from 2026-01-06 07-45-20.png)
+![Topología de red lab2](/media/lab2.png)
+
 
 
 
