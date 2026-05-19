@@ -1,0 +1,23 @@
+- name: Configure Static IP with Netplan
+  hosts: all
+  become: yes
+  vars:
+    interface_name: eth0
+    static_ip_cidr: 192.168.1.100/24
+    gateway_ip: 192.168.1.1
+    dns_server_1: 1.1.1.1
+    dns_server_2: 8.8.8.8
+
+  tasks:
+    - name: Deploy Netplan configuration
+      ansible.builtin.template:
+        src: netplan.yaml.j2
+        dest: /etc/netplan/01-netcfg.yaml
+        owner: root
+        group: root
+        mode: '0600'
+
+    - name: Apply Netplan configuration
+      ansible.builtin.command: netplan apply
+      async: 10 # Useful if changing the IP you're connected through
+      poll: 0

@@ -1,0 +1,89 @@
+# Initial setup for managing Ubuntu servers
+---
+- hosts: all
+  become: yes
+  become_method: sudo
+  gather_facts: false
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    new_user:
+      name: newuser
+      password: user123 # "{{ 'newpassword' | password_hash('sha512') }}"
+      shell: /bin/bash
+  
+  tasks:
+    - name: Copy file to remote server
+      copy:
+        src: /media/hope/DATA/na1/repos/na1labs/lab2/test.txt
+        dest: /tmp/test.txt
+        owner: root
+        group: root
+        mode: '0644'
+    
+    - name: Setup passwordless sudo for new user
+      lineinfile:
+        path: /etc/sudoers
+        state: present
+        regexp: '^%sudo'
+        line: '%sudo ALL=(ALL) NOPASSWD: ALL'
+        validate: '/usr/sbin/visudo -cf %s'
+    
+    - name: Create a new user and add to sudo group
+      user:
+        name: "{{ new_user.name }}"
+        password: "{{ new_user.password }}"
+        shell: "{{ new_user.shell }}"
+        state: present
+        groups: sudo
+        append: yes
+        create_home: yes
+
+# on local machine run:
+# ssh-keygen -t ed25519 -C "hope@domain.com"
+# and then copy the public key to ~/.ssh/id_ed25519.pub
+# ed25519 is more secure than rsa, but if you want to use rsa, run: ssh-keygen -t rsa -b 4096 -C "hope@domain.com"
+    - name: Add authorized key for new user 
+      ansible.posix.authorized_key:
+        user: "{{ new_user.name }}"
+        state: present
+        key: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_ed25519.pub') }}"
+    
+    - name: Disable password authentication for root user
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        state: present
+        regexp: '^PermitRootLogin yes'
+        line: 'PermitRootLogin no'
+        validate: '/usr/sbin/sshd -t -f %s'
+
+    - name: Disable password authentication for SSH
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        state: present
+        regexp: '^PasswordAuthentication yes'
+        line: 'PasswordAuthentication no'
+        validate: '/usr/sbin/sshd -t -f %s'
+      
+    - name: Restart SSH service
+      service:
+        name: ssh
+        state: restarted
+    
+    - name: Install and update curl and ufw
+      apt:
+        name:
+          - curl
+          - ufw
+        state: latest
+        update_cache: yes
+
+    - name: UFW to allow SSH
+      ufw:
+        rule: allow
+        name: OpenSSH
+    
+    - name: UFW to deny everything else
+      ufw:
+        state: enabled
+        default: deny
+        name: 'any'

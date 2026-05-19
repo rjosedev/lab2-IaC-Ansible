@@ -1,0 +1,65 @@
+# Test command to view the inventory:
+# ansible-inventory -i inventario.yml --list
+---
+ubuntu_22:
+  hosts:
+    #UBUNA:
+    #  ansible_host: 172.16.5.200
+    #UBUNB:
+    #  ansible_host: 172.16.5.201
+    #UBUNC:
+    #  ansible_host: 172.16.5.202
+    #UBUND1:
+    #  ansible_host: 172.16.5.203
+    #  ansible_user: user
+    #  ansible_ssh_password: user123
+    #UBUND2:
+    #  ansible_host: 172.16.5.204
+    #UBUND3:
+    #  ansible_host: 172.16.5.205
+    UBUND4:
+      ansible_host: 192.168.100.28
+    UBUND5:
+      ansible_host: 192.168.100.29
+
+all:
+  vars:
+    ansible_user: user
+    ansible_ssh_password: user123
+    ansible_become_password: user123
+
+#all:
+#  vars:
+#    ansible_network_os: cisco.ios.ios
+#    ansible_connection: ansible.netcommon.network_cli.network_cli
+#    ansible_user: utnfrc
+#    ansible_become: true
+#    ansible_become_method: ansible.netcommon.enable
+#    ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+#    # Vault passwords used in this inventory file
+#    # ansible-playbook -i inventario.yml ./playbooks/play_create_codigo.yml --ask-vault-pass
+#    # password: vaultpass
+#    # ansible-vault encrypt_string --stdin-name 'ansible_become_password'
+#    ansible_become_password: !vault |
+#          $ANSIBLE_VAULT;1.1;AES256
+#          33653438303236633334323132653462353963656663373037653737643733663739656437396434
+#          6333666361376536316532663032383436616631303232610a653532363166333334306566313530
+#          38383662613233316561396435346263633139343665616538396266383337386130666436633234
+#          6235303135303064380a636132623931303336386436303861356166353334636136656364393232
+#          3261
+#    # ansible-vault encrypt_string --stdin-name 'ansible_password'
+#    ansible_password: !vault |
+#          $ANSIBLE_VAULT;1.1;AES256
+#          35323064643465636463363261616365656238656334323833363165666234376636653163373132
+#          6161333666653536663562313162336463313536386539310a386532313261623239313530323039
+#          33303336343536386331323536663235393462303837383435613731346433343364333834616236
+#          3534353134646430380a303733353037323035376338316334393765333261373362626464386531
+#          3566
+#    # ansible-vault encrypt_string --stdin-name 'snmp_community'
+#    snmp_community: !vault |
+#          $ANSIBLE_VAULT;1.1;AES256
+#          39343265383362613761333531363261633363653765346265656662623966396263366164663863
+#          3066346230396439396430346230346232346266323631640a376534343331383132653662373337
+#          39313533323563613232333035343936326361323834343762306330303535323763616566333439
+#          3735333135366235310a346332323265613162316164636666636139656339666139316262313135
+#          3834

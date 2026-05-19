@@ -81,6 +81,11 @@ vars:
     vrf_name: null
     ospf_process: null
     ospf_area: null
+  int_ubuntu: &int_ubuntu
+    mode: ubuntu
+    subnet_mask: *sn_24
+    gateway: 172.16.5.1
+    dns_nameservers: 8.8.8.8 8.8.4.4
 modelo:
   metadata:
     version: 1.0
@@ -96,7 +101,7 @@ modelo:
     rt_all: cisco_ios_rt_all
     rt_p: cisco_ios_rt_p
     rt_pe: cisco_ios_rt_pe
-    srv_it: ubuntu_os_srv
+    srv_ubuntu: ubuntu_os
   # Infrastructure inventory
   infra_spec:
     # Devices inventory
@@ -2029,34 +2034,55 @@ modelo:
             <<: *int_l2mgmt
       #### EOF SWD-DC3 ####
 
-      ##################
-      #### UBUNA ####
-      UBUNA:
-        management:
-          ip: 172.16.5.200
-          interface: ens3
-      #### UBUNA ####
+      ###################
+      ##### UBUNA ####
+      #UBUNA:
+      #  management:
+      #    ip: 172.16.5.200
+      #    interface: ens3
+      ##### UBUNA ####
+#
+      ###################
+      ##### UBUNB ####
+      #UBUNB:
+      #  management:
+      #    ip: 172.16.5.201
+      #    interface: ens3
+      ##### UBUNB ####
+#
+      ###################
+      ##### UBUNC ####
+      #UBUNC:
+      #  management:
+      #    ip: 172.16.5.202
+      #    interface: ens3
+      ##### UBUNC ####
 
       ##################
-      #### UBUNB ####
-      UBUNB:
-        management:
-          ip: 172.16.5.201
-          interface: ens3
-      #### UBUNB ####
-
-      ##################
-      #### UBUNC ####
-      UBUNC:
-        management:
-          ip: 172.16.5.202
-          interface: ens3
-      #### UBUNC ####
-
-      ##################
-      #### UBUND ####
-      UBUND:
+      #### UBUND1 ####
+      UBUND1:
         management:
           ip: 172.16.5.203
           interface: ens3
-      #### UBUND ####
+        interfaces:
+          - name: ens3
+            vlan: 5
+            ip_address: 172.16.5.203
+            <<: *int_ubuntu
+      #### UBUND1 ####
+
+      ###################
+      ##### UBUND2 ####
+      #UBUND2:
+      #  management:
+      #    ip: 172.16.5.204
+      #    interface: ens3
+      ##### UBUND2 ####
+#
+      ###################
+      ##### UBUND3 ####
+      #UBUND3:
+      #  management:
+      #    ip: 172.16.5.205
+      #    interface: ens3
+      ##### UBUND3 ####
